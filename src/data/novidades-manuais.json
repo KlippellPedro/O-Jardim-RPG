@@ -56,6 +56,19 @@
       ]
     },
     {
+      "id": "2026-11-17-magias-racas-classes-texto-simples",
+      "data": "2026-11-17",
+      "tipo": "melhoria",
+      "area": "Ficha",
+      "titulo": "Descrições de magias, raças e classes mais claras",
+      "detalhes": [
+        "A descrição curta de cada magia, ritual, selo e encantamento agora diz logo o que ela faz e para que serve.",
+        "As raças, as Formas e Morfologias da Animália e os animais da lista ganharam descrições simples, sem frase de efeito.",
+        "A descrição das classes e algumas habilidades ficaram mais diretas.",
+        "Nenhuma regra mudou: números, testes e efeitos continuam os mesmos."
+      ]
+    },
+    {
       "id": "2026-11-16-mapa-acervo-organizado-token-corpo-inteiro-e-nitidez",
       "data": "2026-11-16",
       "tipo": "melhoria",

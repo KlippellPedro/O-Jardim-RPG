@@ -5917,33 +5917,33 @@ O catálogo mostra a progressão nível a nível, e as classes que conjuram most
 
 - **Alquimista** *(comum)*. Pega o que encontra pelo caminho e transforma em elixir, bomba ou antídoto. Prepara as doses no descanso, e o que sobra estraga até o descanso seguinte.
 - **Atirador** *(comum)*. Prefere lutar de longe e nunca chega sem plano. Escolhe a posição com calma, cuida da munição e sabe sempre quantos tiros ainda tem.
-- **Caçador** *(comum)*. Estuda a presa antes de chegar perto. Cada tipo de criatura pede um jeito diferente de caçar, e o que ele aprende sobre uma serve para toda a família dela.
+- **Caçador** *(comum)*. Estuda a presa antes de chegar perto. Cada tipo de criatura exige um jeito diferente de caçar, e o que ele aprende sobre uma criatura vale para toda a família dela.
 - **Canalizador** *(comum)*. Usa o Fluxo puro, direto da fonte. É o jeito mais simples de conjurar e também o mais difícil de dominar.
 - **Chef** *(comum)*. Pega os Mantimentos e faz comida que segura o grupo, em combate ou fora dele. Bebida faz efeito na hora, lanche vai junto na caminhada e refeição dá um benefício que dura mais.
-- **Comerciante** *(comum)*. Resolve a briga antes dela começar. Conhece a pessoa certa, fica sabendo das coisas na hora e tem sempre o item certo no estoque. Dinheiro do nada ele não faz, por mais que o grupo peça.
-- **Detetive** *(comum)*. Olha uma cena e vê antes de todo mundo: o detalhe fora do lugar, a mentira mal contada, o padrão que passou batido. E nunca fica satisfeito com a primeira explicação.
-- **Engenheiro** *(comum)*. Chega com tudo montado. Prepara invenções de uso rápido, melhora o equipamento do grupo e, quando precisa, força a máquina além do limite sabendo muito bem o preço.
-- **Espadachim** *(comum)*. Passou a vida inteira com uma espada na mão. Acumula posturas ao longo da carreira e encadeia golpes em sequência, e quando erra um, o resto da sequência vai junto.
-- **Guardião** *(comum)*. Escolhe uma pessoa para proteger e leva isso muito a sério. Cria um vínculo com ela, obriga o inimigo a escolher em quem bater e aguenta o que vier, até onde a reação e a cena deixarem.
-- **Guerreiro** *(comum)*. Alguém tem que ficar na frente, e ele fica. Segura a pancada, chama a atenção do inimigo para si e comanda um batalhão que luta melhor quando ele está por perto.
+- **Comerciante** *(comum)*. Prefere negociar a brigar. Conhece as pessoas certas, fica sabendo das novidades antes dos outros e quase sempre tem no estoque o item que o grupo precisa. Não cria dinheiro do nada.
+- **Detetive** *(comum)*. Repara antes de todo mundo no detalhe fora do lugar, na mentira mal contada e no padrão que ninguém viu. Não se contenta com a primeira explicação.
+- **Engenheiro** *(comum)*. Chega com as invenções prontas. Prepara engenhocas de uso rápido, melhora o equipamento do grupo e, quando precisa, força as máquinas além do limite, mesmo sabendo do risco.
+- **Espadachim** *(comum)*. Luta com espada e treinou a vida inteira para isso. Aprende posturas ao longo da carreira e encadeia golpes em sequência. Se errar um golpe, perde o resto da sequência.
+- **Guardião** *(comum)*. Escolhe uma pessoa para proteger. Cria um vínculo com ela, obriga o inimigo a escolher em quem bater e usa a reação para receber golpes no lugar dela.
+- **Guerreiro** *(comum)*. Fica na linha de frente. Segura a pancada, chama a atenção do inimigo para si e comanda um batalhão que luta melhor quando ele está por perto.
 - **Lutador** *(comum)*. Briga de mão limpa, sem arma e sem armadura. Vai marcando o inimigo golpe a golpe e costuma ganhar no cansaço, quando o outro já não aguenta mais.
-- **Médico** *(comum)*. Segura o grupo de pé. Descobre o que o aliado tem, estabiliza quem caiu e manda de volta para luta. Só não consegue desfazer o que já aconteceu.
-- **Ninja** *(comum)*. Aprendeu tudo com um clã e ainda responde a ele. Conforme ganha a confiança dos superiores, sobe na hierarquia e recebe armas e técnicas novas. Rende muito mais quando ninguém percebeu que ele chegou.
+- **Médico** *(comum)*. Mantém o grupo de pé. Descobre o que o aliado tem, estabiliza quem caiu e devolve a pessoa para a luta. Não traz ninguém de volta da morte.
+- **Ninja** *(comum)*. Aprendeu tudo com um clã e ainda responde a ele. Conforme ganha a confiança dos superiores, sobe na hierarquia e recebe armas e técnicas novas. Luta melhor quando o inimigo ainda não percebeu que ele está ali.
 - **Piloto** *(comum)*. Luta de dentro de um veículo que ele mesmo vai melhorando peça por peça. Quanto mais o personagem sobe, mais o veículo cresce junto.
-- **Pop Star** *(comum)*. Resolve as coisas com fama e carisma em vez de briga. A presença dele prende a atenção de todo mundo, e uma boa apresentação muitas vezes resolve mais que uma ameaça.
-- **Ritualista** *(comum)*. Trabalha longe do combate. Ritual não tem círculo, leva tempo e prende a Mana desde o primeiro minuto. Se alguém interromper, a Mana já era.
-- **Sintonizador** *(comum)*. Junta o próprio Fluxo com catalisadores de fora para conseguir o que sozinho não conseguiria. Tudo isso é emprestado e nunca fica guardado na alma.
+- **Pop Star** *(comum)*. Usa a fama e o carisma para resolver as coisas sem briga. Chama a atenção de todo mundo e convence as pessoas com uma boa apresentação.
+- **Ritualista** *(comum)*. Trabalha fora do combate. Ritual não tem círculo, demora para ficar pronto e prende a Mana desde o primeiro minuto. Se o ritual for interrompido, a Mana é perdida.
+- **Sintonizador** *(comum)*. Junta o próprio Fluxo com catalisadores de fora para conseguir o que sozinho não conseguiria. Esse poder é emprestado e não fica com ele depois.
 - **Caçador das Almas** *(especial, Anima)*. Liga a própria alma a uma Zanpakutō e passa a vida patrulhando a fronteira entre vivos e mortos, purificando espíritos corrompidos. Quem descobre o nome da lâmina abre o Shikai, e quem a domina por completo desperta a Bankai.
-- **Campeão Dimensional** *(especial, qualquer Árvore)*. O título fica com quem passa dos limites da própria dimensão. Os picos de poder duram pouco, são contados, e nenhum deles salva ninguém da morte.
+- **Campeão Dimensional** *(especial, qualquer Árvore)*. Ganha esse título quem supera os limites da própria dimensão. Tem picos de poder curtos e com usos contados.
 - **Cartista Arcano** *(especial, qualquer Árvore)*. Conjura com cartas: cada magia que conhece é uma carta do baralho, e o Fluxo nativo dele define quais cartas existem. Também arremessa cartas comuns como arma. Só conjura até o segundo círculo, e as vagas dele só guardam magias desse limite.
 - **Devorador** *(especial, Limiar)*. Nasce sem poder nenhum e pega emprestado de quem morreu. Quando mata alguém ou encontra um corpo recente, devora o que sobrou e guarda dentro de si uma parte da força da vítima.
 - **Elementarista** *(especial, Baluarte)*. Escolhe um único elemento primordial e vai aprofundando esse laço até chegar numa derivação, usando esse elemento para mudar o campo de batalha. Aprender os outros elementos só é possível para quem tem a aptidão de Avatar, que é raríssima.
-- **Escritor de Contos** *(especial, Limiar)*. Conta histórias, presságios e pequenas verdades que ajudam o grupo. O incômodo é que o que ele conta costuma acontecer.
-- **Guia Dimensional** *(especial, Matriz)*. Conhece as rotas, os portais e as âncoras. Quando o grupo chega num lugar sem estrada nenhuma, foi ele quem levou.
+- **Escritor de Contos** *(especial, Limiar)*. Conta histórias, presságios e pequenas verdades que ajudam o grupo. O que ele conta costuma acontecer de verdade.
+- **Guia Dimensional** *(especial, Matriz)*. Conhece as rotas, os portais e as âncoras entre os lugares, e leva o grupo aonde não existe estrada.
 - **Interceptador** *(especial, A.X.I.S)*. Entra na Malha da Tecnologia para desmontar a magia natural dos outros e atrapalhar quem está conjurando. Ele mesmo não conjura.
 - **Invocador** *(especial, qualquer Árvore)*. Luta ao lado de duas criaturas invocadas, feitas do próprio Fluxo nativo. Escolhe as criaturas no Catálogo de Invocações e, a cada pacto, decide se chama mais duas ou se fortalece duas que já tem.
 - **Pirata Amaldiçoado** *(especial, O Vazio)*. Luta com água amaldiçoada, muda o próprio corpo e chama os espíritos de uma tripulação que já morreu e continua obedecendo às suas ordens.
-- **Viajante** *(especial, Matriz, Éon, Vórtice)*. Vive pulando entre Árvores e dimensões. Cada estrada que percorre vira mais um jeito de se virar em qualquer lugar.
+- **Viajante** *(especial, Matriz, Éon, Vórtice)*. Vive viajando entre Árvores e dimensões. Cada lugar por onde passa ensina um jeito novo de se virar.
 
 ## poderes-habilidades
 

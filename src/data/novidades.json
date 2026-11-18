@@ -55,6 +55,19 @@
       ]
     },
     {
+      "id": "2026-11-17-magias-racas-classes-texto-simples",
+      "data": "2026-11-17",
+      "tipo": "melhoria",
+      "area": "Ficha",
+      "titulo": "Descrições de magias, raças e classes mais claras",
+      "detalhes": [
+        "A descrição curta de cada magia, ritual, selo e encantamento agora diz logo o que ela faz e para que serve.",
+        "As raças, as Formas e Morfologias da Animália e os animais da lista ganharam descrições simples, sem frase de efeito.",
+        "A descrição das classes e algumas habilidades ficaram mais diretas.",
+        "Nenhuma regra mudou: números, testes e efeitos continuam os mesmos."
+      ]
+    },
+    {
       "id": "2026-11-16-mapa-acervo-organizado-token-corpo-inteiro-e-nitidez",
       "data": "2026-11-16",
       "tipo": "melhoria",
@@ -1013,21 +1026,6 @@
         "A aba Fichas mostra um cartão para cada personagem no mapa, com retrato, nível, barras e condições. Clique no seu para abrir a ficha inteira ali mesmo, sem sair do mapa. O Mestre abre a de qualquer um.",
         "Nomes compridos ficam abreviados embaixo do token, para não cobrir os vizinhos. Com o mouse em cima, o nome aparece inteiro.",
         "Os avisos do mapa e as caixas para dar nome a uma cena ou pasta agora têm a cara do resto do site."
-      ]
-    },
-    {
-      "id": "2026-11-03-luz-magia-tokens",
-      "data": "2026-11-03",
-      "tipo": "novo",
-      "area": "Sessão",
-      "titulo": "Mapa: tochas, efeitos de magia e tokens com mais vida",
-      "detalhes": [
-        "Clique no token do seu personagem e acenda uma luz: vela, tocha, lanterna ou luz mágica. Dá para mudar o alcance e a cor, e a chama da tocha tremula.",
-        "Quando o Mestre deixa a cena escura, a sua luz abre caminho em volta do seu personagem, do tamanho que você escolheu.",
-        "Na barra da esquerda há a ferramenta de magia (tecla M): escolha círculo, cone, linha ou impacto e a cor do Fluxo, arraste no mapa e a mesa inteira vê o efeito, com o seu nome.",
-        "Enquanto você mira, o mapa mostra o tamanho da área em casas e em metros.",
-        "Os tokens entram crescendo e saem encolhendo. Quando a Vida cai, o token pisca em vermelho e treme; quando sobe, um anel verde se abre.",
-        "Na vez de alguém, o token ganha um brilho dourado com arcos girando, e o token arrastado sobe um pouco e deixa a sombra no chão, na tela de todo mundo."
       ]
     }
   ]

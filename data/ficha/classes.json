@@ -13,11 +13,11 @@
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
     "versao_balanceamento": "2026-08-19",
-    "descricao": "Alguém tem que ficar na frente, e ele fica. Segura a pancada, chama a atenção do inimigo para si e comanda um batalhão que luta melhor quando ele está por perto.",
+    "descricao": "Fica na linha de frente. Segura a pancada, chama a atenção do inimigo para si e comanda um batalhão que luta melhor quando ele está por perto.",
     "dt_efeitos": {
       "rotulo": "DT de Guerreiro",
       "pericia": "intimidacao",
-      "descricao": "Quando um efeito seu manda alguém testar Vontade para não recuar da sua frente, role Intimidação na hora, e o resultado é a DT que a pessoa precisa alcançar. O Guerreiro rola Intimidação com Força no lugar de Carisma: o que assusta é o tamanho do estrago que você acabou de fazer. Troque o atributo dessa perícia na ficha, na aba Perícias, e ele fica trocado."
+      "descricao": "Quando um efeito seu manda alguém testar Vontade para não recuar da sua frente, role Intimidação na hora, e o resultado é a DT que a pessoa precisa alcançar. O Guerreiro rola Intimidação com Força no lugar de Carisma, porque o que assusta é o estrago que ele faz. Troque o atributo dessa perícia na ficha, na aba Perícias, e ele fica trocado."
     },
     "tarefas_bancada": {
       "rotulo": "Arsenal Especial",
@@ -282,7 +282,7 @@
       {
         "id": "implacavel",
         "titulo": "Implacável",
-        "descricao": "Você fica na frente e não sai. Cada estágio soma ao anterior.",
+        "descricao": "Você segura a linha de frente. Cada estágio soma ao anterior.",
         "niveis": [
           1,
           5,
@@ -334,7 +334,7 @@
       {
         "id": "batalhao",
         "titulo": "Batalhão",
-        "descricao": "Quem luta melhor perto de você. A cada estágio, escolha mais um aliado para o seu Batalhão e anote com o Mestre; podem ser outros jogadores ou gente da campanha. Trocar quem está na lista leva um descanso completo. Uma vez por rodada, gaste uma Ação de Movimento para gritar uma das ordens que você conhece a um aliado do Batalhão que possa ouvir você a até 12 m. Levanta! no nível 4 é a única exceção: pode alcançar um aliado inconsciente a 0 de Vida. Poder e habilidade não se emprestam: a ordem faz o que está escrita nela.",
+        "descricao": "Os aliados do seu Batalhão lutam melhor perto de você. A cada estágio, escolha mais um aliado para o seu Batalhão e anote com o Mestre; podem ser outros jogadores ou gente da campanha. Trocar quem está na lista leva um descanso completo. Uma vez por rodada, gaste uma Ação de Movimento para gritar uma das ordens que você conhece a um aliado do Batalhão que possa ouvir você a até 12 m. Levanta! no nível 4 é a única exceção: pode alcançar um aliado inconsciente a 0 de Vida. A ordem não empresta poderes nem habilidades; ela faz só o que está escrito nela.",
         "niveis": [
           3,
           8,
@@ -983,7 +983,7 @@
         },
         "escolha_opcoes": {
           "rotulo": "Modificações instaladas",
-          "descricao": "Uma modificação no nível 3, duas no 8, três no 14 e quatro no 20. São dez na lista, e repetir a mesma peça não vale: ela já está instalada. Com aval do Mestre, uma peça publicada no catálogo entra no lugar de uma da lista, no mesmo tier.",
+          "descricao": "Uma modificação no nível 3, duas no 8, três no 14 e quatro no 20. São dez na lista, e não vale repetir uma peça que já está instalada. Com aval do Mestre, uma peça publicada no catálogo entra no lugar de uma da lista, no mesmo tier.",
           "por_estagio": 1,
           "repetivel": false
         },
@@ -1237,7 +1237,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
     "versao_balanceamento": "2026-08-21",
-    "descricao": "Aprendeu tudo com um clã e ainda responde a ele. Conforme ganha a confiança dos superiores, sobe na hierarquia e recebe armas e técnicas novas. Rende muito mais quando ninguém percebeu que ele chegou.",
+    "descricao": "Aprendeu tudo com um clã e ainda responde a ele. Conforme ganha a confiança dos superiores, sobe na hierarquia e recebe armas e técnicas novas. Luta melhor quando o inimigo ainda não percebeu que ele está ali.",
     "dt_efeitos": {
       "rotulo": "DT do Ninja",
       "pericia": "furtividade",
@@ -1470,7 +1470,7 @@
       {
         "id": "hierarquia",
         "titulo": "Hierarquia",
-        "descricao": "O posto que o clã reconhece em você. Cada estágio soma ao anterior: o bônus em Furtividade não some quando você sobe de posto, e o que o clã oferece continua de pé.",
+        "descricao": "Mostra o seu posto dentro do clã. Cada estágio soma ao anterior: o bônus em Furtividade não some quando você sobe de posto, e o que o clã oferece continua de pé.",
         "niveis": [
           1,
           5,
@@ -1813,7 +1813,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
     "versao_balanceamento": "2026-08-19",
-    "descricao": "Resolve as coisas com fama e carisma em vez de briga. A presença dele prende a atenção de todo mundo, e uma boa apresentação muitas vezes resolve mais que uma ameaça.",
+    "descricao": "Usa a fama e o carisma para resolver as coisas sem briga. Chama a atenção de todo mundo e convence as pessoas com uma boa apresentação.",
     "dt_efeitos": {
       "rotulo": "DT de Palco",
       "pericia": "atuacao",
@@ -1821,7 +1821,7 @@
     },
     "tarefas_bancada": {
       "rotulo": "Escada de Fama",
-      "descricao": "Fama é a tabela geral do capítulo de Facções, e a Pop Star sobe nela pela carreira. Ela abre porta e fecha a porta dos fundos: o mesmo rosto que consegue audiência é o rosto que ninguém esquece quando você precisa passar despercebido.",
+      "descricao": "Fama é a tabela geral do capítulo de Facções, e a Pop Star sobe nela pela carreira. A fama ajuda a conseguir audiência e contatos, mas atrapalha quando você precisa passar despercebido, porque muita gente reconhece o seu rosto.",
       "colunas": [
         "Fama",
         "Nível da classe",
@@ -2083,7 +2083,7 @@
       {
         "id": "fama",
         "titulo": "Fama",
-        "descricao": "O que o mundo sabe de você. A carreira garante um piso de Fama que a campanha não derruba; o que você conquistar acima disso é seu e fica.",
+        "descricao": "A carreira garante um mínimo de Fama que a campanha não derruba. A Fama que você conquistar acima disso também fica com você.",
         "niveis": [
           1,
           5,
@@ -2128,7 +2128,7 @@
       {
         "id": "publi",
         "titulo": "Publi",
-        "descricao": "Marca que paga para aparecer do seu lado. A cada estágio, feche um contrato da lista abaixo: ele rende o que está escrito e cobra exposição pública, que o Mestre encaixa na história. Contrato não vira dinheiro solto, e marca insatisfeita rescinde.",
+        "descricao": "Marcas pagam para aparecer ao seu lado. A cada estágio, feche um contrato da lista abaixo: ele rende o que está escrito e cobra exposição pública, que o Mestre encaixa na história. Contrato não vira dinheiro solto, e marca insatisfeita rescinde.",
         "niveis": [
           3,
           8,
@@ -2159,7 +2159,7 @@
         },
         "escolha_opcoes": {
           "rotulo": "Contratos fechados",
-          "descricao": "Um contrato no nível 3, dois no 8, três no 14 e quatro no 20. Repetir a mesma marca não vale: ela já tem você. Com aval do Mestre, uma marca da campanha entra no lugar de uma da lista, com o mesmo tamanho de benefício.",
+          "descricao": "Um contrato no nível 3, dois no 8, três no 14 e quatro no 20. Não vale repetir a mesma marca. Com aval do Mestre, uma marca da campanha entra no lugar de uma da lista, com o mesmo tamanho de benefício.",
           "por_estagio": 1,
           "repetivel": false
         },
@@ -2441,7 +2441,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
     "versao_balanceamento": "2026-08-24",
-    "descricao": "Passou a vida inteira com uma espada na mão. Acumula posturas ao longo da carreira e encadeia golpes em sequência, e quando erra um, o resto da sequência vai junto.",
+    "descricao": "Luta com espada e treinou a vida inteira para isso. Aprende posturas ao longo da carreira e encadeia golpes em sequência. Se errar um golpe, perde o resto da sequência.",
     "dt_efeitos": {
       "rotulo": "DT do Espadachim",
       "pericia": "luta",
@@ -2964,7 +2964,7 @@
     "dt_efeitos": {
       "rotulo": "Manobra e Marca",
       "pericia": "luta",
-      "descricao": "Agarrar, derrubar, empurrar, desarmar e imobilizar são manobras, e todas rolam Luta contra a defesa passiva do alvo, 10 mais o bônus de Reflexos ou de Fortitude dele, como está no capítulo de Combate. Você tem vantagem nessas rolagens desde o nível 1. As Marcas de Guerra não pedem teste do alvo: elas grudam quando você acerta."
+      "descricao": "Agarrar, derrubar, empurrar, desarmar e imobilizar são manobras, e todas rolam Luta contra a defesa passiva do alvo, 10 mais o bônus de Reflexos ou de Fortitude dele, como está no capítulo de Combate. Você tem vantagem nessas rolagens desde o nível 1. As Marcas de Guerra não pedem teste do alvo e entram sempre que você acerta."
     },
     "tarefas_bancada": {
       "rotulo": "Manobras na Mão",
@@ -3240,7 +3240,7 @@
       {
         "id": "instinto-de-combate",
         "titulo": "Instinto de Combate",
-        "descricao": "O corpo aprende antes da cabeça. Você lê a briga pelo peso, pelo apoio e pela guarda de quem está na sua frente.",
+        "descricao": "Você lê a briga pelo peso, pelo apoio e pela guarda de quem está na sua frente.",
         "niveis": [
           1,
           5,
@@ -3523,7 +3523,7 @@
         "custo_estamina": 6,
         "acao": "Ação Livre",
         "momento": "ao levar o alvo a 0 de Vida",
-        "descricao": "Quando um golpe seu leva uma criatura a 0 de Vida, ela sofre −4 no primeiro teste de Morrendo. Isso não mata ninguém sozinho: só empurra a conta na direção que você quer."
+        "descricao": "Quando um golpe seu leva uma criatura a 0 de Vida, ela sofre −4 no primeiro teste de Morrendo. Isso sozinho não mata, só deixa mais difícil sobreviver."
       },
       {
         "id": "eu-te-conheco",
@@ -4145,7 +4145,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
     "versao_balanceamento": "2026-08-24",
-    "descricao": "Segura o grupo de pé. Descobre o que o aliado tem, estabiliza quem caiu e manda de volta para luta. Só não consegue desfazer o que já aconteceu.",
+    "descricao": "Mantém o grupo de pé. Descobre o que o aliado tem, estabiliza quem caiu e devolve a pessoa para a luta. Não traz ninguém de volta da morte.",
     "dt_efeitos": {
       "rotulo": "DT do Médico",
       "pericia": "cura",
@@ -4744,11 +4744,11 @@
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
     "versao_balanceamento": "2026-08-24",
-    "descricao": "Escolhe uma pessoa para proteger e leva isso muito a sério. Cria um vínculo com ela, obriga o inimigo a escolher em quem bater e aguenta o que vier, até onde a reação e a cena deixarem.",
+    "descricao": "Escolhe uma pessoa para proteger. Cria um vínculo com ela, obriga o inimigo a escolher em quem bater e usa a reação para receber golpes no lugar dela.",
     "dt_efeitos": {
       "rotulo": "DT do Guardião",
       "pericia": "intimidacao",
-      "descricao": "Quando um efeito seu manda alguém testar Vontade para focar em você, role Intimidação na hora. O resultado da sua rolagem é a DT que a pessoa precisa alcançar. O Guardião rola Intimidação com Constituição no lugar de Carisma: o que impõe respeito é o tanto de pancada que você mostra aguentar. Troque o atributo dessa perícia na ficha, na aba Perícias, e ele fica trocado."
+      "descricao": "Quando um efeito seu manda alguém testar Vontade para focar em você, role Intimidação na hora. O resultado da sua rolagem é a DT que a pessoa precisa alcançar. O Guardião rola Intimidação com Constituição no lugar de Carisma, porque impõe respeito pelo tanto que aguenta apanhar. Troque o atributo dessa perícia na ficha, na aba Perícias, e ele fica trocado."
     },
     "progressao": [
       {
@@ -5333,7 +5333,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
     "versao_balanceamento": "2026-08-24",
-    "descricao": "Estuda a presa antes de chegar perto. Cada tipo de criatura pede um jeito diferente de caçar, e o que ele aprende sobre uma serve para toda a família dela.",
+    "descricao": "Estuda a presa antes de chegar perto. Cada tipo de criatura exige um jeito diferente de caçar, e o que ele aprende sobre uma criatura vale para toda a família dela.",
     "dt_efeitos": {
       "rotulo": "DT do Caçador",
       "pericia": "sobrevivencia",
@@ -5720,7 +5720,7 @@
           {
             "id": "bruxa",
             "titulo": "Bruxa",
-            "descricao": "Natureza mágica, não profissão; enxerga maldição e possessão à distância e tece as próprias."
+            "descricao": "Bruxa é uma natureza mágica. Enxerga maldição e possessão à distância e cria as próprias."
           },
           {
             "id": "onirico",
@@ -6127,7 +6127,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
     "versao_balanceamento": "2026-08-19",
-    "descricao": "Chega com tudo montado. Prepara invenções de uso rápido, melhora o equipamento do grupo e, quando precisa, força a máquina além do limite sabendo muito bem o preço.",
+    "descricao": "Chega com as invenções prontas. Prepara engenhocas de uso rápido, melhora o equipamento do grupo e, quando precisa, força as máquinas além do limite, mesmo sabendo do risco.",
     "pericias_concedidas": [
       {
         "id": "oficio-engenharia",
@@ -7268,7 +7268,7 @@
       {
         "id": "formulas",
         "titulo": "Fórmulas",
-        "descricao": "O que você sabe preparar. Cada fórmula abaixo é uma receita fechada: a dose faz aquilo, uma vez, e acaba. Fórmula que obriga o alvo a resistir usa a DT do Alquimista, rolada quando você usa a dose.",
+        "descricao": "Cada fórmula abaixo é uma receita fechada: a dose faz o efeito descrito uma vez e acaba. Fórmula que obriga o alvo a resistir usa a DT do Alquimista, rolada quando você usa a dose.",
         "niveis": [
           3,
           8,
@@ -7507,7 +7507,7 @@
       {
         "id": "transmutacao-mestra",
         "titulo": "Transmutação Mestra",
-        "descricao": "Uma vez por descanso, gaste 8 Mana para alterar por uma cena o material de um objeto mundano de até 2 m³ que você esteja tocando. Pedra vira madeira, ferro vira vidro, corda vira corrente. A regra fecha quatro portas: nada de moeda, nada de artefato, nada de ser vivo e nada de componente raro que fique permanente.",
+        "descricao": "Uma vez por descanso, gaste 8 Mana para alterar por uma cena o material de um objeto mundano de até 2 m³ que você esteja tocando. Pedra vira madeira, ferro vira vidro, corda vira corrente. Não serve para criar moeda, artefato, ser vivo nem componente raro permanente.",
         "custo_mana": 8,
         "niveis": [
           18
@@ -7655,7 +7655,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "proposta_original_balanceada",
     "versao_balanceamento": "2026-08-19",
-    "descricao": "Resolve a briga antes dela começar. Conhece a pessoa certa, fica sabendo das coisas na hora e tem sempre o item certo no estoque. Dinheiro do nada ele não faz, por mais que o grupo peça.",
+    "descricao": "Prefere negociar a brigar. Conhece as pessoas certas, fica sabendo das novidades antes dos outros e quase sempre tem no estoque o item que o grupo precisa. Não cria dinheiro do nada.",
     "pericias_concedidas": [
       {
         "id": "oficio-comercio",
@@ -7668,7 +7668,7 @@
     "dt_efeitos": {
       "rotulo": "DT do Comerciante",
       "pericia": "oficio-comercio",
-      "descricao": "Quando alguém disputa um preço seu, recusa um acordo que você propôs ou tenta esconder o valor real de uma mercadoria, role Ofício (Comércio) na hora da conversa. O resultado da sua rolagem é a DT que a outra parte precisa alcançar, com Vontade para segurar a proposta ou Intuição para farejar o truque. Nada disso obriga ninguém a nada: quem passa no teste só mantém a própria posição. Em falha crítica você entrega o jogo, e aquela praça cobra 10% a mais de você até o fim da sessão."
+      "descricao": "Quando alguém disputa um preço seu, recusa um acordo que você propôs ou tenta esconder o valor real de uma mercadoria, role Ofício (Comércio) na hora da conversa. O resultado da sua rolagem é a DT que a outra parte precisa alcançar, com Vontade para segurar a proposta ou Intuição para farejar o truque. Nada disso obriga ninguém a nada: quem passa no teste só mantém a própria posição. Em falha crítica, os comerciantes do lugar percebem o truque e cobram 10% a mais de você até o fim da sessão."
     },
     "tarefas_bancada": {
       "rotulo": "Balcão do Comerciante",
@@ -8334,11 +8334,11 @@
     "progressao_publicada": true,
     "origem_conteudo": "material_enviado_revisado",
     "versao_balanceamento": "2026-08-24",
-    "descricao": "O título fica com quem passa dos limites da própria dimensão. Os picos de poder duram pouco, são contados, e nenhum deles salva ninguém da morte.",
+    "descricao": "Ganha esse título quem supera os limites da própria dimensão. Tem picos de poder curtos e com usos contados.",
     "dt_efeitos": {
       "rotulo": "DT do Campeão Dimensional",
       "pericia": "intimidacao",
-      "descricao": "Quando um efeito seu manda alguém testar Fortitude, Reflexos ou Vontade, role Intimidação na hora, e o resultado é a DT que a pessoa precisa alcançar. O Campeão Dimensional rola Intimidação com Força no lugar de Carisma: o que assusta é o tamanho do estrago que seu corpo aguenta fazer. Troque o atributo dessa perícia na ficha, na aba Perícias, e ele fica trocado."
+      "descricao": "Quando um efeito seu manda alguém testar Fortitude, Reflexos ou Vontade, role Intimidação na hora, e o resultado é a DT que a pessoa precisa alcançar. O Campeão Dimensional rola Intimidação com Força no lugar de Carisma, porque o que assusta é a força dele. Troque o atributo dessa perícia na ficha, na aba Perícias, e ele fica trocado."
     },
     "progressao": [
       {
@@ -10084,7 +10084,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "proposta_original_balanceada",
     "versao_balanceamento": "2026-08-24",
-    "descricao": "Conhece as rotas, os portais e as âncoras. Quando o grupo chega num lugar sem estrada nenhuma, foi ele quem levou.",
+    "descricao": "Conhece as rotas, os portais e as âncoras entre os lugares, e leva o grupo aonde não existe estrada.",
     "dt_efeitos": {
       "rotulo": "DT do Guia Dimensional",
       "pericia": "misticismo",
@@ -11265,7 +11265,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "proposta_original_balanceada",
     "versao_balanceamento": "2026-08-24",
-    "descricao": "Conta histórias, presságios e pequenas verdades que ajudam o grupo. O incômodo é que o que ele conta costuma acontecer.",
+    "descricao": "Conta histórias, presságios e pequenas verdades que ajudam o grupo. O que ele conta costuma acontecer de verdade.",
     "dt_efeitos": {
       "rotulo": "DT do Escritor de Contos",
       "pericia": "enganacao",
@@ -12230,7 +12230,7 @@
     ],
     "tarefas_bancada": {
       "rotulo": "Catálogo de Invocações",
-      "descricao": "Fichas prontas, exclusivas da classe: nada de criatura da Loja ou improvisada. Seis linhas (Caçador de Feras ofensivo, Colosso de Ferro defensivo, Salamandra de Fogo de suporte à distância, Seiva Viva de cura, Duende Prestativo de utilidade fora de combate e Aranha Tecelã de controle), cada uma em cinco níveis. Uma invocação nova sempre entra no nível 1 da linha escolhida; aprimorar a leva para o próximo nível da mesma linha. A ficha dá o dano do ataque; para acertar, a invocação usa o seu teste de conjuração, como diz o Pacto. Do nível 21 de Invocador em diante, as fichas crescem pela regra da Escolha Final do Pacto. Na aba Aliados, o botão Do Catálogo cria a invocação já com a ficha pronta. A Defesa escrita aqui é a do nível de cada degrau; na mesa, ela acompanha o seu nível total como a de quem veste armadura (Defesa natural do nível, mais a armadura típica dele, mais o ajuste do papel), e o botão já faz essa conta.",
+      "descricao": "As fichas são prontas e exclusivas da classe. Não vale usar criatura da Loja nem criatura improvisada. Seis linhas (Caçador de Feras ofensivo, Colosso de Ferro defensivo, Salamandra de Fogo de suporte à distância, Seiva Viva de cura, Duende Prestativo de utilidade fora de combate e Aranha Tecelã de controle), cada uma em cinco níveis. Uma invocação nova sempre entra no nível 1 da linha escolhida; aprimorar a leva para o próximo nível da mesma linha. A ficha dá o dano do ataque; para acertar, a invocação usa o seu teste de conjuração, como diz o Pacto. Do nível 21 de Invocador em diante, as fichas crescem pela regra da Escolha Final do Pacto. Na aba Aliados, o botão Do Catálogo cria a invocação já com a ficha pronta. A Defesa escrita aqui é a do nível de cada degrau; na mesa, ela acompanha o seu nível total como a de quem veste armadura (Defesa natural do nível, mais a armadura típica dele, mais o ajuste do papel), e o botão já faz essa conta.",
       "colunas": [
         "Invocação",
         "Nível",
@@ -12412,7 +12412,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "proposta_original_balanceada",
     "versao_balanceamento": "2026-08-25",
-    "descricao": "Vive pulando entre Árvores e dimensões. Cada estrada que percorre vira mais um jeito de se virar em qualquer lugar.",
+    "descricao": "Vive viajando entre Árvores e dimensões. Cada lugar por onde passa ensina um jeito novo de se virar.",
     "progressao": [
       {
         "nivel": 1,
@@ -13730,7 +13730,7 @@
         }
       ]
     },
-    "descricao": "Junta o próprio Fluxo com catalisadores de fora para conseguir o que sozinho não conseguiria. Tudo isso é emprestado e nunca fica guardado na alma.",
+    "descricao": "Junta o próprio Fluxo com catalisadores de fora para conseguir o que sozinho não conseguiria. Esse poder é emprestado e não fica com ele depois.",
     "dt_efeitos": {
       "rotulo": "DT do Sintonizador",
       "pericia": "misticismo",
@@ -14353,11 +14353,11 @@
         }
       ]
     },
-    "descricao": "Trabalha longe do combate. Ritual não tem círculo, leva tempo e prende a Mana desde o primeiro minuto. Se alguém interromper, a Mana já era.",
+    "descricao": "Trabalha fora do combate. Ritual não tem círculo, demora para ficar pronto e prende a Mana desde o primeiro minuto. Se o ritual for interrompido, a Mana é perdida.",
     "dt_efeitos": {
       "rotulo": "Teste do Rito e Interrupção",
       "pericia": "misticismo",
-      "descricao": "Todo rito rola d20 mais Mod. Fluxo mais o seu Grau de Misticismo contra a DT escrita no próprio ritual, de 15 no simples a 30 no monumental. A Mana fica comprometida desde o começo: se você falhar ou for interrompido, ela já foi. Quando alguma coisa ameaça o trabalho, alguém pisando no traçado, briga do lado de fora, o chão tremendo, faça um teste de interrupção com a mesma rolagem contra a mesma DT. Falhou, o rito quebra ali. Passou, você continua, e a ameaça seguinte cobra outro teste."
+      "descricao": "Todo rito rola d20 mais Mod. Fluxo mais o seu Grau de Misticismo contra a DT escrita no próprio ritual, de 15 no simples a 30 no monumental. A Mana fica comprometida desde o começo: se você falhar ou for interrompido, ela já foi. Quando alguma coisa ameaça o trabalho (alguém pisando no traçado, briga do lado de fora, o chão tremendo), faça um teste de interrupção com a mesma rolagem contra a mesma DT. Se falhar, o rito quebra. Se passar, você continua, e cada nova ameaça pede outro teste."
     },
     "tarefas_bancada": {
       "rotulo": "Mesa do Ritualista",
@@ -14627,7 +14627,7 @@
       {
         "id": "livro-de-rituais",
         "titulo": "Livro de Rituais",
-        "descricao": "O que você sabe fazer. Rito não se aprende sozinho: cada um vem de família, de pacto, de pergaminho ou de tradição, e o Mestre diz de onde veio o seu. Junto dos ritos, a classe abre vagas de Selo e de Encantamento, resumidas no quadro de consulta desta página e escolhidas na aba Magias.",
+        "descricao": "Ninguém aprende um rito sozinho. Cada um vem de família, de pacto, de pergaminho ou de tradição, e o Mestre diz de onde veio o seu. Junto dos ritos, a classe abre vagas de Selo e de Encantamento, resumidas no quadro de consulta desta página e escolhidas na aba Magias.",
         "niveis": [
           1,
           5,
@@ -14675,7 +14675,7 @@
       {
         "id": "circulo-preparado",
         "titulo": "Círculo Preparado",
-        "descricao": "O traçado que você desenha antes de começar. Escolha um preparo por estágio na lista abaixo; ao começar um rito, aplique a ele um dos preparos que você conhece. Um preparo por rito, declarado antes da primeira rolagem.",
+        "descricao": "É o traçado que você desenha antes de começar um rito. Escolha um preparo por estágio na lista abaixo; ao começar um rito, aplique a ele um dos preparos que você conhece. Um preparo por rito, declarado antes da primeira rolagem.",
         "niveis": [
           3,
           8,
@@ -16131,7 +16131,7 @@
     "progressao_publicada": true,
     "origem_conteudo": "proposta_original_balanceada",
     "versao_balanceamento": "2026-08-25",
-    "descricao": "Olha uma cena e vê antes de todo mundo: o detalhe fora do lugar, a mentira mal contada, o padrão que passou batido. E nunca fica satisfeito com a primeira explicação.",
+    "descricao": "Repara antes de todo mundo no detalhe fora do lugar, na mentira mal contada e no padrão que ninguém viu. Não se contenta com a primeira explicação.",
     "dt_efeitos": {
       "rotulo": "DT do Detetive",
       "pericia": "investigacao",
@@ -16510,7 +16510,7 @@
       {
         "id": "caso-frio",
         "titulo": "Caso Frio",
-        "descricao": "Um mistério antigo e mal resolvido bate à sua porta de novo, trazendo uma pista nova ou uma testemunha que reapareceu.",
+        "descricao": "Um mistério antigo e mal resolvido volta a aparecer, com uma pista nova ou uma testemunha que reapareceu.",
         "niveis": [
           4,
           7,
@@ -17022,7 +17022,7 @@
       {
         "id": "fome-que-nao-passa",
         "titulo": "Fome que Não Passa",
-        "descricao": "Passar tempo demais sem devorar cobra um preço: um instinto mais difícil de disfarçar, uma lembrança emprestada que ressurge, ou alguém que percebeu o que você é.",
+        "descricao": "Passar tempo demais sem devorar traz problemas: um instinto mais difícil de disfarçar, uma lembrança emprestada que volta ou alguém que descobre o que você é.",
         "niveis": [
           4,
           7,

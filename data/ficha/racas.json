@@ -16,7 +16,7 @@
     "mana": 0,
     "movimento": 0,
     "pericias_iniciais_adicionais": 1,
-    "descricao": "Nasce sem dom nenhum, e é justamente aí que está a graça. Começa sabendo uma coisa a mais que todo mundo e se encaixa em qualquer Árvore, em qualquer classe e em qualquer mesa.",
+    "descricao": "Nasce sem nenhum dom especial. Em troca, começa com um Legado a mais e combina com qualquer Árvore e qualquer classe.",
     "fisiologia": [
       "Tamanho Normal."
     ],
@@ -115,7 +115,7 @@
     "mana": 0,
     "estamina": 1,
     "movimento": 0,
-    "descricao": "Enxerga no escuro, fecha ferida bebendo sangue e sofre bastante quando fica sem. O Clã define o que ele faz com a fome, e o tempo cuida do resto: quanto mais velho, mais o sangue rende, e quem passa de séculos vira Senhor da Noite, com uma fome do mesmo tamanho. É um povo de Întuneric.",
+    "descricao": "Enxerga no escuro, se cura bebendo sangue e sofre quando fica sem. O Clã define como ele lida com a fome. Quanto mais velho, mais o sangue rende, e quem passa de alguns séculos vira Senhor da Noite, com uma fome maior também. É um povo de Întuneric.",
     "fisiologia": [
       "Enxerga normalmente em escuridão natural, mas não através de escuridão criada por magia ou Fluxo."
     ],
@@ -384,7 +384,7 @@
         "vida": 2,
         "mana": 2,
         "requer_autorizacao_mestre": true,
-        "descricao": "A família mais antiga de Întuneric. Dizem que já bebiam quando a lua parou no céu e nunca mais se pôs, e foi dessa noite sem fim que veio o nome. Uma Linhagem dos Elfos leva o mesmo nome porque nasceu da mesma noite, e os dois povos se reconhecem nela. Quando um deles entra no salão, os outros seis Clãs baixam a cabeça: são a realeza dos vampiros, os únicos recebidos no castelo da Transilvânia sem precisar pedir. O sangue rende mais neles do que em qualquer outro, e a fome também. Começa com +2 de Vida e +2 de Mana além do que a raça dá, e só entra na mesa com o aval do Mestre.",
+        "descricao": "A família mais antiga de Întuneric. O nome vem da noite em que a lua parou no céu e nunca mais se pôs, e dizem que eles já existiam nessa época. Uma Linhagem dos Elfos leva o mesmo nome porque nasceu da mesma noite, e os dois povos se reconhecem por isso. São a realeza dos vampiros: os outros seis Clãs se curvam a eles, e só eles entram no castelo da Transilvânia sem precisar pedir. O sangue rende mais neles do que em qualquer outro Clã, e a fome também. Começa com +2 de Vida e +2 de Mana além do que a raça dá, e só entra na mesa com o aval do Mestre.",
         "caracteristicas": [
           {
             "id": "sangue-real",
@@ -523,7 +523,7 @@
     "titulo": "Goblim",
     "povo": [
       "Pequeno e rápido, ele vive bem onde gente grande não cabe: túnel, telhado, porão e a parte de baixo da feira.",
-      "Todo povo goblim gira em torno de troca, e saber o preço de uma coisa vale tanto quanto ter a coisa.",
+      "A vida de todo povo goblim gira em torno de troca, e quem sabe o valor das coisas é muito respeitado.",
       "Um bom negócio vira história contada por anos, e quem levou a pior com um goblim costuma virar freguês dele."
     ],
     "linguas": [
@@ -539,7 +539,7 @@
     "mana": 1,
     "estamina": 2,
     "movimento": 1.5,
-    "descricao": "Pequeno, rápido e com um talento chato para vender qualquer coisa por mais do que ela vale, de preferência algo que já era dele.",
+    "descricao": "Pequeno, rápido e muito bom de negócio. Consegue vender quase qualquer coisa por mais do que ela vale.",
     "fisiologia": [
       "Tamanho Pequeno."
     ],
@@ -626,7 +626,7 @@
       "Tem as mãos feitas para o ofício, então em todo povo anão o que alguém sabe fazer na bancada diz quem essa pessoa é.",
       "Aprende devagar e de verdade, de Aprendiz a Mestre com os anos, e o mestre de um ofício tem voz em qualquer comunidade anã.",
       "Pequeno e difícil de derrubar, prefere construir o que dura a mudar de lugar.",
-      "Uma peça bem feita é presente, herança e assinatura ao mesmo tempo."
+      "Uma peça bem feita é presente e herança, e sempre leva a marca de quem a fez."
     ],
     "linguas": [
       {
@@ -646,7 +646,7 @@
     "mana": 0,
     "estamina": 3,
     "movimento": 0,
-    "descricao": "Baixinho, difícil de derrubar e melhor que qualquer um com uma ferramenta na mão. Constrói, conserta e na segunda tentativa quase não erra. Na criação escolhe um Ofício de Forja e vai de Aprendiz a Mestre conforme passa tempo na bancada. O que sai das forjas do Reino dos Anões nenhum outro reino consegue igualar.",
+    "descricao": "Baixo, difícil de derrubar e muito bom com ferramentas. Constrói, conserta e quase não erra na segunda tentativa. Na criação escolhe um Ofício de Forja e vai de Aprendiz a Mestre conforme passa tempo na bancada. As forjas do Reino dos Anões fazem peças que nenhum outro reino consegue igualar.",
     "fisiologia": [
       "Tamanho Pequeno."
     ],
@@ -890,7 +890,7 @@
     "povo": [
       "Não come, não bebe e não respira, então nenhum povo golem tem culinária, mesa farta ou medo de fome.",
       "Quando quebra, quem resolve é um artesão, e todo golem guarda o nome de quem o consertou.",
-      "Cada conserto deixa o corpo mais duro, e as marcas de reparo contam a vida dele melhor que qualquer palavra."
+      "Cada conserto deixa o corpo mais duro, e as marcas de reparo mostram por quanta coisa ele já passou."
     ],
     "linguas": [
       {
@@ -901,7 +901,7 @@
     "dt_efeitos": {
       "rotulo": "DT de Golem",
       "pericia": "atletismo",
-      "descricao": "Quando um traço seu manda alguém testar Fortitude, Reflexos, Vontade ou Percepção, role Atletismo na hora: quem decide é o peso da matéria. O resultado é a DT que a criatura precisa alcançar, e uma rolagem vale para todos os alvos daquele uso."
+      "descricao": "Quando um traço seu manda alguém testar Fortitude, Reflexos, Vontade ou Percepção, role Atletismo na hora, porque o que conta é o peso do corpo. O resultado é a DT que a criatura precisa alcançar, e uma rolagem vale para todos os alvos daquele uso."
     },
     "categoria": "padrao",
     "disponibilidade": "geral",
@@ -1228,7 +1228,7 @@
             "titulo": "Estrutura Monumental",
             "tipo": "passiva",
             "nivel_minimo": 36,
-            "descricao": "O corpo não tem mais ponto fraco de fábrica: receba +4 Defesa e imunidade a acertos críticos causados por armas comuns.",
+            "descricao": "O corpo já não tem pontos fracos. Receba +4 Defesa e imunidade a acertos críticos causados por armas comuns.",
             "defesa": 4,
             "automatizada": true
           },
@@ -1301,7 +1301,7 @@
     "mana": 3,
     "movimento": 0,
     "legados_adicionais": 1,
-    "descricao": "Quem morre e não vai embora fica como espírito. O que ele vira depende do que carregava: um Fluxo que o prendeu ao mundo, um Pecado que nunca largou ou uma Virtude que ainda o sustenta. Sem corpo, atravessa parede e enxerga no escuro. Amadurece sozinho, em seis degraus, e só o último pede mais que nível: pede uma Provação. Cada Natureza tem a sua língua: Anemir para os naturais, Kharum para os demoníacos e Aurelim para os angelicais.",
+    "descricao": "É alguém que morreu e não foi embora. O tipo de espírito depende do que o prendeu ao mundo: um Fluxo, um Pecado ou uma Virtude. Sem corpo, atravessa parede e enxerga no escuro. Evolui sozinho em seis degraus, e o último também exige uma Provação. Cada Natureza tem a sua língua: Anemir para os naturais, Kharum para os demoníacos e Aurelim para os angelicais.",
     "fisiologia": [
       "Não precisa respirar, comer ou beber enquanto está sem corpo.",
       "Enxerga normalmente em escuridão natural.",
@@ -1339,18 +1339,18 @@
     ],
     "recursos_provisorios": false,
     "rotulo_natureza": "Natureza",
-    "descricao_naturezas": "Todo espírito é de uma Natureza. A natural é a de quem ficou preso a um Fluxo depois de morrer. A demoníaca é a de quem morreu carregando um Pecado e nunca largou, e com o tempo aprende a vestir corpos alheios. A angelical é a de quem morreu carregando uma Virtude, e com o tempo aprende a pedir um corpo emprestado.",
+    "descricao_naturezas": "Todo espírito é de uma Natureza. A natural é a de quem ficou preso a um Fluxo depois de morrer. A demoníaca é a de quem morreu carregando um Pecado e nunca largou, e com o tempo aprende a possuir o corpo de outras pessoas. A angelical é a de quem morreu carregando uma Virtude, e com o tempo aprende a pedir um corpo emprestado.",
     "naturezas": [
       {
         "id": "natural",
         "titulo": "Espírito Natural",
-        "descricao": "Morreu e ficou, preso ao Fluxo que o segurou no mundo. É o fantasma das histórias: nunca tem corpo, atravessa paredes e, a cada degrau, atravessa mais longe e com menos esforço. O Fluxo da marca é o seu Fluxo nativo, seja qual for a Árvore em que você nasceu. Fala Anemir.",
+        "descricao": "Ficou preso ao mundo por um Fluxo depois de morrer. É o fantasma das histórias: nunca tem corpo, atravessa paredes e, a cada degrau, atravessa mais longe e com menos esforço. O Fluxo da marca é o seu Fluxo nativo, seja qual for a Árvore em que você nasceu. Fala Anemir.",
         "rotulo_variante": "Fluxo"
       },
       {
         "id": "demoniaca",
         "titulo": "Espírito Demoníaco",
-        "descricao": "Morreu carregando um Pecado e nunca largou. O corpo ficou para trás, e o desejo ficou inteiro. No começo é só espírito; a partir do nível 5 aprende a tomar corpos alheios e usá-los como roupa. Cada degrau traz um poder do Pecado, e quase todo poder cobra um preço. Fala Kharum.",
+        "descricao": "Morreu preso a um Pecado. No começo é só espírito; a partir do nível 5 aprende a possuir o corpo de outras pessoas. Cada degrau traz um poder do Pecado, e quase todo poder tem um custo. Fala Kharum.",
         "rotulo_variante": "Pecado",
         "descricao_variantes": "Escolha um Pecado, e ele vale para a vida inteira do personagem. Os sete têm o mesmo peso: cada um desperta uma característica em cada degrau da escada, e quase todas cobram um preço.",
         "fisiologia": [
@@ -1374,7 +1374,7 @@
       {
         "id": "angelical",
         "titulo": "Espírito Angelical",
-        "descricao": "Morreu carregando uma Virtude, e ela nunca o deixou. O corpo ficou para trás, e a Virtude ficou inteira. No começo é só espírito; a partir do nível 5 aprende a encarnar, mas só com permissão: o dono empresta o corpo, ou o corpo já não tem dono. Cada degrau traz um poder da Virtude, e quase todo poder pede um voto em troca. Fala Aurelim.",
+        "descricao": "Morreu preso a uma Virtude. No começo é só espírito; a partir do nível 5 aprende a ocupar um corpo, mas só com permissão: o dono empresta o corpo, ou o corpo já não tem dono. Cada degrau traz um poder da Virtude, e quase todo poder exige um voto em troca. Fala Aurelim.",
         "rotulo_variante": "Virtude",
         "descricao_variantes": "Escolha uma Virtude, e ela vale para a vida inteira do personagem. As sete têm o mesmo peso e espelham os sete Pecados: cada uma desperta uma característica em cada degrau da escada, e quase todas pedem um voto em troca.",
         "fisiologia": [
@@ -2891,7 +2891,7 @@
         "fluxo": "universal",
         "natureza": "natural",
         "somente_mestre": true,
-        "descricao": "O Fluxo que toca todos os outros sem pertencer a nenhum. Quem o carrega usa o que qualquer Fluxo oferece e paga Mana extra por escolher na hora. Só o Mestre concede, e até hoje só Blanc é conhecida por tê-lo.",
+        "descricao": "Um Fluxo ligado a todos os outros, sem pertencer a nenhum. Quem o tem pode usar o que qualquer Fluxo oferece, pagando Mana extra por escolher na hora. Só o Mestre concede, e até hoje só se sabe de Blanc com ele.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -2972,7 +2972,7 @@
         "natureza": "demoniaca",
         "pecado": "pecado-soberba",
         "virtude_oposta": "virtude-humildade",
-        "descricao": "Morreu convencido de que não devia nada a ninguém, e continua convencido. Toda ajuda alheia soa como ofensa.",
+        "descricao": "Acha que não deve nada a ninguém e se ofende quando alguém tenta ajudar.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -3054,7 +3054,7 @@
         "natureza": "demoniaca",
         "pecado": "pecado-avareza",
         "virtude_oposta": "virtude-caridade",
-        "descricao": "Morreu contando o que tinha e ainda conta. Sente o brilho de tudo que vale alguma coisa, e não larga o que pega.",
+        "descricao": "Quer tudo o que tem valor. Percebe de longe as coisas valiosas e não larga o que pega.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -3138,7 +3138,7 @@
         "natureza": "demoniaca",
         "pecado": "pecado-luxuria",
         "virtude_oposta": "virtude-castidade",
-        "descricao": "Morreu querendo, e quer até hoje. Sabe o que cada um deseja e usa isso como quem usa uma chave.",
+        "descricao": "Sabe o que cada pessoa deseja e usa isso para conseguir o que quer.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -3226,7 +3226,7 @@
         "natureza": "demoniaca",
         "pecado": "pecado-inveja",
         "virtude_oposta": "virtude-gratidao",
-        "descricao": "Morreu olhando o que era dos outros. Toma emprestado o talento de quem passa por perto, e nunca gosta do que sobra.",
+        "descricao": "Quer o que é dos outros. Toma emprestado o talento de quem está por perto e nunca fica satisfeito.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -3310,7 +3310,7 @@
         "natureza": "demoniaca",
         "pecado": "pecado-gula",
         "virtude_oposta": "virtude-temperanca",
-        "descricao": "Morreu com fome e a fome ficou. Devora o que encontra, e quanto mais devora, menos sente.",
+        "descricao": "Tem uma fome que nunca passa e devora tudo o que encontra.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -3393,7 +3393,7 @@
         "natureza": "demoniaca",
         "pecado": "pecado-ira",
         "virtude_oposta": "virtude-paciencia",
-        "descricao": "Morreu furioso e a raiva nunca esfriou. Cada golpe que recebe vira combustível, e a calma é o que mais lhe falta.",
+        "descricao": "Vive com raiva. Fica mais forte a cada golpe que recebe e tem dificuldade para manter a calma.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -3473,7 +3473,7 @@
         "natureza": "demoniaca",
         "pecado": "pecado-preguica",
         "virtude_oposta": "virtude-diligencia",
-        "descricao": "Morreu sem vontade de levantar e o mundo parou de pedir. Tudo ao redor anda mais devagar, ele inclusive.",
+        "descricao": "Não tem vontade de fazer nada. Tudo ao redor dele fica mais lento, inclusive ele mesmo.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -3559,7 +3559,7 @@
         "natureza": "angelical",
         "virtude": "virtude-humildade",
         "pecado_oposto": "pecado-soberba",
-        "descricao": "Morreu sem pedir nada pelo que fez, e continua assim. Prefere que o outro vença.",
+        "descricao": "Não pede nada em troca do que faz e prefere ver o outro vencer.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -3643,7 +3643,7 @@
         "natureza": "angelical",
         "virtude": "virtude-caridade",
         "pecado_oposto": "pecado-avareza",
-        "descricao": "Morreu dando o que tinha e ainda dá. Percebe quem precisa antes de ouvir o pedido.",
+        "descricao": "Dá o que tem a quem precisa e percebe quem precisa de ajuda antes de ouvir o pedido.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -3726,7 +3726,7 @@
         "natureza": "angelical",
         "virtude": "virtude-castidade",
         "pecado_oposto": "pecado-luxuria",
-        "descricao": "Morreu inteiro, sem dever a desejo nenhum. Ninguém consegue puxá-lo para onde ele não quer ir.",
+        "descricao": "Não se deixa levar por desejo nenhum, e ninguém consegue convencê-lo a ir aonde não quer.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -3810,7 +3810,7 @@
         "natureza": "angelical",
         "virtude": "virtude-gratidao",
         "pecado_oposto": "pecado-inveja",
-        "descricao": "Morreu lembrando de cada mão que o ajudou. Faz questão de devolver, e de devolver em dobro.",
+        "descricao": "Lembra de cada pessoa que o ajudou e faz questão de devolver o favor em dobro.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -3863,7 +3863,7 @@
             "titulo": "Dívida Paga",
             "tipo": "reacao",
             "nivel_minimo": 40,
-            "descricao": "Duas vezes por descanso, gaste uma reação e 8 Mana quando um aliado a até 18 m usar uma habilidade ou magia: o efeito se repete, uma vez, sem custo, sobre outro alvo à sua escolha, mas só se a habilidade ou magia for de nível ou círculo até o 5º. Depois disso, você perde 4 Mana pelo peso da dívida.",
+            "descricao": "Duas vezes por descanso, gaste uma reação e 8 Mana quando um aliado a até 18 m usar uma habilidade ou magia: o efeito se repete, uma vez, sem custo, sobre outro alvo à sua escolha, mas só se a habilidade ou magia for de nível ou círculo até o 5º. Depois disso, você perde 4 Mana.",
             "usos": 2,
             "recuperacao": "sessao",
             "custo_mana": 8,
@@ -3893,7 +3893,7 @@
         "natureza": "angelical",
         "virtude": "virtude-temperanca",
         "pecado_oposto": "pecado-gula",
-        "descricao": "Morreu sabendo parar na hora certa. Conhece o tamanho exato de cada coisa.",
+        "descricao": "Sabe a hora certa de parar e a medida certa de cada coisa.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -3979,7 +3979,7 @@
         "natureza": "angelical",
         "virtude": "virtude-paciencia",
         "pecado_oposto": "pecado-ira",
-        "descricao": "Morreu sem pressa e sem rancor. Espera o golpe passar e responde com calma.",
+        "descricao": "Não tem pressa nem guarda rancor. Espera o golpe passar e responde com calma.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -4061,7 +4061,7 @@
         "natureza": "angelical",
         "virtude": "virtude-diligencia",
         "pecado_oposto": "pecado-preguica",
-        "descricao": "Morreu trabalhando e continua. Quando todos descansam, ele já começou o dia.",
+        "descricao": "Não para de trabalhar. Quando todo mundo ainda está descansando, ele já começou o dia.",
         "vida": 0,
         "mana": 0,
         "caracteristicas": [
@@ -4162,7 +4162,7 @@
     "dt_efeitos": {
       "rotulo": "DT de Gigante",
       "pericia": "atletismo",
-      "descricao": "Quando um traço seu manda alguém testar Fortitude, Reflexos, Vontade ou Percepção, role Atletismo na hora: quem decide é o peso do corpo. O resultado é a DT que a criatura precisa alcançar, e uma rolagem vale para todos os alvos daquele uso."
+      "descricao": "Quando um traço seu manda alguém testar Fortitude, Reflexos, Vontade ou Percepção, role Atletismo na hora, porque o que conta é o peso do corpo. O resultado é a DT que a criatura precisa alcançar, e uma rolagem vale para todos os alvos daquele uso."
     },
     "categoria": "padrao",
     "disponibilidade": "geral",
@@ -4171,7 +4171,7 @@
     "mana": -1,
     "estamina": 3,
     "movimento": 0,
-    "descricao": "É tão grande que nada feito para os outros serve nele. Carrega o dobro, não sai do lugar quando tentam empurrar e vive batendo a cabeça em porta normal. A Linhagem define o que corre no sangue, e o porte só aumenta: Grande, Enorme e, no fim, Colossal.",
+    "descricao": "É grande demais para usar o que é feito para os outros. Carrega o dobro de peso, é difícil de empurrar e vive batendo a cabeça em porta normal. A Linhagem define o poder do sangue dele, e o porte cresce com o tempo: Grande, Enorme e, no fim, Colossal.",
     "fisiologia": [
       "Tamanho Grande; equipamentos precisam ter tamanho compatível."
     ],
@@ -4187,7 +4187,7 @@
     ],
     "recursos_provisorios": false,
     "rotulo_variante": "Linhagem Gigante",
-    "descricao_variantes": "Escolha o sangue que corre no gigante. As quatro linhagens pesam igual, e cada uma traz o seu próprio tipo de estrago.",
+    "descricao_variantes": "Escolha a linhagem do gigante. As quatro têm o mesmo peso, e cada uma tem o seu próprio tipo de ataque.",
     "variantes": [
       {
         "id": "pedra",
@@ -4437,7 +4437,7 @@
     "vida": 0,
     "mana": 0,
     "movimento": 0,
-    "descricao": "Gente com corpo de bicho, e todo animal do Jardim conta como Animália. Você escolhe a Forma (quanto do bicho aparece no corpo), a Morfologia (o instinto que veio mais forte) e o animal, que define o seu tamanho. Conversa coisas simples com bichos, o que não quer dizer que eles obedeçam. Fala Urrân.",
+    "descricao": "Gente com corpo de bicho, e todo animal do Jardim conta como Animália. Você escolhe a Forma (quanto do bicho aparece no corpo), a Morfologia (o instinto que veio mais forte) e o animal, que define o seu tamanho. Consegue conversar coisas simples com bichos, mas eles não são obrigados a obedecer. Fala Urrân.",
     "rotulo_variante": "Morfologia",
     "descricao_variantes": "Escolha o instinto que veio mais forte no seu animal. As dez Morfologias têm o mesmo peso e servem a qualquer Forma: a diferença está em para que o corpo serve (correr, aguentar, farejar, caçar, voar, nadar, picar, andar em bando, resistir ou impressionar).",
     "fisiologia": [
@@ -4457,7 +4457,7 @@
       {
         "id": "agil",
         "titulo": "Morfologia Ágil",
-        "descricao": "O corpo leve que corre, salta e escapa. Felinos, lebres, macacos e tudo que vive de reflexo.",
+        "descricao": "Corpo leve, feito para correr, saltar e escapar. Felinos, lebres, macacos e outros bichos de reflexo rápido.",
         "vida": -1,
         "mana": 1,
         "estamina": 2,
@@ -4475,7 +4475,7 @@
       {
         "id": "robusta",
         "titulo": "Morfologia Robusta",
-        "descricao": "O corpo largo que aguenta. Gorilas, rinocerontes, ursos e bichos que não saem do lugar.",
+        "descricao": "Corpo largo e resistente. Gorilas, rinocerontes, ursos e outros bichos difíceis de mover.",
         "vida": 2,
         "mana": 0,
         "estamina": 3,
@@ -4493,7 +4493,7 @@
       {
         "id": "mistica",
         "titulo": "Morfologia Mística",
-        "descricao": "Os sentidos afiados e o jeito de quem sabe mais do que diz. Corujas, raposas, corvos e gatos.",
+        "descricao": "Sentidos afiados e intuição forte. Corujas, raposas, corvos e gatos.",
         "vida": 0,
         "mana": 2,
         "movimento": 0,
@@ -4527,7 +4527,7 @@
       {
         "id": "alada",
         "titulo": "Morfologia Alada",
-        "descricao": "Asas, vento e vista de cima. Águias, falcões, morcegos e papagaios.",
+        "descricao": "Tem asas e voa. Águias, falcões, morcegos e papagaios.",
         "vida": -1,
         "mana": 1,
         "estamina": 2,
@@ -4547,7 +4547,7 @@
       {
         "id": "aquatica",
         "titulo": "Morfologia Aquática",
-        "descricao": "A água é casa. Golfinhos, polvos, focas e baleias.",
+        "descricao": "Vive na água. Golfinhos, polvos, focas e baleias.",
         "vida": 1,
         "mana": 0,
         "estamina": 2,
@@ -4581,7 +4581,7 @@
       {
         "id": "gregaria",
         "titulo": "Morfologia Gregária",
-        "descricao": "Nunca anda sozinha. Formigas, abelhas, ratos e cães.",
+        "descricao": "Vive em grupo. Formigas, abelhas, ratos e cães.",
         "vida": 1,
         "mana": 1,
         "estamina": 1,
@@ -4617,7 +4617,7 @@
       {
         "id": "mitica",
         "titulo": "Morfologia Mítica",
-        "descricao": "Os animais das histórias. Dragões, grifos, fênix e unicórnios.",
+        "descricao": "Animais lendários. Dragões, grifos, fênix e unicórnios.",
         "vida": 1,
         "mana": 2,
         "estamina": 0,
@@ -4634,14 +4634,14 @@
     ],
     "recursos_provisorios": false,
     "rotulo_natureza": "Forma",
-    "descricao_naturezas": "A Forma diz o quanto do bicho aparece no corpo. A Fera é o animal inteiro, o Híbrido é metade bicho e metade gente, e os Traços são gente com sinais de bicho. As três têm o mesmo peso: quem mostra mais bicho ganha mais corpo e perde em equipamento, e quem mostra menos ganha liberdade.",
+    "descricao_naturezas": "A Forma diz o quanto do bicho aparece no corpo. A Fera é o animal inteiro, o Híbrido é metade bicho e metade gente, e os Traços são gente com sinais de bicho. As três têm o mesmo peso: quem mostra mais bicho ganha mais força no corpo e perde opções de equipamento, e quem mostra menos pode usar qualquer equipamento.",
     "natureza_padrao": "hibrido",
     "naturezas": [
       {
         "id": "fera",
         "titulo": "Fera",
         "arma_natural_dano": "1d8",
-        "descricao": "O bicho inteiro, do jeito que a natureza fez. Um gorila que fala, um dragão que pensa, uma coruja que escolhe um lado. Tem o corpo e o tamanho do animal e a arma natural mais forte, e paga no equipamento: tudo que veste precisa ser feito para ele.",
+        "descricao": "O animal inteiro, só que pensa e fala como gente. Tem o corpo e o tamanho do animal e a arma natural mais forte, mas todo equipamento precisa ser feito sob medida para ele.",
         "vida": 2,
         "mana": -1,
         "estamina": 0,
@@ -4689,7 +4689,7 @@
       {
         "id": "tracos",
         "titulo": "Traços",
-        "descricao": "Gente com orelhas, rabo e os sentidos de um bicho. Passa por pessoa em qualquer rua, usa qualquer equipamento e tem sempre o tamanho de uma pessoa, seja qual for o animal. O bicho aparece menos no corpo e mais no instinto.",
+        "descricao": "Gente com orelhas, rabo e os sentidos de um bicho. Passa por pessoa em qualquer rua, usa qualquer equipamento e tem sempre o tamanho de uma pessoa, seja qual for o animal.",
         "tamanho": "Normal",
         "sem_arma_natural": true,
         "vida": -1,
@@ -4721,7 +4721,7 @@
         ],
         "tamanho": "Normal",
         "arma_natural": "Garra",
-        "descricao": "Silêncio, sombra e um bote só."
+        "descricao": "Felino escuro que caça de emboscada, sem fazer barulho."
       },
       {
         "id": "leopardo",
@@ -4742,7 +4742,7 @@
         ],
         "tamanho": "Normal",
         "arma_natural": "Garra",
-        "descricao": "Corre mais que qualquer um, por pouco tempo."
+        "descricao": "O animal mais rápido em corrida curta."
       },
       {
         "id": "lince",
@@ -4753,7 +4753,7 @@
         ],
         "tamanho": "Normal",
         "arma_natural": "Garra",
-        "descricao": "Orelhas em pincel que escutam o que o vento esconde."
+        "descricao": "Felino de orelhas em pincel e audição muito boa."
       },
       {
         "id": "gato",
@@ -4774,7 +4774,7 @@
         ],
         "tamanho": "Pequeno",
         "arma_natural": "Chute",
-        "descricao": "Dá o salto antes de pensar na fuga."
+        "descricao": "Rápida e assustada, foge aos saltos."
       },
       {
         "id": "macaco",
@@ -4784,7 +4784,7 @@
         ],
         "tamanho": "Pequeno",
         "arma_natural": "Mordida",
-        "descricao": "Mãos hábeis e a certeza de que tudo pode ser escalado."
+        "descricao": "Tem mãos hábeis e escala quase tudo."
       },
       {
         "id": "esquilo",
@@ -4794,7 +4794,7 @@
         ],
         "tamanho": "Pequeno",
         "arma_natural": "Mordida",
-        "descricao": "Guarda tudo e nunca está onde você olhou."
+        "descricao": "Pequeno e rápido, guarda tudo o que encontra."
       },
       {
         "id": "gazela",
@@ -4804,7 +4804,7 @@
         ],
         "tamanho": "Normal",
         "arma_natural": "Chifre",
-        "descricao": "Leve demais para ser alcançada."
+        "descricao": "Leve e veloz, difícil de alcançar."
       },
       {
         "id": "canguru",
@@ -4825,7 +4825,7 @@
         ],
         "tamanho": "Normal",
         "arma_natural": "Chifre",
-        "descricao": "Anda onde só o vento chega."
+        "descricao": "Sobe encostas e penhascos que quase ninguém consegue subir."
       },
       {
         "id": "gorila",
@@ -4835,7 +4835,7 @@
         ],
         "tamanho": "Grande",
         "arma_natural": "Punho",
-        "descricao": "Força de sobra e a paciência de quem não precisa provar nada."
+        "descricao": "Muito forte e calmo."
       },
       {
         "id": "rinoceronte",
@@ -4846,7 +4846,7 @@
         ],
         "tamanho": "Grande",
         "arma_natural": "Chifre",
-        "descricao": "Pele grossa, cabeça baixa e nenhuma vontade de recuar."
+        "descricao": "Pele grossa e investida forte, difícil de fazer recuar."
       },
       {
         "id": "urso",
@@ -4867,7 +4867,7 @@
         ],
         "tamanho": "Grande",
         "arma_natural": "Chifre",
-        "descricao": "Enxerga vermelho em qualquer pano e em qualquer provocação."
+        "descricao": "Forte e esquentado, parte para cima com os chifres."
       },
       {
         "id": "bufalo",
@@ -4888,7 +4888,7 @@
         ],
         "tamanho": "Enorme",
         "arma_natural": "Presa",
-        "descricao": "Memória longa, passo pesado e uma delicadeza que ninguém espera."
+        "descricao": "Enorme, de memória longa e com uma tromba que serve de mão."
       },
       {
         "id": "mamute",
@@ -4898,7 +4898,7 @@
         ],
         "tamanho": "Enorme",
         "arma_natural": "Presa",
-        "descricao": "Peludo, antigo e lento de convencer."
+        "descricao": "Elefante peludo das terras geladas."
       },
       {
         "id": "hipopotamo",
@@ -4909,7 +4909,7 @@
         ],
         "tamanho": "Grande",
         "arma_natural": "Mordida",
-        "descricao": "Parece manso na lama e é o bicho mais perigoso do rio."
+        "descricao": "Parece calmo na lama, mas é um dos bichos mais perigosos do rio."
       },
       {
         "id": "javali",
@@ -4961,7 +4961,7 @@
         ],
         "tamanho": "Grande",
         "arma_natural": "Chifre",
-        "descricao": "Chifres largos como galhos de árvore velha."
+        "descricao": "Cervo enorme de chifres largos."
       },
       {
         "id": "coruja",
@@ -4972,7 +4972,7 @@
         ],
         "tamanho": "Pequeno",
         "arma_natural": "Garra",
-        "descricao": "Enxerga no escuro e escuta o coração de um rato."
+        "descricao": "Enxerga no escuro e ouve muito bem."
       },
       {
         "id": "corvo",
@@ -4983,7 +4983,7 @@
         ],
         "tamanho": "Pequeno",
         "arma_natural": "Bico",
-        "descricao": "Lembra de rostos, de dívidas e de histórias."
+        "descricao": "Inteligente e de boa memória, lembra de rostos por anos."
       },
       {
         "id": "raposa",
@@ -5004,7 +5004,7 @@
         ],
         "tamanho": "Normal",
         "arma_natural": "Chifre",
-        "descricao": "Calmo na clareira e sempre pronto para a floresta."
+        "descricao": "Calmo e atento, foge para o mato ao menor perigo."
       },
       {
         "id": "gato-preto",
@@ -5014,7 +5014,7 @@
         ],
         "tamanho": "Pequeno",
         "arma_natural": "Garra",
-        "descricao": "Dizem que dá azar. Dizem muita coisa."
+        "descricao": "Gato de pelo preto, ágil e discreto. Nas histórias, dá azar."
       },
       {
         "id": "sapo",
@@ -5034,7 +5034,7 @@
         ],
         "tamanho": "Normal",
         "arma_natural": "Bico",
-        "descricao": "Mostra a cauda para que ninguém repare no resto."
+        "descricao": "Abre a cauda colorida para chamar atenção."
       },
       {
         "id": "cisne",
@@ -5045,7 +5045,7 @@
         ],
         "tamanho": "Normal",
         "arma_natural": "Bico",
-        "descricao": "Calmo por cima da água e firme por baixo."
+        "descricao": "Ave elegante que nada com calma."
       },
       {
         "id": "mariposa",
@@ -5056,7 +5056,7 @@
         ],
         "tamanho": "Pequeno",
         "arma_natural": "Mordida",
-        "descricao": "Segue a luz errada de propósito."
+        "descricao": "Inseto noturno atraído pela luz."
       },
       {
         "id": "lemure",
@@ -5066,7 +5066,7 @@
         ],
         "tamanho": "Pequeno",
         "arma_natural": "Garra",
-        "descricao": "Olhos enormes que veem o que a noite guarda."
+        "descricao": "Tem olhos enormes e enxerga bem à noite."
       },
       {
         "id": "lobo",
@@ -5089,7 +5089,7 @@
         ],
         "tamanho": "Grande",
         "arma_natural": "Garra",
-        "descricao": "Listras no escuro e um salto que ninguém ouve."
+        "descricao": "Felino listrado que ataca com um salto silencioso."
       },
       {
         "id": "leao",
@@ -5111,7 +5111,7 @@
         ],
         "tamanho": "Normal",
         "arma_natural": "Mordida",
-        "descricao": "Ri de quem corre e come o que sobra."
+        "descricao": "Tem risada alta e mordida forte, e come o que os outros deixam."
       },
       {
         "id": "onca",
@@ -5133,7 +5133,7 @@
         ],
         "tamanho": "Normal",
         "arma_natural": "Mordida",
-        "descricao": "Sobrevive a tudo e ri de tudo."
+        "descricao": "Esperto e resistente, se adapta a quase qualquer lugar."
       },
       {
         "id": "urso-polar",
@@ -5144,7 +5144,7 @@
         ],
         "tamanho": "Grande",
         "arma_natural": "Garra",
-        "descricao": "Branco, enorme e paciente à beira do buraco no gelo."
+        "descricao": "Urso branco e enorme que caça no gelo."
       },
       {
         "id": "tubarao",
@@ -5155,7 +5155,7 @@
         ],
         "tamanho": "Grande",
         "arma_natural": "Mordida",
-        "descricao": "Sente uma gota de sangue a léguas de distância."
+        "descricao": "Sente cheiro de sangue de muito longe."
       },
       {
         "id": "orca",
@@ -5189,7 +5189,7 @@
         ],
         "tamanho": "Normal",
         "arma_natural": "Garra",
-        "descricao": "Vê o rato a um quilômetro e desce sem avisar."
+        "descricao": "Enxerga muito longe e ataca de cima."
       },
       {
         "id": "falcao",
@@ -5201,7 +5201,7 @@
         ],
         "tamanho": "Pequeno",
         "arma_natural": "Garra",
-        "descricao": "O mergulho mais rápido do céu."
+        "descricao": "A ave mais rápida em mergulho."
       },
       {
         "id": "morcego",
@@ -5224,7 +5224,7 @@
         ],
         "tamanho": "Pequeno",
         "arma_natural": "Garra",
-        "descricao": "Corta o vento entre os galhos."
+        "descricao": "Voa rápido e manobra bem entre os galhos."
       },
       {
         "id": "albatroz",
@@ -5244,7 +5244,7 @@
         ],
         "tamanho": "Grande",
         "arma_natural": "Bico",
-        "descricao": "Asas largas e fome paciente."
+        "descricao": "Ave enorme que plana por horas atrás de carniça."
       },
       {
         "id": "beija-flor",
@@ -5255,7 +5255,7 @@
         ],
         "tamanho": "Pequeno",
         "arma_natural": "Bico",
-        "descricao": "Paira no ar e some antes de alguém piscar."
+        "descricao": "Pequeno e muito rápido, consegue parar no ar."
       },
       {
         "id": "cegonha",
@@ -5265,7 +5265,7 @@
         ],
         "tamanho": "Normal",
         "arma_natural": "Bico",
-        "descricao": "Traz o que lhe pedem, e às vezes o que não pediram."
+        "descricao": "Ave de pernas longas e bico comprido."
       },
       {
         "id": "papagaio",
@@ -5276,7 +5276,7 @@
         ],
         "tamanho": "Pequeno",
         "arma_natural": "Bico",
-        "descricao": "Repete o que ouve e entende mais do que parece."
+        "descricao": "Colorido e falante, repete o que ouve."
       },
       {
         "id": "golfinho",
@@ -5319,7 +5319,7 @@
         ],
         "tamanho": "Enorme",
         "arma_natural": "Cauda",
-        "descricao": "Canta de um oceano a outro."
+        "descricao": "Enorme, com um canto que se ouve de muito longe."
       },
       {
         "id": "lontra",
@@ -5340,7 +5340,7 @@
         ],
         "tamanho": "Normal",
         "arma_natural": "Descarga",
-        "descricao": "Guarda uma tempestade no corpo."
+        "descricao": "Peixe comprido que dá choque."
       },
       {
         "id": "raia",
@@ -5373,7 +5373,7 @@
         ],
         "tamanho": "Pequeno",
         "arma_natural": "Tentáculo",
-        "descricao": "Flutua sem pressa e deixa um aviso na pele."
+        "descricao": "Flutua devagar e queima a pele de quem encosta."
       },
       {
         "id": "pinguim",
@@ -5405,7 +5405,7 @@
         ],
         "tamanho": "Normal",
         "arma_natural": "Presa",
-        "descricao": "Quieta na grama, rápida na hora H."
+        "descricao": "Fica escondida na grama e dá o bote rápido."
       },
       {
         "id": "jiboia",
@@ -5416,7 +5416,7 @@
         ],
         "tamanho": "Grande",
         "arma_natural": "Constrição",
-        "descricao": "Não precisa de veneno: aperta até a conversa acabar."
+        "descricao": "Não tem veneno e mata apertando a presa."
       },
       {
         "id": "escorpiao",
@@ -5437,7 +5437,7 @@
         ],
         "tamanho": "Pequeno",
         "arma_natural": "Presa",
-        "descricao": "Tece de noite e espera de dia."
+        "descricao": "Faz teias e espera a presa cair nelas."
       },
       {
         "id": "sapo-venenoso",
@@ -5447,7 +5447,7 @@
         ],
         "tamanho": "Pequeno",
         "arma_natural": "Toque",
-        "descricao": "Colorido de propósito: é o aviso."
+        "descricao": "As cores fortes avisam que ele é venenoso."
       },
       {
         "id": "centopeia",
@@ -5457,7 +5457,7 @@
         ],
         "tamanho": "Pequeno",
         "arma_natural": "Mordida",
-        "descricao": "Cem pernas e nenhuma pressa de recuar."
+        "descricao": "Tem dezenas de pernas e uma picada venenosa."
       },
       {
         "id": "vespa",
@@ -5479,7 +5479,7 @@
         ],
         "tamanho": "Normal",
         "arma_natural": "Presa",
-        "descricao": "Avisa uma vez, com o guizo."
+        "descricao": "Avisa com o chocalho da cauda antes de picar."
       },
       {
         "id": "ornitorrinco",
@@ -5513,7 +5513,7 @@
         ],
         "tamanho": "Pequeno",
         "arma_natural": "Ferrão",
-        "descricao": "Trabalha para o ninho e morre pela colmeia."
+        "descricao": "Trabalha para a colmeia e defende o ninho com o ferrão."
       },
       {
         "id": "rato",
@@ -5546,7 +5546,7 @@
         ],
         "tamanho": "Normal",
         "arma_natural": "Mordida",
-        "descricao": "Leal até o fim, e depois dele."
+        "descricao": "Leal, de bom faro e muito apegado ao dono."
       },
       {
         "id": "estorninho",
@@ -5557,7 +5557,7 @@
         ],
         "tamanho": "Pequeno",
         "arma_natural": "Bico",
-        "descricao": "Voa em nuvem e muda de rumo como um só."
+        "descricao": "Voa em bandos enormes que mudam de direção juntos."
       },
       {
         "id": "gafanhoto",
@@ -5581,7 +5581,7 @@
         ],
         "tamanho": "Pequeno",
         "arma_natural": "Mordida",
-        "descricao": "Sozinha é um peixe, em cardume é um problema."
+        "descricao": "Peixe pequeno de dentes afiados que ataca em cardume."
       },
       {
         "id": "ovelha",
@@ -5591,7 +5591,7 @@
         ],
         "tamanho": "Normal",
         "arma_natural": "Chifre",
-        "descricao": "Segue o rebanho, e o rebanho segue ela."
+        "descricao": "Anda sempre com o rebanho."
       },
       {
         "id": "tartaruga",
@@ -5601,7 +5601,7 @@
         ],
         "tamanho": "Pequeno",
         "arma_natural": "Casco",
-        "descricao": "Leva a casa nas costas e sempre chega."
+        "descricao": "Lenta e protegida pelo casco."
       },
       {
         "id": "tatu",
@@ -5611,7 +5611,7 @@
         ],
         "tamanho": "Pequeno",
         "arma_natural": "Garra",
-        "descricao": "Enrola e vira pedra."
+        "descricao": "Se enrola numa bola de couraça para se proteger."
       },
       {
         "id": "crocodilo",
@@ -5623,7 +5623,7 @@
         ],
         "tamanho": "Grande",
         "arma_natural": "Mordida",
-        "descricao": "Fica parado até o último segundo."
+        "descricao": "Espera parado na água e ataca de surpresa."
       },
       {
         "id": "besouro",
@@ -5633,7 +5633,7 @@
         ],
         "tamanho": "Pequeno",
         "arma_natural": "Mandíbula",
-        "descricao": "Carapaça brilhante e força que não cabe no tamanho."
+        "descricao": "Pequeno, de carapaça dura e muito forte para o tamanho."
       },
       {
         "id": "caranguejo",
@@ -5644,7 +5644,7 @@
         ],
         "tamanho": "Pequeno",
         "arma_natural": "Pinça",
-        "descricao": "Anda de lado, segura de frente."
+        "descricao": "Anda de lado e prende com as pinças."
       },
       {
         "id": "pangolim",
@@ -5654,7 +5654,7 @@
         ],
         "tamanho": "Pequeno",
         "arma_natural": "Garra",
-        "descricao": "Escamas que viram escudo."
+        "descricao": "Coberto de escamas duras que servem de armadura."
       },
       {
         "id": "jacare",
@@ -5666,7 +5666,7 @@
         ],
         "tamanho": "Grande",
         "arma_natural": "Mordida",
-        "descricao": "Dorme de olho aberto na beira do rio."
+        "descricao": "Fica parado na beira do rio, sempre atento."
       },
       {
         "id": "tartaruga-gigante",
@@ -5676,7 +5676,7 @@
         ],
         "tamanho": "Grande",
         "arma_natural": "Casco",
-        "descricao": "Cem anos de calma debaixo de um casco do tamanho de uma porta."
+        "descricao": "Vive mais de cem anos e tem um casco enorme."
       },
       {
         "id": "dragao",
@@ -5686,7 +5686,7 @@
         ],
         "tamanho": "Enorme",
         "arma_natural": "Mordida",
-        "descricao": "O mais antigo dos animais, e o mais convencido."
+        "descricao": "O animal mais antigo e mais poderoso das histórias."
       },
       {
         "id": "grifo",
@@ -5698,7 +5698,7 @@
         ],
         "tamanho": "Grande",
         "arma_natural": "Garra",
-        "descricao": "Águia na frente, leão atrás e orgulho nos dois."
+        "descricao": "Metade águia e metade leão."
       },
       {
         "id": "fenix",
@@ -5710,7 +5710,7 @@
         ],
         "tamanho": "Normal",
         "arma_natural": "Garra",
-        "descricao": "Morre em chamas e volta com a mesma pergunta."
+        "descricao": "Ave de fogo que renasce das próprias cinzas."
       },
       {
         "id": "unicornio",
@@ -5721,7 +5721,7 @@
         ],
         "tamanho": "Grande",
         "arma_natural": "Chifre",
-        "descricao": "Branco, raro e muito difícil de enganar."
+        "descricao": "Cavalo branco com um chifre na testa, muito raro."
       },
       {
         "id": "pegaso",
@@ -5732,7 +5732,7 @@
         ],
         "tamanho": "Grande",
         "arma_natural": "Coice",
-        "descricao": "Cavalo de nuvem que obedece só ao vento."
+        "descricao": "Cavalo com asas."
       },
       {
         "id": "basilisco",
@@ -5743,7 +5743,7 @@
         ],
         "tamanho": "Normal",
         "arma_natural": "Presa",
-        "descricao": "Um olhar basta, e quase ninguém sobra para contar."
+        "descricao": "Serpente lendária de olhar mortal."
       },
       {
         "id": "quimera",
@@ -5754,7 +5754,7 @@
         ],
         "tamanho": "Grande",
         "arma_natural": "Mordida",
-        "descricao": "Três cabeças, três opiniões e nenhuma paciência."
+        "descricao": "Fera de três cabeças: leão, cabra e serpente."
       },
       {
         "id": "manticora",
@@ -5765,7 +5765,7 @@
         ],
         "tamanho": "Grande",
         "arma_natural": "Garra",
-        "descricao": "Corpo de leão, cauda de escorpião e fome de enigmas."
+        "descricao": "Corpo de leão, cauda de escorpião e rosto quase humano."
       },
       {
         "id": "cerbero",
@@ -5776,7 +5776,7 @@
         ],
         "tamanho": "Grande",
         "arma_natural": "Mordida",
-        "descricao": "Guarda o portão e não aceita suborno."
+        "descricao": "Cão de três cabeças que guarda portões."
       },
       {
         "id": "hidra",
@@ -5799,7 +5799,7 @@
         ],
         "tamanho": "Enorme",
         "arma_natural": "Tentáculo",
-        "descricao": "Dorme no fundo do mar e acorda de mau humor."
+        "descricao": "Monstro marinho gigante, cheio de tentáculos."
       },
       {
         "id": "esfinge",
@@ -5810,7 +5810,7 @@
         ],
         "tamanho": "Grande",
         "arma_natural": "Garra",
-        "descricao": "Faz uma pergunta só, e é sempre a mais difícil."
+        "descricao": "Corpo de leão e rosto humano, famosa pelos enigmas."
       }
     ],
     "estagios": [
@@ -5868,7 +5868,7 @@
     "titulo": "Sereia / Tritão",
     "povo": [
       "Respira dentro e fora d'água, então todo povo de sereias e tritões precisa da margem e do fundo por perto.",
-      "A voz é arma e laço ao mesmo tempo: a Canção de cada um diz o que ele faz com quem ouve, e cantar junto é coisa séria.",
+      "A voz serve para atacar e para criar laços: a Canção de cada um diz o que ele faz com quem ouve, e cantar junto é coisa séria.",
       "Nada tão rápido quanto anda, e a distância debaixo d'água conta tanto quanto a de terra."
     ],
     "linguas": [
@@ -6154,7 +6154,7 @@
     "vida": -1,
     "mana": 2,
     "movimento": 0,
-    "descricao": "Copia o rosto, a roupa e o jeito de quem observou de perto, e vira até um móvel quando precisa que ninguém olhe. Por baixo continua o mesmo bicho magro e nervoso, com um núcleo só, e é esse núcleo que entrega tudo quando ele apaga. O Molde escolhido define o que ele copia melhor, e com o tempo ele consegue guardar mais de uma forma pronta.",
+    "descricao": "Copia o rosto, a roupa e o jeito de quem observou de perto, e consegue até virar um móvel para não ser notado. Por baixo é uma criatura magra e nervosa, com um único núcleo, e perde a forma copiada se ficar inconsciente. O Molde escolhido define o que ele copia melhor, e com o tempo ele consegue guardar mais de uma forma pronta.",
     "fisiologia": [
       "Corpo mole, sem esqueleto fixo, que assume a forma que a vontade mandar. Tem um único núcleo de identidade, e perder a consciência desmancha qualquer forma copiada na hora."
     ],
@@ -6414,7 +6414,7 @@
     "vida": 0,
     "mana": 0,
     "movimento": 0,
-    "descricao": "Um corpo só com mais de um bicho morando dentro, dividindo comida, sono e decisões. Aguenta passar necessidade muito melhor do que qualquer um deles aguentaria sozinho, e ninguém de fora sabe dizer onde um acaba e o outro começa. O Tipo escolhido define como essa parceria aparece por fora, e quanto mais tempo passa, mais eles se misturam.",
+    "descricao": "Um corpo com mais de um ser vivendo dentro, dividindo comida, sono e decisões. Aguenta passar necessidade melhor do que cada um aguentaria sozinho. O Tipo escolhido define como essa parceria aparece por fora, e com o tempo eles se misturam cada vez mais.",
     "fisiologia": [
       "Corpo formado pela união ou pela cooperação entre organismos distintos. Aparência, textura e comportamento mudam conforme o Tipo de Simbionte escolhido."
     ],
@@ -7007,7 +7007,7 @@
     "titulo": "Feérico",
     "povo": [
       "Tem muito mais Mana do que o tamanho faz parecer, então todo povo feérico vive cercado de cor, som e brilho que somem quando alguém toca.",
-      "Ilusão é brincadeira de criança e arma de adulto, e saber a diferença é a primeira coisa que um feérico aprende.",
+      "Toda criança feérica brinca com ilusões, e a primeira coisa que ela aprende é quando uma ilusão pode machucar alguém.",
       "Como o estrago de uma ilusão vem do que a vítima acredita, palavra dada vale muito entre feéricos."
     ],
     "linguas": [],
@@ -7022,7 +7022,7 @@
     "vida": -2,
     "mana": 4,
     "movimento": 0,
-    "descricao": "Pode ser pequeno ou de tamanho normal, e tem muito mais Mana do que o tamanho faz parecer. Faz truquezinho sensorial toda hora, de graça, e ilusão grande quando resolve levar a sério. Nenhuma delas machuca ninguém; o estrago vem do que a vítima faz acreditando na coisa errada.",
+    "descricao": "Pode ser pequeno ou de tamanho normal, e tem muito mais Mana do que o tamanho faz parecer. Faz pequenos truques sensoriais à vontade, sem custo, e ilusões grandes quando precisa. As ilusões não causam dano, mas fazem a vítima agir errado por acreditar nelas.",
     "fisiologia": [
       "Tamanho Pequeno ou Normal, definido na criação."
     ],
@@ -7141,7 +7141,7 @@
       "itens_comuns_total": 2,
       "retroativos_em_transformacao": false
     },
-    "descricao": "Não envelhece e não esquece nada. São séculos de leitura acumulados num Intelecto que passa do limite que vale para todo mundo. Vem de Nadalon e escolhe uma das seis Linhagens, que é o que diferencia um Elfo de Sombras de um Elfo de Tempestades. A Linhagem fica mais forte quando ele vira Ancião e se abre por completo quando chega a Milenar.",
+    "descricao": "Não envelhece e não esquece nada. Os séculos de estudo deixam o Intelecto dele acima do limite normal. Vem de Nadalon e escolhe uma das seis Linhagens, que é o que diferencia um Elfo de Sombras de um Elfo de Tempestades. A Linhagem fica mais forte quando ele vira Ancião e se abre por completo quando chega a Milenar.",
     "fisiologia": [
       "Não envelhece e é imune a envelhecimento sobrenatural."
     ],
@@ -7584,7 +7584,7 @@
       "itens_comuns_total": 0,
       "retroativos_em_transformacao": false
     },
-    "descricao": "Morreu, foi parar em Arkarin e voltou. Trouxe um Fragmento de Arkarin preso na alma, que vibra perto de espírito preso e de tudo que a morte tocou. Quanto mais tempo ficou do outro lado, mais coisa trouxe de volta, e a Condição Ancestral escolhida explica por que a Mulher Carmesim deixou ele ir embora.",
+    "descricao": "Morreu, foi parar em Arkarin e voltou. Trouxe um Fragmento de Arkarin preso na alma, que vibra perto de espíritos presos e de coisas ligadas à morte. Quanto mais tempo ficou do outro lado, mais coisa trouxe de volta, e a Condição Ancestral escolhida explica por que a Mulher Carmesim deixou ele ir embora.",
     "fisiologia": [
       "Continua sendo um ser vivo, salvo alteração declarada pela Condição Ancestral escolhida.",
       "Carrega um Fragmento de Arkarin ligado à própria alma."
@@ -7810,8 +7810,8 @@
     "tipo": "raca",
     "titulo": "Auleth",
     "povo": [
-      "Nasceu fora do Jardim e escolheu um corpo para caber aqui, então todo Auleth olha o mundo como quem chegou de visita.",
-      "Não come, não bebe e não dorme, e medita no lugar do sono, então o dia de um Auleth corre num relógio próprio.",
+      "Nasceu fora do Jardim e escolheu um corpo para caber aqui, então todo Auleth vê este mundo como um visitante.",
+      "Não come, não bebe e não dorme, e medita no lugar do sono, então o dia de um Auleth segue um horário próprio.",
       "Sabe muito sobre duas coisas e quase nada sobre o que os outros sentem, e conviver com um Auleth pede paciência dos dois lados."
     ],
     "linguas_nota": "Fala o Universal, que foi criado por um Auleth, e o povo o trata como língua da casa.",
@@ -7870,7 +7870,7 @@
       "Grande",
       "Enorme"
     ],
-    "descricao": "Uma consciência que nasceu lá fora e escolheu um corpo para caber aqui. Muda de forma e de tamanho quando quer, sabe demais sobre duas coisas bem específicas e quase nada sobre o que os outros sentem. A Origem Cósmica diz de onde ele veio (estrela, planeta, buraco negro), e o tempo neste mundo vai devolvendo o que ficou para trás, de Fragmento até Íntegro.",
+    "descricao": "Uma consciência que nasceu fora do Jardim e escolheu um corpo para viver aqui. Muda de forma e de tamanho quando quer, sabe muito sobre duas coisas bem específicas e entende pouco o que os outros sentem. A Origem Cósmica diz de onde ele veio (estrela, planeta, buraco negro), e com o tempo ele recupera o que deixou para trás, de Fragmento até Íntegro.",
     "fisiologia": [
       "Não precisa comer, beber ou dormir. Para concluir um descanso, medita pelo tempo normal e pode perceber os arredores, mas qualquer atividade além de observação simples interrompe a recuperação.",
       "É imune a doenças comuns ou sobrenaturais, mas não a venenos ou outras condições que apenas produzam sintomas semelhantes.",
@@ -8239,7 +8239,7 @@
     "tipo": "raca",
     "titulo": "Autômato",
     "povo": [
-      "Não respira, não come e não dorme, então todo povo autômato tem tempo de sobra e nenhuma mesa de jantar.",
+      "Não respira, não come e não dorme, então todo povo autômato tem tempo de sobra e não faz refeições.",
       "Quando quebra, quem conserta é um engenheiro, e todo autômato sabe o nome de quem mexe no núcleo dele.",
       "Tem vontade própria e não deve obediência a criador nenhum, e essa liberdade é o que um autômato mais defende."
     ],
@@ -9215,7 +9215,7 @@
     "povo": [
       "É feito de pedaços de mais de uma criatura, então todo Amálgamo carrega mais de uma origem no mesmo corpo.",
       "Nenhuma das partes manda sozinha, e conviver consigo mesmo é o primeiro aprendizado de um Amálgamo.",
-      "O corpo cobra a conta quando ele força os Fragmentos, e todo Amálgamo aprende cedo até onde pode ir."
+      "Forçar os Fragmentos machuca o corpo, e todo Amálgamo aprende cedo até onde pode ir."
     ],
     "linguas_nota": "Fala as línguas dos seres que se fundiram nele, às vezes misturadas na mesma frase, e o Universal.",
     "linguas": [],
@@ -9277,7 +9277,7 @@
       "expressos": 2,
       "surto_adicional": 1
     },
-    "descricao": "Um corpo só, montado com pedaços de mais de uma criatura. Fica com uma mistura das partes, sem herdar o pacote de raça de nenhuma delas: aguenta melhor o que ataca o corpo e o que ataca a cabeça, e conhece Fragmentos que consegue usar por algumas rodadas antes do corpo cobrar a conta.",
+    "descricao": "Um corpo só, montado com pedaços de mais de uma criatura. Fica com uma mistura das partes, sem herdar o pacote de raça de nenhuma delas: aguenta melhor o que ataca o corpo e o que ataca a cabeça, e conhece Fragmentos que consegue usar por algumas rodadas antes de o corpo começar a sofrer.",
     "fisiologia": [
       "É um ser vivo e pode ser tratado normalmente com Cura.",
       "Seu corpo reúne diferentes criaturas, corpos, almas ou essências, mas não acumula os pacotes raciais das partes que o formaram."
@@ -9439,7 +9439,7 @@
     "povo": [
       "Bruxa é uma natureza que chega e fica, então todo grupo de bruxas junta gente vinda de outros povos, ofícios e famílias.",
       "Enxerga maldição, pacto e possessão de longe, e por isso sabe de coisas que os vizinhos prefeririam esconder.",
-      "Quando a Mana acaba, paga com Vida, e toda bruxa aprende a contar o próprio preço antes de qualquer feitiço."
+      "Quando a Mana acaba, paga com Vida, e toda bruxa aprende a calcular quanto vai gastar antes de cada feitiço."
     ],
     "linguas": [
       {
