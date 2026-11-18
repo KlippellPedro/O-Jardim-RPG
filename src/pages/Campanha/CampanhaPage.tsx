@@ -1,36 +1,88 @@
-import { useCallback, useEffect, useState, type CSSProperties } from 'react';
+import { useCallback, useEffect, useId, useState, type CSSProperties } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  BookOpen, CalendarClock, CalendarDays, Car, Copy, Crown, Globe, History, Palette, Radio,
-  ScrollText, Shield, ShoppingBag, Sparkles, Swords, Users,
+  BookOpen, CalendarClock, CalendarDays, Car, ChevronRight, Copy, Crown, Dices, Eye, Flame, Globe, History, Hourglass,
+  Palette, ScrollText, Shield, ShoppingBag, Sparkles, Swords, Trophy, Users,
 } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import { useAuthStore } from '../../store/useAuthStore';
 import { campanhasApi } from '../../services/campanhasApi';
-import { campanhaPainelApi, type IPainelCampanha } from '../../services/campanhaPainelApi';
+import { campanhaPainelApi, type IEpilogo, type IMembroDoPainel, type IPainelCampanha } from '../../services/campanhaPainelApi';
 import { calendarioMundoApi, type ICalendarioMundo } from '../../services/calendarioMundoApi';
 import { engajamentoApi, type ICalendario } from '../../services/engajamentoApi';
 import { CarimboRetido, RasuraTitulo } from '../../components/ui/Rasura';
 import { ResumoSessaoModal } from '../Sessao/components/ResumoSessaoModal';
-import { formatarDataDaSessao } from '../Quadro/quadro';
+import { COR_DA_ESTACAO, textoEmDias } from '../Mundo/calendarioMundo';
+import { corLegivel } from '../Ficha/Wizard/corLegivel';
+import { CORES_DO_RANK, ICONES_DO_RANK } from '../Quadro/titulosDoRank';
 import { IdentidadeModal } from './IdentidadeModal';
 import { EpilogoModal } from './EpilogoModal';
 import { SeletorDeCampanha } from './SeletorDeCampanha';
 import { CronicaCampanha } from './CronicaCampanha';
-import { ROTULO_PAPEL, corDaCampanha, textoDeDuracao, textoDeVisita, urlDaCapa } from './campanha';
+import {
+  ROTULO_PAPEL, corDaCampanha, folhaDaSessao, horasDeHistoria, inicialDaCampanha, presencaDe, textoDeDuracao, textoDeVisita, urlDaCapa,
+} from './campanha';
 import { confirmar } from '../../components/avisos/confirmacao';
+import './campanha.css';
 
-const ATALHOS = [
-  { rotulo: 'Ficha', caminho: '/ficha', icone: Shield },
-  { rotulo: 'Sessão', caminho: '/sessao', icone: Swords },
-  { rotulo: 'Quadro', caminho: '/quadro', icone: ScrollText },
-  { rotulo: 'Mundo', caminho: '/mundo', icone: Globe },
-  { rotulo: 'Loja', caminho: '/loja', icone: ShoppingBag },
-  { rotulo: 'Livro', caminho: '/regras', icone: BookOpen },
-  { rotulo: 'Frota', caminho: '/frota', icone: Car },
-] as const;
+const PORTAIS: Array<{ rotulo: string; dica: string; caminho: string; icone: LucideIcon; cor: string }> = [
+  { rotulo: 'Ficha', dica: 'Seu personagem', caminho: '/ficha', icone: Shield, cor: '#e9c46a' },
+  { rotulo: 'Sessão', dica: 'A mesa ao vivo', caminho: '/sessao', icone: Swords, cor: '#f87171' },
+  { rotulo: 'Quadro', dica: 'Mural, rank e agenda', caminho: '/quadro', icone: ScrollText, cor: '#f2a65a' },
+  { rotulo: 'Mundo', dica: 'Lore e Árvores', caminho: '/mundo', icone: Globe, cor: '#5fc9b3' },
+  { rotulo: 'Loja', dica: 'Comprar e vender', caminho: '/loja', icone: ShoppingBag, cor: '#fbbf24' },
+  { rotulo: 'Livro', dica: 'Regras do jogo', caminho: '/regras', icone: BookOpen, cor: '#a78bfa' },
+  { rotulo: 'Frota', dica: 'Veículos do grupo', caminho: '/frota', icone: Car, cor: '#7dd3fc' },
+];
 
-const cartao = 'rounded-3xl border border-white/10 bg-[#0c0b11]/85 p-5';
-const titulo = 'mb-4 flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.22em] text-gray-500';
+const ORDEM_DO_PAPEL: Record<string, number> = { mestre: 0, assistente: 1, jogador: 2, observador: 3 };
+const ICONE_DO_PAPEL: Record<string, LucideIcon> = { mestre: Crown, assistente: Sparkles, jogador: Shield, observador: Eye };
+const numero = (valor: number) => valor.toLocaleString('pt-BR');
+
+/** O brasão da campanha: um escudo na cor dela com a inicial do nome. */
+const Brasao = ({ inicial }: { inicial: string }) => {
+  const id = useId().replace(/:/g, '');
+  return (
+    <svg className="cp-brasao" viewBox="0 0 64 76" aria-hidden="true">
+      <defs>
+        <linearGradient id={`${id}-fundo`} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" style={{ stopColor: 'color-mix(in srgb, var(--cp-acento) 85%, white)' }} />
+          <stop offset="1" style={{ stopColor: 'color-mix(in srgb, var(--cp-acento) 45%, #07060a)' }} />
+        </linearGradient>
+      </defs>
+      <path d="M32 2 L61 11 V36 C61 54 48 66 32 74 C16 66 3 54 3 36 V11 Z" fill={`url(#${id}-fundo)`} stroke="rgba(0,0,0,.45)" strokeWidth="1.5" />
+      <path d="M32 7.5 L56 15 V36 C56 51 45.5 61 32 68 C18.5 61 8 51 8 36 V15 Z" fill="none" stroke="rgba(255,250,240,.45)" strokeWidth="1.2" />
+      <text x="32" y="47" textAnchor="middle" fontSize={inicial.length > 1 ? 22 : 30}>{inicial}</text>
+    </svg>
+  );
+};
+
+const Membro = ({ membro }: { membro: IMembroDoPainel }) => {
+  const mestre = membro.papel === 'mestre';
+  const Icone = ICONE_DO_PAPEL[membro.papel] ?? Shield;
+  const presenca = presencaDe(membro.visto_em);
+  return (
+    <li className={`cp-membro ${mestre ? 'cp-membro--mestre' : ''}`}>
+      <span className="cp-retrato" aria-hidden="true">
+        {mestre ? <Crown size={17} /> : membro.nome.slice(0, 1).toUpperCase()}
+        <span className={`cp-presenca cp-presenca--${presenca}`} />
+      </span>
+      <span className="cp-membro__texto">
+        <span className="cp-membro__nome">
+          <strong>{membro.nome}</strong>
+          <small><Icone size={9} className="mr-1 inline" aria-hidden="true" />{ROTULO_PAPEL[membro.papel] ?? membro.papel}</small>
+        </span>
+        {membro.personagem ? (
+          <span className="cp-membro__personagem">{membro.personagem.nome}</span>
+        ) : membro.papel === 'jogador' ? (
+          <span className="cp-membro__personagem"><em>sem personagem escolhido</em></span>
+        ) : null}
+        <span className="cp-membro__visto">{textoDeVisita(membro.visto_em)}</span>
+      </span>
+      {membro.personagem?.nivel ? <span className="cp-nivel" title="Nível do personagem">Nv {membro.personagem.nivel}</span> : null}
+    </li>
+  );
+};
 
 /** A página da campanha: o que é dela (mundo, sessão, quem joga, o que já aconteceu). */
 export default function CampanhaPage() {
@@ -41,6 +93,7 @@ export default function CampanhaPage() {
   const [painel, setPainel] = useState<IPainelCampanha | null>(null);
   const [mundo, setMundo] = useState<ICalendarioMundo | null>(null);
   const [agenda, setAgenda] = useState<ICalendario | null>(null);
+  const [numeros, setNumeros] = useState<IEpilogo | null>(null);
   const [erro, setErro] = useState('');
   const [editando, setEditando] = useState(false);
   const [epilogo, setEpilogo] = useState(false);
@@ -56,12 +109,13 @@ export default function CampanhaPage() {
     } catch (falha) {
       setErro(falha instanceof Error ? falha.message : 'Não foi possível abrir a campanha.');
     }
-    // Hoje no mundo e a próxima sessão vêm dos próprios módulos; se falharem, o cartão só some.
+    // O resto vem dos próprios módulos; se algum falhar, a parte dele só some.
     calendarioMundoApi.obter(campanhaId).then(setMundo).catch(() => setMundo(null));
     engajamentoApi.calendario(campanhaId).then(setAgenda).catch(() => setAgenda(null));
+    campanhaPainelApi.epilogo(campanhaId).then(setNumeros).catch(() => setNumeros(null));
   }, [campanhaId]);
 
-  useEffect(() => { setPainel(null); void carregar(); }, [carregar]);
+  useEffect(() => { setPainel(null); setNumeros(null); void carregar(); }, [carregar]);
 
   const duplicar = async () => {
     if (!campanhaId || duplicando) return;
@@ -90,133 +144,205 @@ export default function CampanhaPage() {
     return <main className="app-page mx-auto max-w-3xl text-center text-gray-400"><p>Escolha uma campanha para abrir a página dela.</p></main>;
   }
 
-  const identidade = painel?.campanha.identidade ?? null;
-  const cor = corDaCampanha(identidade);
+  const nome = painel?.campanha.nome ?? campanhaAtiva?.nome ?? '';
+  const identidade = painel?.campanha.identidade ?? campanhaAtiva?.identidade ?? null;
+  const cor = corLegivel(corDaCampanha(identidade), 0.2).cor;
   const capa = urlDaCapa(campanhaId, identidade);
-  const proximaProxima = agenda?.proxima ?? null;
+  const meuPapel = painel?.meu_papel ?? campanhaAtiva?.papel ?? '';
+  const IconePapel = ICONE_DO_PAPEL[meuPapel] ?? Shield;
+  const proxima = agenda?.proxima && !agenda.proxima.passou ? agenda.proxima : null;
+  const folha = folhaDaSessao(proxima?.em);
   const proximoEvento = mundo?.proximos[0] ?? null;
+  const corEstacao = mundo ? COR_DA_ESTACAO[mundo.estacao.chave] ?? cor : cor;
+  const membros = [...(painel?.membros ?? [])].sort((a, b) => (ORDEM_DO_PAPEL[a.papel] ?? 9) - (ORDEM_DO_PAPEL[b.papel] ?? 9));
+  const online = membros.filter((membro) => presencaDe(membro.visto_em) === 'agora').length;
+  const destaques = numeros?.titulos.slice(0, 4) ?? [];
+  const gestorDeConteudo = painel?.meu_papel === 'mestre' || painel?.meu_papel === 'assistente';
 
   return (
-    <main className="app-page mx-auto flex max-w-6xl flex-col gap-6" style={{ '--cor-campanha': cor } as CSSProperties}>
-      <div className="flex justify-end"><SeletorDeCampanha /></div>
+    <main className="cp-shell app-page mx-auto flex max-w-6xl flex-col" style={{ '--cp-cor': cor } as CSSProperties}>
+      <div className="cp-topo"><SeletorDeCampanha /></div>
 
-      <header className="relative overflow-hidden rounded-3xl border" style={{ borderColor: `${cor}55` }}>
-        <div className="absolute inset-0" style={{ background: capa ? `url(${capa}) center / cover` : `radial-gradient(circle at 80% 0%, ${cor}44, transparent 60%), linear-gradient(160deg, #14131c, #0a0a10)` }} />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a10] via-[#0a0a10]/70 to-transparent" />
-        <div className="relative flex min-h-[15rem] flex-col justify-end gap-3 p-6 sm:min-h-[19rem] sm:p-9">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="rounded-full border px-3 py-1 text-[11px] font-bold uppercase tracking-widest" style={{ borderColor: `${cor}88`, color: cor, backgroundColor: 'rgba(10,10,16,0.7)' }}>{ROTULO_PAPEL[painel?.meu_papel ?? campanhaAtiva?.papel ?? ''] ?? 'Membro'}</span>
-            {painel?.ao_vivo ? (
-              <button type="button" onClick={() => navigate('/sessao')} className="inline-flex items-center gap-2 rounded-full border border-emerald-400/50 bg-emerald-400/15 px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-emerald-200">
-                <Radio size={12} className="animate-pulse" /> Sessão ao vivo · entrar
-              </button>
-            ) : null}
-          </div>
-          <h1 className="text-[clamp(2rem,7vw,3.5rem)] font-bold leading-tight text-white drop-shadow-lg" style={{ fontFamily: 'Cinzel, serif' }}>{painel?.campanha.nome ?? campanhaAtiva?.nome}</h1>
-          {identidade?.frase ? <p className="max-w-2xl text-base italic leading-7 text-gray-200/90">“{identidade.frase}”</p> : painel?.campanha.descricao ? <p className="line-clamp-2 max-w-2xl text-sm leading-6 text-gray-300">{painel.campanha.descricao}</p> : null}
-          {painel?.gestor ? (
-            <div className="flex flex-wrap gap-2 pt-1">
-              {painel.meu_papel === 'mestre' || painel.meu_papel === 'assistente' ? (
+      <header className="cp-estandarte">
+        {capa
+          ? <div className="cp-estandarte__fundo cp-estandarte__fundo--capa" style={{ backgroundImage: `url(${capa})` }} aria-hidden="true" />
+          : <><div className="cp-estandarte__fundo" aria-hidden="true" /><span className="cp-estandarte__marca" aria-hidden="true">{inicialDaCampanha(nome)}</span></>}
+        <div className="cp-estandarte__conteudo">
+          <Brasao inicial={inicialDaCampanha(nome)} />
+          <div className="cp-estandarte__texto">
+            <div className="cp-estandarte__selos">
+              <span className="cp-papel"><IconePapel size={11} aria-hidden="true" /> {ROTULO_PAPEL[meuPapel] ?? 'Membro'}</span>
+              {painel?.ao_vivo ? (
+                <button type="button" onClick={() => navigate('/sessao')} className="cp-ao-vivo">
+                  <i aria-hidden="true" /> Sessão ao vivo · entrar
+                </button>
+              ) : null}
+            </div>
+            <h1>{nome}</h1>
+            {identidade?.frase
+              ? <p className="cp-estandarte__frase">“{identidade.frase}”</p>
+              : painel?.campanha.descricao ? <p className="cp-estandarte__descricao">{painel.campanha.descricao}</p> : null}
+            <div className="cp-estandarte__acoes">
+              {gestorDeConteudo ? (
                 <>
-                  <button type="button" onClick={() => setEditando(true)} className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-white/20 bg-black/40 px-3 text-xs font-bold text-white hover:bg-black/60"><Palette size={14} /> Personalizar</button>
-                  <button type="button" onClick={() => void duplicar()} disabled={duplicando} className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-white/20 bg-black/40 px-3 text-xs font-bold text-white hover:bg-black/60 disabled:opacity-50"><Copy size={14} /> {duplicando ? 'Copiando...' : 'Duplicar como modelo'}</button>
+                  <button type="button" onClick={() => setEditando(true)} className="cp-botao cp-botao--vidro"><Palette size={14} aria-hidden="true" /> Personalizar</button>
+                  <button type="button" onClick={() => void duplicar()} disabled={duplicando} className="cp-botao cp-botao--vidro"><Copy size={14} aria-hidden="true" /> {duplicando ? 'Copiando...' : 'Duplicar como modelo'}</button>
                 </>
               ) : null}
-              <button type="button" onClick={() => setEpilogo(true)} className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-white/20 bg-black/40 px-3 text-xs font-bold text-white hover:bg-black/60"><History size={14} /> Epílogo e encerramento</button>
+              <button type="button" onClick={() => setEpilogo(true)} className="cp-botao cp-botao--vidro">
+                <History size={14} aria-hidden="true" /> {painel?.gestor ? 'Epílogo e encerramento' : 'Ver a retrospectiva'}
+              </button>
             </div>
-          ) : (
-            <div className="pt-1"><button type="button" onClick={() => setEpilogo(true)} className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-white/20 bg-black/40 px-3 text-xs font-bold text-white hover:bg-black/60"><History size={14} /> Ver a retrospectiva</button></div>
-          )}
+          </div>
         </div>
+
+        {numeros ? (
+          <dl className="cp-numeros" aria-label="A campanha em números">
+            <div><dt>{numeros.sessoes === 1 ? 'Noite jogada' : 'Noites jogadas'}</dt><dd><CalendarDays size={17} aria-hidden="true" />{numero(numeros.sessoes)}</dd></div>
+            <div><dt>De história</dt><dd><Hourglass size={17} aria-hidden="true" />{horasDeHistoria(numeros.minutos)}</dd></div>
+            <div><dt>Dados rolados</dt><dd><Dices size={17} aria-hidden="true" />{numero(numeros.rolagens)}</dd></div>
+            <div><dt>20 naturais</dt><dd><Flame size={17} aria-hidden="true" />{numero(numeros.criticos)}</dd></div>
+          </dl>
+        ) : null}
       </header>
 
-      {aviso ? <p role="status" className="rounded-xl border border-emerald-400/30 bg-emerald-400/10 p-3 text-sm text-emerald-200">{aviso}</p> : null}
-      {erro ? <p role="alert" className="rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-200">{erro}</p> : null}
+      {aviso ? <p role="status" className="cp-aviso">{aviso}</p> : null}
+      {erro ? <p role="alert" className="cp-erro">{erro}</p> : null}
 
-      <nav className="grid grid-cols-3 gap-2 sm:grid-cols-4 lg:grid-cols-7" aria-label="Atalhos da campanha">
-        {ATALHOS.map(({ rotulo, caminho, icone: Icone }) => (
-          <button key={caminho} type="button" onClick={() => navigate(caminho)} className="flex min-h-[4.5rem] flex-col items-center justify-center gap-1.5 rounded-2xl border border-white/10 bg-white/[0.03] text-xs font-bold text-gray-200 transition hover:-translate-y-0.5 hover:bg-white/[0.07]" style={{ borderColor: undefined }}>
-            <Icone size={20} style={{ color: cor }} aria-hidden="true" /> {rotulo}
+      <nav className="cp-portais" aria-label="Atalhos da campanha">
+        {PORTAIS.map(({ rotulo, dica, caminho, icone: Icone, cor: corDoPortal }) => (
+          <button key={caminho} type="button" onClick={() => navigate(caminho)} className="cp-portal" style={{ '--portal-cor': corDoPortal } as CSSProperties}>
+            <span className="cp-portal__icone"><Icone size={19} aria-hidden="true" /></span>
+            <span className="cp-portal__texto"><strong>{rotulo}</strong><small>{dica}</small></span>
           </button>
         ))}
       </nav>
 
-      {!painel && !erro ? <p className="py-10 text-center text-sm text-gray-500" aria-busy="true">Abrindo a campanha...</p> : null}
+      {!painel && !erro ? <p className="cp-carregando" aria-busy="true">Abrindo a campanha...</p> : null}
 
       {painel ? (
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
-          <div className="space-y-6">
-            <section className={cartao} aria-label="Hoje no mundo">
-              <h2 className={titulo}><Globe size={14} style={{ color: cor }} /> Hoje no mundo</h2>
-              {mundo ? (
-                <>
-                  <p className="text-2xl font-bold text-white" style={{ fontFamily: 'Cinzel, serif' }}>{mundo.hoje_extenso}</p>
-                  <p className="mt-1 text-sm text-gray-400"><Sparkles size={13} className="mr-1 inline" style={{ color: cor }} />{mundo.estacao.rotulo}: {mundo.estacao.descricao}</p>
-                  {proximoEvento ? (
-                    <div className="mt-4 rounded-2xl border border-white/[0.07] bg-black/25 p-3">
-                      <p className="text-[10px] font-bold uppercase tracking-widest" style={{ color: cor }}>{proximoEvento.em_dias <= 0 ? 'Hoje' : proximoEvento.em_dias === 1 ? 'Amanhã' : `Em ${proximoEvento.em_dias} dias`}</p>
-                      {proximoEvento.rasurado ? <><div className="mt-1"><RasuraTitulo semente={proximoEvento.id} className="text-base" /></div><div className="mt-2"><CarimboRetido texto="Algo se aproxima" /></div></> : <p className="mt-1 font-bold text-white">{proximoEvento.titulo}</p>}
+        <div className="cp-grade">
+          <div className="cp-coluna">
+            <div className="cp-dupla">
+              <section className="cp-cartao cp-sessao" aria-label="Próxima sessão">
+                <div className="cp-cartao__cabeca"><h2 className="cp-cartao__titulo"><CalendarClock size={17} aria-hidden="true" /> Próxima sessão</h2></div>
+                <div className="cp-sessao__corpo">
+                  <div className={`cp-folha ${folha ? '' : 'cp-folha--vazia'}`} aria-hidden="true">
+                    <span className="cp-folha__mes">{folha?.mes ?? '---'}</span>
+                    <span className="cp-folha__dia">{folha?.dia ?? '?'}</span>
+                    <span className="cp-folha__semana">{folha?.semana ?? 'sem data'}</span>
+                  </div>
+                  {proxima && folha ? (
+                    <div className="cp-sessao__texto">
+                      <span className="cp-sessao__quando">{proxima.texto}</span>
+                      <span className="cp-sessao__detalhe">{folha.semana}, às <b>{folha.hora}</b></span>
+                      {proxima.titulo ? <span className="cp-sessao__detalhe">{proxima.titulo}</span> : null}
                     </div>
-                  ) : null}
-                  <button type="button" onClick={() => navigate('/mundo/calendario')} className="mt-4 inline-flex items-center gap-2 text-xs font-bold hover:underline" style={{ color: cor }}><CalendarDays size={14} /> Abrir o calendário e as estações</button>
-                </>
-              ) : <p className="text-sm text-gray-500">O Mestre ainda não abriu o calendário do mundo.</p>}
-            </section>
+                  ) : (
+                    <div className="cp-sessao__texto">
+                      <span className="cp-sessao__quando">Ainda sem data</span>
+                      <span className="cp-sessao__detalhe">{painel.gestor ? 'Marque o dia fixo na Agenda do Quadro.' : 'O Mestre avisa quando marcar.'}</span>
+                    </div>
+                  )}
+                </div>
+                {proxima?.nota ? <p className="cp-sessao__nota">{proxima.nota}</p> : null}
+                {painel.gestor ? (
+                  <div className="cp-sessao__pe">
+                    <button type="button" onClick={() => navigate('/quadro?aba=agenda')} className="cp-link"><CalendarClock size={14} aria-hidden="true" /> Abrir a Agenda</button>
+                  </div>
+                ) : null}
+              </section>
 
-            <section className={cartao} aria-label="Próxima sessão">
-              <h2 className={titulo}><CalendarClock size={14} style={{ color: cor }} /> Próxima sessão</h2>
-              {proximaProxima ? (
-                <>
-                  <p className="text-xl font-bold text-white">{formatarDataDaSessao(proximaProxima.em)}</p>
-                  <p className="mt-1 text-sm text-gray-400">{proximaProxima.texto}{proximaProxima.titulo ? ` · ${proximaProxima.titulo}` : ''}</p>
-                  {proximaProxima.nota ? <p className="mt-2 text-sm leading-6 text-gray-400">{proximaProxima.nota}</p> : null}
-                </>
-              ) : <p className="text-sm text-gray-500">Nenhuma sessão marcada. {painel.gestor ? 'Defina o dia fixo no Quadro, na aba Agenda.' : ''}</p>}
-            </section>
+              <section className="cp-cartao cp-mundo" aria-label="Hoje no mundo" style={{ '--estacao': corEstacao } as CSSProperties}>
+                <div className="cp-cartao__cabeca"><h2 className="cp-cartao__titulo"><Globe size={17} aria-hidden="true" /> Hoje no mundo</h2></div>
+                {mundo ? (
+                  <>
+                    <p className="cp-mundo__data">{mundo.hoje_extenso}</p>
+                    {mundo.hora_extenso ? <p className="cp-mundo__hora">{mundo.hora_extenso}</p> : null}
+                    <span className="cp-estacao"><i aria-hidden="true" /> {mundo.estacao.rotulo}</span>
+                    <p className="cp-mundo__descricao">{mundo.estacao.descricao}</p>
+                    {proximoEvento ? (
+                      <div className="cp-evento">
+                        <span className="cp-evento__quando">{textoEmDias(proximoEvento.em_dias)}</span>
+                        {proximoEvento.rasurado
+                          ? <span className="min-w-0"><RasuraTitulo semente={proximoEvento.id} className="text-sm" /><span className="mt-1 block"><CarimboRetido texto="Algo se aproxima" /></span></span>
+                          : <span className="cp-evento__titulo">{proximoEvento.titulo}</span>}
+                      </div>
+                    ) : null}
+                    <div className="cp-mundo__pe">
+                      <button type="button" onClick={() => navigate('/mundo/calendario')} className="cp-link"><CalendarDays size={14} aria-hidden="true" /> Calendário e estações</button>
+                    </div>
+                  </>
+                ) : <p className="cp-vazio">O Mestre ainda não abriu o calendário do mundo.</p>}
+              </section>
+            </div>
 
-            <section className={cartao} aria-label="Anteriormente">
-              <h2 className={titulo}><History size={14} style={{ color: cor }} /> Anteriormente...</h2>
-              {painel.anteriormente.length === 0 ? <p className="text-sm text-gray-500">A primeira noite ainda vai acontecer.</p> : (
-                <ul className="space-y-3">
-                  {painel.anteriormente.map((sessao) => (
-                    <li key={sessao.sessao_id}>
-                      <button type="button" onClick={() => setResumoId(sessao.sessao_id)} className="flex w-full items-center gap-3 rounded-2xl border border-white/[0.07] bg-black/25 p-3 text-left transition hover:border-white/25">
-                        <span className="min-w-0 flex-1">
-                          <span className="block truncate font-bold text-white">{sessao.titulo}</span>
-                          <span className="text-xs text-gray-500">
-                            {sessao.encerrada_em ? new Date(sessao.encerrada_em).toLocaleDateString('pt-BR', { day: 'numeric', month: 'short' }) : ''}
-                            {sessao.duracao_min ? ` · ${textoDeDuracao(sessao.duracao_min)}` : ''}
-                            {` · ${sessao.rolagens} rolagens`}{sessao.criticos ? ` · ${sessao.criticos} 20 natural` : ''}
+            <section className="cp-cartao" aria-label="Anteriormente">
+              <div className="cp-cartao__cabeca"><h2 className="cp-cartao__titulo"><History size={17} aria-hidden="true" /> Anteriormente...</h2></div>
+              {painel.anteriormente.length === 0 ? <p className="cp-vazio">A primeira noite ainda vai acontecer. Quando uma sessão terminar, ela entra aqui com o resumo.</p> : (
+                <ol className="cp-linha">
+                  {painel.anteriormente.map((sessao, indice) => (
+                    <li key={sessao.sessao_id} className="cp-marco">
+                      <button type="button" onClick={() => setResumoId(sessao.sessao_id)} className="cp-marco__botao">
+                        <span className="cp-marco__texto">
+                          <span className="cp-marco__data">
+                            {indice === 0 ? 'Última sessão · ' : ''}
+                            {sessao.encerrada_em ? new Date(sessao.encerrada_em).toLocaleDateString('pt-BR', { day: 'numeric', month: 'short' }) : 'sem data'}
+                          </span>
+                          <span className="cp-marco__titulo">{sessao.titulo}</span>
+                          <span className="cp-marco__chips">
+                            {sessao.duracao_min ? <span className="cp-chip"><Hourglass size={11} aria-hidden="true" /> {textoDeDuracao(sessao.duracao_min)}</span> : null}
+                            <span className="cp-chip"><Dices size={11} aria-hidden="true" /> {numero(sessao.rolagens)} rolagens</span>
+                            {sessao.criticos ? <span className="cp-chip cp-chip--critico"><Flame size={11} aria-hidden="true" /> {sessao.criticos}× 20 natural</span> : null}
                           </span>
                         </span>
-                        <span className="text-[11px] font-bold uppercase tracking-widest" style={{ color: cor }}>Resumo</span>
+                        <span className="cp-marco__ler">Ler resumo <ChevronRight size={14} aria-hidden="true" /></span>
                       </button>
                     </li>
                   ))}
-                </ul>
+                </ol>
               )}
             </section>
 
-            <CronicaCampanha campanhaId={campanhaId} cor={cor} />
+            <CronicaCampanha campanhaId={campanhaId} />
           </div>
 
-          <section className={`${cartao} h-fit`} aria-label="A mesa">
-            <h2 className={titulo}><Users size={14} style={{ color: cor }} /> A mesa</h2>
-            <ul className="space-y-2.5">
-              {painel.membros.map((membro) => (
-                <li key={membro.usuario_id} className="flex items-center gap-3 rounded-2xl border border-white/[0.07] bg-black/25 p-3">
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border text-sm font-bold text-white" style={{ borderColor: `${cor}77`, backgroundColor: `${cor}22` }} aria-hidden="true">
-                    {membro.papel === 'mestre' ? <Crown size={16} style={{ color: cor }} /> : membro.nome.slice(0, 1).toUpperCase()}
-                  </span>
-                  <span className="min-w-0 flex-1">
-                    <span className="block truncate text-sm font-bold text-white">{membro.nome}<span className="ml-2 text-[10px] font-bold uppercase tracking-widest text-gray-500">{ROTULO_PAPEL[membro.papel] ?? membro.papel}</span></span>
-                    <span className="block truncate text-xs text-gray-400">{membro.personagem ? `${membro.personagem.nome}${membro.personagem.nivel ? ` · nível ${membro.personagem.nivel}` : ''}` : membro.papel === 'jogador' ? 'sem personagem escolhido' : ' '}</span>
-                    <span className="block text-[11px] text-gray-600">{textoDeVisita(membro.visto_em)}</span>
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </section>
+          <aside className="cp-coluna">
+            <section className="cp-cartao" aria-label="A mesa">
+              <div className="cp-cartao__cabeca">
+                <h2 className="cp-cartao__titulo"><Users size={17} aria-hidden="true" /> A mesa <small>{membros.length} {membros.length === 1 ? 'pessoa' : 'pessoas'}{online ? ` · ${online} por aqui` : ''}</small></h2>
+              </div>
+              <ul className="cp-membros">
+                {membros.map((membro) => <Membro key={membro.usuario_id} membro={membro} />)}
+              </ul>
+            </section>
+
+            {numeros && (numeros.mvp || destaques.length) ? (
+              <section className="cp-cartao" aria-label="Destaques da campanha">
+                <div className="cp-cartao__cabeca">
+                  <h2 className="cp-cartao__titulo"><Trophy size={17} aria-hidden="true" /> Destaques</h2>
+                  <button type="button" onClick={() => navigate('/quadro?aba=rank')} className="cp-link">Ver o Rank <ChevronRight size={13} aria-hidden="true" /></button>
+                </div>
+                <ul className="cp-destaques">
+                  {numeros.mvp ? (
+                    <li className="cp-destaque" style={{ '--cor': '#e9c46a' } as CSSProperties}>
+                      <span className="cp-destaque__icone" aria-hidden="true"><Crown size={15} /></span>
+                      <span className="cp-destaque__texto"><small>Mais vezes MVP</small><strong>{numeros.mvp.nome}</strong><span>{numeros.mvp.votos} {numeros.mvp.votos === 1 ? 'voto' : 'votos'} da mesa</span></span>
+                    </li>
+                  ) : null}
+                  {destaques.map((titulo) => {
+                    const Icone = ICONES_DO_RANK[titulo.chave] ?? Trophy;
+                    return (
+                      <li key={titulo.chave} className="cp-destaque" style={{ '--cor': CORES_DO_RANK[titulo.chave] ?? cor } as CSSProperties}>
+                        <span className="cp-destaque__icone" aria-hidden="true"><Icone size={15} /></span>
+                        <span className="cp-destaque__texto"><small>{titulo.titulo}</small><strong>{titulo.nome}</strong><span>{titulo.frase}</span></span>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </section>
+            ) : null}
+          </aside>
         </div>
       ) : null}
 
@@ -231,7 +357,7 @@ export default function CampanhaPage() {
       {epilogo ? (
         <EpilogoModal
           campanhaId={campanhaId}
-          campanhaNome={painel?.campanha.nome ?? campanhaAtiva?.nome ?? ''}
+          campanhaNome={nome}
           cor={cor}
           podeEncerrar={painel?.meu_papel === 'mestre'}
           onEncerrar={encerrar}

@@ -33,6 +33,43 @@ export function textoDeVisita(iso: string | null | undefined, agora: number = Da
   return dias === 1 ? 'visto ontem' : `visto há ${dias} dias`;
 }
 
+export type Presenca = 'agora' | 'hoje' | 'sumido' | 'nunca';
+
+/** Bolinha de presença na lista da mesa: online há pouco, passou hoje, sumido ou nunca entrou. */
+export function presencaDe(iso: string | null | undefined, agora: number = Date.now()): Presenca {
+  if (!iso) return 'nunca';
+  const tempo = new Date(iso).getTime();
+  if (Number.isNaN(tempo)) return 'nunca';
+  const minutos = Math.max(0, Math.floor((agora - tempo) / 60_000));
+  if (minutos < 10) return 'agora';
+  if (minutos < 24 * 60) return 'hoje';
+  return 'sumido';
+}
+
+/** A letra do brasão: a primeira letra ou número do nome, em maiúscula. */
+export function inicialDaCampanha(nome: string | null | undefined): string {
+  const letra = (nome ?? '').match(/[\p{L}\p{N}]/u)?.[0];
+  return letra ? letra.toLocaleUpperCase('pt-BR') : '?';
+}
+
+/** A folhinha do calendário da próxima sessão: "NOV", "20", "sexta", "18:00". */
+export function folhaDaSessao(iso: string | null | undefined): { mes: string; dia: string; semana: string; hora: string } | null {
+  if (!iso) return null;
+  const data = new Date(iso);
+  if (Number.isNaN(data.getTime())) return null;
+  const mes = data.toLocaleDateString('pt-BR', { month: 'short' }).replace('.', '').toLocaleUpperCase('pt-BR');
+  const semana = data.toLocaleDateString('pt-BR', { weekday: 'long' }).replace('-feira', '');
+  const hora = `${String(data.getHours()).padStart(2, '0')}:${String(data.getMinutes()).padStart(2, '0')}`;
+  return { mes, dia: String(data.getDate()), semana, hora };
+}
+
+/** Horas inteiras de jogo para o placar do topo: "34 h" ou "45 min" quando ainda não deu uma hora. */
+export function horasDeHistoria(minutos: number | null | undefined): string {
+  if (!minutos || minutos <= 0) return '0 h';
+  if (minutos < 60) return `${minutos} min`;
+  return `${Math.round(minutos / 60)} h`;
+}
+
 /** "2 h 05 min" ou "45 min". */
 export function textoDeDuracao(minutos: number | null | undefined): string {
   if (!minutos || minutos <= 0) return '';

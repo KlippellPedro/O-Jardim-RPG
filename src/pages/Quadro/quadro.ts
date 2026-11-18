@@ -1,4 +1,4 @@
-import type { IItemMural } from '../../services/engajamentoApi';
+import type { IItemMural, IJogadorRank } from '../../services/engajamentoApi';
 
 /** "sábado, 27 de set. às 20:00", no fuso de quem está olhando. */
 export function formatarDataDaSessao(iso: string): string {
@@ -30,6 +30,74 @@ export function separarMural(itens: IItemMural[]): { fotos: IItemMural[]; frases
   return {
     fotos: itens.filter((item) => item.tipo === 'foto'),
     frases: itens.filter((item) => item.tipo === 'citacao'),
+  };
+}
+
+export type FiltroMural = 'tudo' | 'frases' | 'fotos';
+
+export function filtrarMural(itens: IItemMural[], filtro: FiltroMural): IItemMural[] {
+  if (filtro === 'frases') return itens.filter((item) => item.tipo === 'citacao');
+  if (filtro === 'fotos') return itens.filter((item) => item.tipo === 'foto');
+  return itens;
+}
+
+/** Número estável a partir de um texto (FNV-1a), para o mesmo papel cair sempre igual no mural. */
+function semente(texto: string): number {
+  let hash = 2166136261;
+  for (let i = 0; i < texto.length; i += 1) {
+    hash ^= texto.charCodeAt(i);
+    hash = Math.imul(hash, 16777619);
+  }
+  return hash >>> 0;
+}
+
+/** Quanto o papel fica torto no mural, em graus, entre -maximo e +maximo. Nunca reto demais. */
+export function giroDoPapel(id: string, maximo = 2.4): number {
+  const passo = (semente(id) % 1000) / 999; // 0..1
+  const giro = (passo * 2 - 1) * maximo;
+  const minimo = maximo * 0.25;
+  const ajustado = Math.abs(giro) < minimo ? (giro < 0 ? -minimo : minimo) : giro;
+  return Math.round(ajustado * 10) / 10;
+}
+
+/** Tom do papel e cor do alfinete, escolhidos pelo id do item. */
+const PAPEIS = ['#efe3c2', '#f1dfc0', '#e6dcc0', '#efe6cf', '#e9d9b5'] as const;
+const ALFINETES = ['#b8352b', '#2f6f9a', '#c8962e', '#3f7d4f', '#7a3f8f'] as const;
+
+export function estiloDoPapel(id: string): { papel: string; alfinete: string; giro: number } {
+  const base = semente(`papel:${id}`);
+  return {
+    papel: PAPEIS[base % PAPEIS.length],
+    alfinete: ALFINETES[Math.floor(base / 7) % ALFINETES.length],
+    giro: giroDoPapel(id),
+  };
+}
+
+export type ColunaRank = 'rolagens' | 'criticos' | 'falhas' | 'dano_maximo' | 'lunaris_gastos';
+export const COLUNAS_RANK: ColunaRank[] = ['rolagens', 'criticos', 'falhas', 'dano_maximo', 'lunaris_gastos'];
+
+/** O maior valor de cada coluna da tabela, para marcar quem lidera. Zero não lidera nada. */
+export function lideresDoRank(jogadores: Pick<IJogadorRank, ColunaRank>[]): Record<ColunaRank, number> {
+  const lideres = {} as Record<ColunaRank, number>;
+  COLUNAS_RANK.forEach((coluna) => {
+    lideres[coluna] = jogadores.reduce((maior, jogador) => Math.max(maior, Number(jogador[coluna]) || 0), 0);
+  });
+  return lideres;
+}
+
+/** Parte do total em porcentagem inteira, sem passar de 0..100. */
+export function porcentagem(parte: number, total: number): number {
+  if (!total || total <= 0) return 0;
+  return Math.max(0, Math.min(100, Math.round((parte / total) * 100)));
+}
+
+/** "sábado, 22 de nov." e "20:00" separados, para o cartão da próxima sessão. */
+export function partesDaSessao(iso: string): { dia: string; hora: string } | null {
+  const data = new Date(iso);
+  if (Number.isNaN(data.getTime())) return null;
+  return {
+    dia: data.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'short' }),
+    hora: data.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
   };
 }
 

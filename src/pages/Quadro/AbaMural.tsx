@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
-import { Camera, Crown, Heart, Quote, Trash2 } from 'lucide-react';
+import { useEffect, useRef, useState, type CSSProperties } from 'react';
+import { Camera, Crown, Heart, Pin, Quote, Trash2 } from 'lucide-react';
 import { mesaApi, type ISessaoResumo } from '../../services/mesaApi';
 import { engajamentoApi, type IItemMural, type IMvp } from '../../services/engajamentoApi';
 import { reduzirImagem } from './reduzirImagem';
-import { separarMural } from './quadro';
+import { estiloDoPapel, filtrarMural, porcentagem, separarMural, type FiltroMural } from './quadro';
 import { confirmar } from '../../components/avisos/confirmacao';
 
 interface IAbaMuralProps {
@@ -11,7 +11,6 @@ interface IAbaMuralProps {
   gestor: boolean;
 }
 
-const campo = 'w-full rounded-xl border border-white/10 bg-[#0b0a10] px-3 py-2.5 text-sm text-white outline-none focus:border-[#c7a44c]/50';
 const quando = (iso: string) => new Date(iso).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' });
 
 const BotaoCurtir = ({ item, onCurtir }: { item: IItemMural; onCurtir: (item: IItemMural) => void }) => (
@@ -20,14 +19,20 @@ const BotaoCurtir = ({ item, onCurtir }: { item: IItemMural; onCurtir: (item: II
     aria-pressed={item.votei}
     aria-label={`${item.votei ? 'Tirar a curtida de' : 'Curtir'} ${item.tipo === 'foto' ? 'esta foto' : 'esta frase'}, ${item.votos} curtida(s)`}
     onClick={() => onCurtir(item)}
-    className={`flex min-h-9 items-center gap-1.5 rounded-full border px-3 text-xs font-bold transition-colors ${item.votei ? 'border-rose-400/50 bg-rose-400/15 text-rose-200' : 'border-white/10 text-gray-400 hover:text-white'}`}
+    className={`qd-papel-botao ${item.votei ? 'is-curtido' : ''}`}
   >
-    <Heart size={13} fill={item.votei ? 'currentColor' : 'none'} /> {item.votos}
+    <Heart size={13} fill={item.votei ? 'currentColor' : 'none'} aria-hidden="true" /> {item.votos}
+  </button>
+);
+
+const BotaoApagar = ({ rotulo, onApagar }: { rotulo: string; onApagar: () => void }) => (
+  <button type="button" aria-label={rotulo} onClick={onApagar} className="qd-papel-botao qd-papel-botao--apagar">
+    <Trash2 size={13} aria-hidden="true" />
   </button>
 );
 
 /** Votação de MVP da noite: o placar só aparece depois que a pessoa vota. */
-const CartaoMvp = ({ campanhaId, gestor }: { campanhaId: string; gestor: boolean }) => {
+const PlacaMvp = ({ campanhaId, gestor }: { campanhaId: string; gestor: boolean }) => {
   const [sessoes, setSessoes] = useState<ISessaoResumo[]>([]);
   const [sessaoId, setSessaoId] = useState('');
   const [mvp, setMvp] = useState<IMvp | null>(null);
@@ -65,45 +70,114 @@ const CartaoMvp = ({ campanhaId, gestor }: { campanhaId: string; gestor: boolean
   };
 
   const vencedores = mvp?.resultado?.vencedores ?? [];
+  const temPlacar = Boolean(mvp?.resultado && mvp.resultado.total_votos > 0);
+  const maiorVoto = mvp?.resultado?.ranking[0]?.votos || 1;
+  const titulo = temPlacar && vencedores.length
+    ? vencedores.map((vencedor) => vencedor.nome).join(' e ')
+    : 'Quem brilhou nesta sessão?';
+
   return (
-    <section className="rounded-2xl border border-[#c7a44c]/25 bg-gradient-to-br from-[#c7a44c]/10 to-transparent p-5" aria-label="MVP da noite">
-      <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
-        <h3 className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] text-[#c7a44c]"><Crown size={14} /> MVP da noite</h3>
-        <select value={sessaoId} onChange={(evento) => setSessaoId(evento.target.value)} aria-label="Sessão do MVP" className="min-h-10 rounded-lg border border-white/10 bg-[#0b0a10] px-3 text-xs text-white">
-          {sessoes.map((sessao) => <option key={sessao.id} value={sessao.id}>{sessao.titulo || 'Sessão'} · {quando(sessao.iniciada_em)}</option>)}
-        </select>
+    <section className="qd-mvp" aria-label="MVP da noite">
+      <span className="qd-mvp__medalhao" aria-hidden="true"><Crown size={28} /></span>
+      <div className="min-w-0">
+        <div className="qd-mvp__topo">
+          <div className="min-w-0">
+            <span className="qd-eyebrow">{temPlacar && vencedores.length ? (vencedores.length > 1 ? 'Empate no MVP da noite' : 'MVP da noite') : 'Votação de MVP'}</span>
+            <h3>{titulo}</h3>
+          </div>
+          <select value={sessaoId} onChange={(evento) => setSessaoId(evento.target.value)} aria-label="Sessão do MVP" className="qd-mvp__select">
+            {sessoes.map((sessao) => <option key={sessao.id} value={sessao.id}>{sessao.titulo || 'Sessão'} · {quando(sessao.iniciada_em)}</option>)}
+          </select>
+        </div>
+        {erro ? <p role="alert" className="qd-erro mt-3">{erro}</p> : null}
+        {mvp ? (
+          <>
+            {!gestor ? (
+              <div className="qd-mvp__candidatos">
+                {mvp.candidatos.map((candidato) => (
+                  <button
+                    key={candidato.usuario_id}
+                    type="button"
+                    aria-pressed={mvp.meu_voto === candidato.usuario_id}
+                    onClick={() => void votar(candidato.usuario_id)}
+                    className={`qd-candidato ${mvp.meu_voto === candidato.usuario_id ? 'is-votado' : ''}`}
+                  >
+                    <span className="qd-candidato__inicial" aria-hidden="true">{candidato.nome.charAt(0).toUpperCase()}</span>
+                    {candidato.nome}
+                  </button>
+                ))}
+              </div>
+            ) : null}
+            <p className="qd-mvp__status" role="status">
+              {mvp.votaram} de {mvp.total_eleitores} já votaram.{!gestor && !mvp.meu_voto ? ' Vote para ver o placar. Voto em si mesmo não vale.' : ''}
+            </p>
+            {temPlacar ? (
+              <div className="qd-mvp__placar">
+                {mvp.resultado?.ranking.map((item) => (
+                  <div key={item.usuario_id} className={`qd-mvp__linha ${vencedores.some((v) => v.usuario_id === item.usuario_id) ? 'is-vencedor' : ''}`}>
+                    <span>{item.nome}</span>
+                    <span className="qd-mvp__barra" aria-hidden="true"><i style={{ width: `${porcentagem(item.votos, maiorVoto)}%` }} /></span>
+                    <b>{item.votos}</b>
+                  </div>
+                ))}
+              </div>
+            ) : null}
+          </>
+        ) : null}
       </div>
-      {erro ? <p role="alert" className="mb-3 text-sm text-red-300">{erro}</p> : null}
-      {mvp ? (
-        <>
-          {!gestor ? (
-            <div className="flex flex-wrap gap-2">
-              {mvp.candidatos.map((candidato) => (
-                <button key={candidato.usuario_id} type="button" aria-pressed={mvp.meu_voto === candidato.usuario_id} onClick={() => void votar(candidato.usuario_id)} className={`min-h-11 rounded-xl border px-4 text-sm font-bold ${mvp.meu_voto === candidato.usuario_id ? 'border-[#c7a44c]/70 bg-[#c7a44c]/20 text-[#f3dc8f]' : 'border-white/10 text-gray-300 hover:text-white'}`}>{candidato.nome}</button>
-              ))}
-            </div>
-          ) : null}
-          <p className="mt-3 text-xs text-gray-500" role="status">{mvp.votaram} de {mvp.total_eleitores} já votaram.{!gestor && !mvp.meu_voto ? ' Vote para ver o placar (voto em si mesmo não vale).' : ''}</p>
-          {mvp.resultado && mvp.resultado.total_votos > 0 ? (
-            <div className="mt-3 space-y-1.5">
-              {mvp.resultado.ranking.map((item) => (
-                <div key={item.usuario_id} className="flex items-center gap-3 text-sm">
-                  <span className={`w-28 truncate font-bold ${vencedores.some((v) => v.usuario_id === item.usuario_id) ? 'text-[#f3dc8f]' : 'text-gray-300'}`}>{item.nome}</span>
-                  <div className="h-2 flex-1 overflow-hidden rounded-full bg-black/60"><div className="h-full rounded-full bg-[#c7a44c]" style={{ width: `${(item.votos / (mvp.resultado?.ranking[0]?.votos || 1)) * 100}%` }} /></div>
-                  <span className="w-6 text-right text-xs text-gray-400">{item.votos}</span>
-                </div>
-              ))}
-            </div>
-          ) : null}
-        </>
-      ) : null}
     </section>
+  );
+};
+
+const NotaDaMesa = ({ item, onCurtir, onApagar }: { item: IItemMural; onCurtir: (item: IItemMural) => void; onApagar: (item: IItemMural) => void }) => {
+  const papel = estiloDoPapel(item.id);
+  return (
+    <figure
+      className={`qd-nota ${item.melhor_da_noite ? 'is-melhor' : ''}`}
+      style={{ '--giro': `${papel.giro}deg`, '--papel': papel.papel, '--alfinete': papel.alfinete } as CSSProperties}
+    >
+      <span className="qd-alfinete" aria-hidden="true" />
+      {item.melhor_da_noite ? <span className="qd-nota__melhor"><Crown size={10} aria-hidden="true" /> Melhor da noite</span> : null}
+      <blockquote>“{item.texto}”</blockquote>
+      <figcaption>
+        <span className="qd-nota__quem">
+          <strong>{item.autor}</strong>
+          <small>{quando(item.criado_em)}</small>
+        </span>
+        <span className="qd-papel-acoes">
+          <BotaoCurtir item={item} onCurtir={onCurtir} />
+          {item.pode_apagar ? <BotaoApagar rotulo="Apagar frase" onApagar={() => onApagar(item)} /> : null}
+        </span>
+      </figcaption>
+    </figure>
+  );
+};
+
+const FotoDaMesa = ({ item, onCurtir, onApagar }: { item: IItemMural; onCurtir: (item: IItemMural) => void; onApagar: (item: IItemMural) => void }) => {
+  const papel = estiloDoPapel(item.id);
+  return (
+    <figure className="qd-polaroide" style={{ '--giro': `${papel.giro}deg` } as CSSProperties}>
+      <span className="qd-fita" aria-hidden="true" />
+      {item.imagem ? <img src={item.imagem} alt={item.texto || `Foto de ${item.publicado_por}`} loading="lazy" /> : null}
+      <figcaption>
+        <span className="qd-polaroide__legenda">
+          <strong>{item.texto || 'Sem legenda'}</strong>
+          <small>{item.publicado_por} · {quando(item.criado_em)}</small>
+        </span>
+        <span className="qd-papel-acoes">
+          <BotaoCurtir item={item} onCurtir={onCurtir} />
+          {item.pode_apagar ? <BotaoApagar rotulo="Apagar foto" onApagar={() => onApagar(item)} /> : null}
+        </span>
+      </figcaption>
+    </figure>
   );
 };
 
 export const AbaMural = ({ campanhaId, gestor }: IAbaMuralProps) => {
   const [itens, setItens] = useState<IItemMural[] | null>(null);
   const [erro, setErro] = useState('');
+  const [modo, setModo] = useState<'frase' | 'foto'>('frase');
+  const [filtro, setFiltro] = useState<FiltroMural>('tudo');
   const [frase, setFrase] = useState('');
   const [quemDisse, setQuemDisse] = useState('');
   const [legenda, setLegenda] = useState('');
@@ -164,72 +238,81 @@ export const AbaMural = ({ campanhaId, gestor }: IAbaMuralProps) => {
   };
 
   const { fotos, frases } = separarMural(itens ?? []);
+  const visiveis = filtrarMural(itens ?? [], filtro);
 
   return (
-    <div className="space-y-6">
-      <CartaoMvp campanhaId={campanhaId} gestor={gestor} />
+    <div className="flex flex-col gap-5">
+      <PlacaMvp campanhaId={campanhaId} gestor={gestor} />
 
-      <div className="grid gap-4 lg:grid-cols-2">
-        <form className="space-y-3 rounded-2xl border border-white/10 bg-[#0f0e15] p-5" onSubmit={(evento) => { evento.preventDefault(); publicarFrase(); }}>
-          <h3 className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500"><Quote size={13} /> Frase da mesa</h3>
-          <textarea value={frase} maxLength={300} onChange={(evento) => setFrase(evento.target.value)} placeholder="Aquela frase que ninguém vai esquecer..." aria-label="Frase" className={`${campo} min-h-20`} />
-          <input value={quemDisse} maxLength={60} onChange={(evento) => setQuemDisse(evento.target.value)} placeholder="Quem disse? (deixe vazio se foi você)" aria-label="Quem disse" className={campo} />
-          <button type="submit" disabled={enviando || !frase.trim()} className="min-h-11 rounded-xl border border-[#c7a44c]/40 bg-[#c7a44c]/15 px-5 text-sm font-bold text-[#f3dc8f] disabled:opacity-40">Pendurar no mural</button>
-        </form>
-
-        <div className="space-y-3 rounded-2xl border border-white/10 bg-[#0f0e15] p-5">
-          <h3 className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500"><Camera size={13} /> Foto do grupo</h3>
-          <input value={legenda} maxLength={140} onChange={(evento) => setLegenda(evento.target.value)} placeholder="Legenda (opcional)" aria-label="Legenda da foto" className={campo} />
-          <input ref={arquivoRef} type="file" accept="image/jpeg,image/png,image/webp" className="sr-only" aria-label="Escolher foto" onChange={(evento) => escolherFoto(evento.target.files?.[0])} />
-          <button type="button" disabled={enviando} onClick={() => arquivoRef.current?.click()} className="flex min-h-11 items-center gap-2 rounded-xl border border-[#c7a44c]/40 bg-[#c7a44c]/15 px-5 text-sm font-bold text-[#f3dc8f] disabled:opacity-40"><Camera size={15} /> {enviando ? 'Enviando...' : 'Escolher foto'}</button>
-          <p className="text-[11px] text-gray-600">A foto é reduzida no seu aparelho antes de subir. O mural guarda até 40.</p>
+      <section className="qd-painel qd-pendurar" aria-label="Pendurar no mural">
+        <div className="qd-pendurar__cabeca">
+          <h3 className="qd-painel__titulo"><Pin size={16} aria-hidden="true" /> Pendurar no mural</h3>
+          <div className="qd-segmentos" role="group" aria-label="O que pendurar">
+            <button type="button" aria-pressed={modo === 'frase'} onClick={() => setModo('frase')} className={`qd-segmento ${modo === 'frase' ? 'is-ativo' : ''}`}><Quote size={13} aria-hidden="true" /> Frase da mesa</button>
+            <button type="button" aria-pressed={modo === 'foto'} onClick={() => setModo('foto')} className={`qd-segmento ${modo === 'foto' ? 'is-ativo' : ''}`}><Camera size={13} aria-hidden="true" /> Foto do grupo</button>
+          </div>
         </div>
-      </div>
 
-      {erro ? <p role="alert" className="rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-200">{erro}</p> : null}
-      {!itens ? <p className="py-8 text-center text-sm text-gray-500" aria-busy="true">Abrindo o mural...</p> : null}
-      {itens && itens.length === 0 ? <p className="rounded-2xl border border-dashed border-white/10 py-12 text-center text-sm text-gray-500">O mural está vazio. Pendure a primeira frase ou foto.</p> : null}
+        {modo === 'frase' ? (
+          <form className="grid gap-3" onSubmit={(evento) => { evento.preventDefault(); publicarFrase(); }}>
+            <textarea value={frase} maxLength={300} onChange={(evento) => setFrase(evento.target.value)} placeholder="Aquela frase que ninguém vai esquecer..." aria-label="Frase" className="qd-campo" />
+            <div className="qd-pendurar__linha">
+              <input value={quemDisse} maxLength={60} onChange={(evento) => setQuemDisse(evento.target.value)} placeholder="Quem disse? (vazio se foi você)" aria-label="Quem disse" className="qd-campo" />
+              <span className="qd-contador" aria-hidden="true">{frase.length}/300</span>
+              <button type="submit" disabled={enviando || !frase.trim()} className="qd-botao"><Pin size={15} aria-hidden="true" /> {enviando ? 'Pendurando...' : 'Pendurar'}</button>
+            </div>
+          </form>
+        ) : (
+          <div className="grid gap-3">
+            <div className="qd-pendurar__linha">
+              <input value={legenda} maxLength={140} onChange={(evento) => setLegenda(evento.target.value)} placeholder="Legenda (opcional)" aria-label="Legenda da foto" className="qd-campo" />
+              <input ref={arquivoRef} type="file" accept="image/jpeg,image/png,image/webp" className="sr-only" aria-label="Escolher foto" onChange={(evento) => escolherFoto(evento.target.files?.[0])} />
+              <button type="button" disabled={enviando} onClick={() => arquivoRef.current?.click()} className="qd-botao"><Camera size={15} aria-hidden="true" /> {enviando ? 'Enviando...' : 'Escolher foto'}</button>
+            </div>
+            <p className="qd-pendurar__nota">A foto é reduzida no seu aparelho antes de subir. O mural guarda até 40.</p>
+          </div>
+        )}
+      </section>
 
-      {frases.length ? (
-        <section aria-label="Frases">
-          <h3 className="mb-3 text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500">Frases ({frases.length})</h3>
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {frases.map((item) => (
-              <figure key={item.id} className={`relative flex flex-col justify-between rounded-2xl border p-5 ${item.melhor_da_noite ? 'border-[#c7a44c]/60 bg-gradient-to-br from-[#c7a44c]/15 to-transparent' : 'border-white/10 bg-[#0f0e15]'}`}>
-                {item.melhor_da_noite ? <span className="absolute -top-2.5 left-4 flex items-center gap-1 rounded-full bg-[#c7a44c] px-3 py-0.5 text-[10px] font-black uppercase tracking-widest text-black"><Crown size={10} /> Melhor da noite</span> : null}
-                <blockquote className="text-lg leading-8 text-gray-100" style={{ fontFamily: 'Georgia, serif' }}>“{item.texto}”</blockquote>
-                <figcaption className="mt-4 flex items-center justify-between gap-2">
-                  <span className="min-w-0 truncate text-xs text-gray-500">{item.autor} · {quando(item.criado_em)}</span>
-                  <span className="flex shrink-0 items-center gap-1.5">
-                    <BotaoCurtir item={item} onCurtir={curtir} />
-                    {item.pode_apagar ? <button type="button" aria-label="Apagar frase" onClick={() => apagar(item)} className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 text-gray-500 hover:text-red-400"><Trash2 size={13} /></button> : null}
-                  </span>
-                </figcaption>
-              </figure>
+      {erro ? <p role="alert" className="qd-erro">{erro}</p> : null}
+
+      {itens && itens.length > 0 ? (
+        <div className="qd-filtros">
+          <div className="qd-segmentos" role="group" aria-label="Mostrar no mural">
+            {([
+              ['tudo', 'Tudo', itens.length],
+              ['frases', 'Frases', frases.length],
+              ['fotos', 'Fotos', fotos.length],
+            ] as Array<[FiltroMural, string, number]>).map(([valor, rotulo, total]) => (
+              <button key={valor} type="button" aria-pressed={filtro === valor} onClick={() => setFiltro(valor)} className={`qd-segmento ${filtro === valor ? 'is-ativo' : ''}`}>
+                {rotulo} <small>{total}</small>
+              </button>
             ))}
           </div>
-        </section>
+        </div>
       ) : null}
 
-      {fotos.length ? (
-        <section aria-label="Fotos">
-          <h3 className="mb-3 text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500">Fotos ({fotos.length})</h3>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {fotos.map((item) => (
-              <figure key={item.id} className="overflow-hidden rounded-2xl border border-white/10 bg-[#0f0e15]">
-                {item.imagem ? <img src={item.imagem} alt={item.texto || `Foto de ${item.publicado_por}`} loading="lazy" className="aspect-[4/3] w-full object-cover" /> : null}
-                <figcaption className="flex items-center justify-between gap-2 p-3">
-                  <span className="min-w-0 text-xs text-gray-400"><span className="block truncate text-gray-200">{item.texto || 'Sem legenda'}</span>{item.publicado_por} · {quando(item.criado_em)}</span>
-                  <span className="flex shrink-0 items-center gap-1.5">
-                    <BotaoCurtir item={item} onCurtir={curtir} />
-                    {item.pode_apagar ? <button type="button" aria-label="Apagar foto" onClick={() => apagar(item)} className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 text-gray-500 hover:text-red-400"><Trash2 size={13} /></button> : null}
-                  </span>
-                </figcaption>
-              </figure>
+      <section className="qd-cortica" aria-label="Mural da mesa" aria-busy={!itens}>
+        {!itens ? <p className="qd-carregando" style={{ color: '#d9c3a0' }}>Abrindo o mural...</p> : null}
+        {itens && visiveis.length === 0 ? (
+          <div className="qd-vazio">
+            <Pin size={28} aria-hidden="true" />
+            <strong>{itens.length === 0 ? 'O mural está vazio' : filtro === 'fotos' ? 'Nenhuma foto ainda' : 'Nenhuma frase ainda'}</strong>
+            <p>{itens.length === 0 ? 'Pendure a primeira frase que fez a mesa rir ou uma foto do grupo.' : 'Use o campo acima para pendurar a primeira.'}</p>
+          </div>
+        ) : null}
+        {visiveis.length ? (
+          <div className="qd-mural">
+            {visiveis.map((item) => (
+              <div key={item.id}>
+                {item.tipo === 'foto'
+                  ? <FotoDaMesa item={item} onCurtir={curtir} onApagar={(alvo) => void apagar(alvo)} />
+                  : <NotaDaMesa item={item} onCurtir={curtir} onApagar={(alvo) => void apagar(alvo)} />}
+              </div>
             ))}
           </div>
-        </section>
-      ) : null}
+        ) : null}
+      </section>
     </div>
   );
 };

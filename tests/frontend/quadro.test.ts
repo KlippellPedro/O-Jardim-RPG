@@ -4,10 +4,16 @@ import {
   TAMANHO_MAXIMO_FOTO,
   cabeNoLimite,
   deCampoDataHora,
+  estiloDoPapel,
+  filtrarMural,
   formatarDataDaSessao,
+  giroDoPapel,
+  lideresDoRank,
   montarMes,
   paraCampoDataHora,
+  partesDaSessao,
   planoDeReducao,
+  porcentagem,
   rotuloDoMes,
   separarMural,
   sessoesPorDia,
@@ -79,4 +85,51 @@ test('limite de tamanho da foto bate com o do servidor', () => {
   assert.equal(TAMANHO_MAXIMO_FOTO, 150_000);
   assert.equal(cabeNoLimite('x'.repeat(150_000)), true);
   assert.equal(cabeNoLimite('x'.repeat(150_001)), false);
+});
+
+test('mural filtra por tipo e "tudo" devolve a lista como veio', () => {
+  const lista = [item({ id: '1', tipo: 'foto' }), item({ id: '2' }), item({ id: '3', tipo: 'foto' })];
+  assert.deepEqual(filtrarMural(lista, 'tudo').map((i) => i.id), ['1', '2', '3']);
+  assert.deepEqual(filtrarMural(lista, 'fotos').map((i) => i.id), ['1', '3']);
+  assert.deepEqual(filtrarMural(lista, 'frases').map((i) => i.id), ['2']);
+});
+
+test('papel do mural cai sempre torto do mesmo jeito, dentro do limite e nunca reto', () => {
+  const ids = Array.from({ length: 200 }, (_, i) => `item-${i}`);
+  ids.forEach((id) => {
+    const giro = giroDoPapel(id);
+    assert.equal(giro, giroDoPapel(id));
+    assert.ok(Math.abs(giro) <= 2.4, `${id}: ${giro}`);
+    assert.ok(Math.abs(giro) >= 0.6, `${id}: ${giro}`);
+  });
+  // Ids diferentes não caem todos no mesmo ângulo.
+  assert.ok(new Set(ids.map((id) => giroDoPapel(id))).size > 10);
+  const estilo = estiloDoPapel('abc');
+  assert.deepEqual(estilo, estiloDoPapel('abc'));
+  assert.match(estilo.papel, /^#[0-9a-f]{6}$/);
+  assert.match(estilo.alfinete, /^#[0-9a-f]{6}$/);
+});
+
+test('rank marca o maior valor de cada coluna e zero nao lidera', () => {
+  const linha = (extra: Partial<Record<string, number>>) => ({ rolagens: 0, criticos: 0, falhas: 0, dano_maximo: 0, lunaris_gastos: 0, ...extra });
+  const lideres = lideresDoRank([linha({ rolagens: 14, criticos: 4 }), linha({ rolagens: 9, dano_maximo: 40 })]);
+  assert.equal(lideres.rolagens, 14);
+  assert.equal(lideres.criticos, 4);
+  assert.equal(lideres.dano_maximo, 40);
+  assert.equal(lideres.falhas, 0);
+  assert.deepEqual(lideresDoRank([]), { rolagens: 0, criticos: 0, falhas: 0, dano_maximo: 0, lunaris_gastos: 0 });
+});
+
+test('porcentagem fica entre 0 e 100 e aguenta total zero', () => {
+  assert.equal(porcentagem(1, 19), 5);
+  assert.equal(porcentagem(19, 19), 100);
+  assert.equal(porcentagem(30, 19), 100);
+  assert.equal(porcentagem(3, 0), 0);
+});
+
+test('proxima sessao separa dia e hora', () => {
+  const partes = partesDaSessao(new Date(2026, 10, 22, 20, 0).toISOString());
+  assert.equal(partes?.hora, '20:00');
+  assert.match(partes?.dia ?? '', /domingo, 22/);
+  assert.equal(partesDaSessao('lixo'), null);
 });

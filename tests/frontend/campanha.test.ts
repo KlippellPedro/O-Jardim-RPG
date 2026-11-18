@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { COR_PADRAO_CAMPANHA, corDaCampanha, recorteDaCapa, textoDeDuracao, textoDeVisita, urlDaCapa } from '../../src/pages/Campanha/campanha';
+import { COR_PADRAO_CAMPANHA, corDaCampanha, folhaDaSessao, horasDeHistoria, inicialDaCampanha, presencaDe, recorteDaCapa, textoDeDuracao, textoDeVisita, urlDaCapa } from '../../src/pages/Campanha/campanha';
 
 test('cor da campanha aceita hex valido e cai no dourado do Jardim', () => {
   assert.equal(corDaCampanha({ cor: '#AABBCC' }), '#aabbcc');
@@ -33,4 +33,35 @@ test('recorte 3:1 centralizado, para imagem larga e para imagem alta', () => {
   assert.deepEqual(recorteDaCapa(3000, 1000), { x: 0, y: 0, w: 3000, h: 1000 });
   assert.deepEqual(recorteDaCapa(1200, 1200), { x: 0, y: 400, w: 1200, h: 400 });
   assert.deepEqual(recorteDaCapa(4000, 1000), { x: 500, y: 0, w: 3000, h: 1000 });
+});
+
+test('presenca na mesa: agora, hoje, sumido ou nunca', () => {
+  const agora = new Date('2026-11-18T12:00:00Z').getTime();
+  assert.equal(presencaDe(null, agora), 'nunca');
+  assert.equal(presencaDe('lixo', agora), 'nunca');
+  assert.equal(presencaDe('2026-11-18T11:55:00Z', agora), 'agora');
+  assert.equal(presencaDe('2026-11-18T02:00:00Z', agora), 'hoje');
+  assert.equal(presencaDe('2026-11-16T12:00:00Z', agora), 'sumido');
+});
+
+test('letra do brasao pula espacos e simbolos', () => {
+  assert.equal(inicialDaCampanha('Mesa da Loja'), 'M');
+  assert.equal(inicialDaCampanha('  "érebo"'), 'É');
+  assert.equal(inicialDaCampanha('7 Mares'), '7');
+  assert.equal(inicialDaCampanha(''), '?');
+  assert.equal(inicialDaCampanha(null), '?');
+});
+
+test('folhinha da sessao traz mes curto, dia, dia da semana e hora', () => {
+  const folha = folhaDaSessao(new Date(2026, 10, 20, 18, 0).toISOString());
+  assert.deepEqual(folha, { mes: 'NOV', dia: '20', semana: 'sexta', hora: '18:00' });
+  assert.equal(folhaDaSessao('lixo'), null);
+  assert.equal(folhaDaSessao(null), null);
+});
+
+test('horas de historia arredondam e mostram minutos abaixo de uma hora', () => {
+  assert.equal(horasDeHistoria(0), '0 h');
+  assert.equal(horasDeHistoria(45), '45 min');
+  assert.equal(horasDeHistoria(125), '2 h');
+  assert.equal(horasDeHistoria(2040), '34 h');
 });

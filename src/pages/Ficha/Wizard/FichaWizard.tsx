@@ -415,7 +415,7 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
         </div>
       );
     }
-    if (isLoading) return <div className="p-20 text-center text-gray-400">Carregando Códice...</div>;
+    if (isLoading) return <div className="p-20 text-center text-gray-400">Carregando raças, classes e Árvores...</div>;
 
     const currentRaca = catalogo?.racas.find(r => r.id === racaId);
     const gruposEscolhaRacial = obterGruposEscolhaRacial(currentRaca, escolhaRacial);
@@ -513,7 +513,7 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
                         label={`O que é a Árvore de ${arvore.nome}?`}
                         onClick={() => setInfoModal({
                           titulo: `${arvore.nome} · ${arvore.deidadeTitulo}`,
-                          texto: descricaoArvore(arvore.id) || 'Esta Árvore ainda não tem uma descrição detalhada no Códice.',
+                          texto: descricaoArvore(arvore.id) || 'Esta Árvore ainda não tem uma descrição detalhada.',
                         })}
                       />
                     </div>
@@ -867,7 +867,7 @@ export const FichaWizard: React.FC<WizardProps> = ({ onClose }) => {
                           label={`O que a perícia ${pericia.titulo} faz?`}
                           onClick={() => setInfoModal({
                             titulo: pericia.titulo,
-                            texto: pericia.descricao || 'Esta perícia ainda não tem uma descrição detalhada no Códice.',
+                            texto: pericia.descricao || 'Esta perícia ainda não tem uma descrição detalhada.',
                           })}
                         />
                       </div>

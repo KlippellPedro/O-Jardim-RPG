@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
-import { HelpCircle, Sparkles } from 'lucide-react';
+import { useEffect, useState, type CSSProperties } from 'react';
+import { Eye, Lock, Sparkles, Users } from 'lucide-react';
 import { descobertasApi, type IDescobertasDaCampanha } from '../../services/descobertasApi';
+import { porcentagem } from './quadro';
 
 /** As coisas escondidas do site: mostra quem achou cada uma, nunca onde ela está. */
 export const AbaDescobertas = ({ campanhaId }: { campanhaId: string }) => {
@@ -15,30 +16,58 @@ export const AbaDescobertas = ({ campanhaId }: { campanhaId: string }) => {
     return () => { ativo = false; };
   }, [campanhaId]);
 
-  if (erro) return <p role="alert" className="rounded-xl border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-200">{erro}</p>;
-  if (!dados) return <p className="py-10 text-center text-sm text-gray-500" aria-busy="true">Procurando...</p>;
+  if (erro) return <p role="alert" className="qd-erro">{erro}</p>;
+  if (!dados) return <p className="qd-carregando" aria-busy="true">Procurando...</p>;
+
+  const achadasPelaMesa = dados.itens.filter((item) => item.descobridores.length > 0).length;
+  const maiorTotal = dados.ranking[0]?.total || 1;
 
   return (
-    <div className="space-y-6">
-      <p className="text-sm leading-6 text-gray-400">
-        O Jardim guarda coisas escondidas. Aqui aparece quem já achou cada uma, mas não onde estão. Você achou <strong className="text-[#f3dc8f]">{dados.achadas_por_mim}</strong> de {dados.total}.
-      </p>
+    <div className="flex flex-col gap-5">
+      <section className="qd-painel qd-progresso" aria-label="Seu progresso">
+        <div className="qd-anel" style={{ '--p': porcentagem(dados.achadas_por_mim, dados.total) } as CSSProperties}>
+          <span className="qd-anel__valor"><strong>{dados.achadas_por_mim}</strong><small>de {dados.total}</small></span>
+        </div>
+        <div className="min-w-0">
+          <h2>Coisas escondidas no Jardim</h2>
+          <p>
+            O site guarda segredos espalhados pelas páginas. Aqui aparece quem já achou cada um, mas nunca onde ele está.
+            A mesa toda já achou <strong className="text-[#f1e8d4]">{achadasPelaMesa}</strong>.
+          </p>
+          <div className="qd-trilha" aria-hidden="true">
+            {dados.itens.map((item) => (
+              <i key={item.chave} className={item.achei ? 'is-meu' : item.descobridores.length ? 'is-achado' : ''} />
+            ))}
+          </div>
+          <p className="qd-legenda" aria-hidden="true">
+            <span><i className="is-meu" /> Achado por você</span>
+            <span><i className="is-achado" /> Achado pela mesa</span>
+            <span><i /> Ninguém achou</span>
+          </p>
+        </div>
+      </section>
 
-      <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      <ul className="qd-segredos">
         {dados.itens.map((item) => {
           const conhecida = item.nome !== '???';
+          const rara = item.raridade === 'rara';
+          const estado = item.achei ? 'is-meu' : conhecida ? 'is-revelado' : 'is-selado';
           return (
-            <li key={item.chave} className={`rounded-2xl border p-4 ${item.achei ? 'border-violet-400/40 bg-violet-400/10' : 'border-white/10 bg-[#0f0e15]'}`}>
-              <div className="flex items-start gap-3">
-                {item.achei ? <Sparkles size={18} className="mt-0.5 shrink-0 text-violet-300" aria-hidden="true" /> : <HelpCircle size={18} className="mt-0.5 shrink-0 text-gray-600" aria-hidden="true" />}
-                <div className="min-w-0">
-                  <h3 className={`text-sm font-bold ${conhecida ? 'text-white' : 'text-gray-500'}`}>{item.nome}</h3>
-                  {item.raridade === 'rara' ? <span className="text-[10px] font-bold uppercase tracking-widest text-amber-300">Rara</span> : null}
-                </div>
+            <li key={item.chave} className={`qd-segredo ${estado} ${rara ? 'is-rara' : ''}`}>
+              {rara ? <span className="qd-segredo__rara">Rara</span> : null}
+              <div className="qd-segredo__cabeca">
+                <span className="qd-segredo__selo" aria-hidden="true">
+                  {item.achei ? <Sparkles size={17} /> : conhecida ? <Eye size={17} /> : <Lock size={15} />}
+                </span>
+                <h3>
+                  {conhecida ? item.nome : <><span aria-hidden="true">???</span><span className="sr-only">Segredo que ninguém achou</span></>}
+                </h3>
               </div>
-              {item.dica ? <p className="mt-2 text-xs italic leading-5 text-gray-500">{item.dica}</p> : null}
-              <p className="mt-2 text-xs leading-5 text-gray-400">
-                {item.descobridores.length ? <>Achada por {item.descobridores.join(', ')}</> : 'Ninguém achou ainda.'}
+              {item.dica ? <p className="qd-segredo__dica">{item.dica}</p> : null}
+              <p className="qd-segredo__quem">
+                {item.descobridores.length
+                  ? <>Achado por <b>{item.descobridores.join(', ')}</b></>
+                  : 'Ninguém achou ainda.'}
               </p>
             </li>
           );
@@ -46,13 +75,15 @@ export const AbaDescobertas = ({ campanhaId }: { campanhaId: string }) => {
       </ul>
 
       {dados.ranking.length ? (
-        <section aria-label="Quem mais achou" className="rounded-2xl border border-white/10 bg-[#0f0e15] p-5">
-          <h3 className="mb-3 text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500">Quem mais achou</h3>
-          <ol className="space-y-1.5">
+        <section aria-label="Quem mais achou" className="qd-painel">
+          <h3 className="qd-painel__titulo"><Users size={16} aria-hidden="true" /> Quem mais achou</h3>
+          <ol className="qd-ranking">
             {dados.ranking.map((linha, indice) => (
-              <li key={linha.nome} className="flex items-center justify-between text-sm text-gray-200">
-                <span>{indice + 1}. {linha.nome}</span>
-                <span className="font-bold text-[#f3dc8f]">{linha.total}</span>
+              <li key={linha.nome}>
+                <span className="qd-ranking__pos" aria-hidden="true">{indice + 1}</span>
+                <span className="qd-ranking__nome">{linha.nome}</span>
+                <span className="qd-ranking__barra" aria-hidden="true"><i style={{ width: `${porcentagem(linha.total, maiorTotal)}%` }} /></span>
+                <span className="qd-ranking__total">{linha.total}</span>
               </li>
             ))}
           </ol>

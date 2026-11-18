@@ -1,24 +1,23 @@
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
-import { BookText, Loader2, Pencil, Trash2 } from 'lucide-react';
+import { BookText, Feather, Loader2, Pencil, Trash2, X } from 'lucide-react';
 import { engajamentoApi, type IEntradaCronica } from '../../services/engajamentoApi';
 import { confirmar } from '../../components/avisos/confirmacao';
 
-const cartao = 'rounded-3xl border border-white/10 bg-[#0c0b11]/85 p-5';
-const tituloSecao = 'mb-4 flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.22em] text-gray-500';
-const campoTexto = 'w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm leading-6 text-white placeholder:text-gray-600 focus:border-primary/50 focus:outline-none';
-
 interface CronicaCampanhaProps {
   campanhaId: string;
-  cor: string;
 }
 
+const LIMITE = 4000;
+const dataCurta = (iso: string) => new Date(iso).toLocaleDateString('pt-BR', { day: 'numeric', month: 'short', year: 'numeric' });
+
 /** Crônica coletiva: o que o grupo viveu, escrito à mão pelos próprios
- * jogadores e pelo Mestre - complementa o "Anteriormente" automático, que só
+ * jogadores e pelo Mestre. Complementa o "Anteriormente" automático, que só
  * resume números da sessão. Qualquer membro (menos observador) publica; cada
  * um edita ou apaga o que escreveu, e o Mestre modera tudo. */
-export function CronicaCampanha({ campanhaId, cor }: CronicaCampanhaProps) {
+export function CronicaCampanha({ campanhaId }: CronicaCampanhaProps) {
   const [entradas, setEntradas] = useState<IEntradaCronica[] | null>(null);
   const [erro, setErro] = useState('');
+  const [escrevendo, setEscrevendo] = useState(false);
   const [tituloNovo, setTituloNovo] = useState('');
   const [textoNovo, setTextoNovo] = useState('');
   const [publicando, setPublicando] = useState(false);
@@ -44,6 +43,7 @@ export function CronicaCampanha({ campanhaId, cor }: CronicaCampanhaProps) {
       await engajamentoApi.publicarCronica(campanhaId, tituloNovo.trim(), textoNovo.trim());
       setTituloNovo('');
       setTextoNovo('');
+      setEscrevendo(false);
       carregar();
     } catch (falha) {
       setErro(falha instanceof Error ? falha.message : 'Não foi possível publicar.');
@@ -84,110 +84,76 @@ export function CronicaCampanha({ campanhaId, cor }: CronicaCampanhaProps) {
     }
   };
 
+  // Sem nenhuma entrada, o campo já aparece aberto para a primeira.
+  const formAberto = escrevendo || (entradas !== null && entradas.length === 0);
+
   return (
-    <section className={cartao} aria-label="Crônica da campanha">
-      <h2 className={tituloSecao}><BookText size={14} style={{ color: cor }} /> Crônica da campanha</h2>
-      <p className="mb-4 text-xs leading-5 text-gray-500">
-        O que o grupo viveu, escrito por vocês - diferente do resumo automático de "Anteriormente".
-      </p>
-
-      {erro ? <p role="alert" className="mb-3 rounded-xl border border-red-500/30 bg-red-500/10 p-2.5 text-xs text-red-200">{erro}</p> : null}
-
-      <form onSubmit={publicar} className="mb-5 space-y-2 rounded-2xl border border-white/[0.07] bg-black/25 p-3">
-        <input
-          type="text"
-          value={tituloNovo}
-          onChange={(evento) => setTituloNovo(evento.target.value)}
-          placeholder="Título (opcional)"
-          maxLength={120}
-          className={campoTexto}
-        />
-        <textarea
-          value={textoNovo}
-          onChange={(evento) => setTextoNovo(evento.target.value)}
-          placeholder="O que aconteceu..."
-          maxLength={4000}
-          rows={3}
-          className={`resize-y ${campoTexto}`}
-        />
-        <div className="flex justify-end">
-          <button
-            type="submit"
-            disabled={!textoNovo.trim() || publicando}
-            className="inline-flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-bold text-black disabled:cursor-not-allowed disabled:opacity-40"
-            style={{ backgroundColor: cor }}
-          >
-            {publicando ? <Loader2 size={14} className="animate-spin" /> : null}
-            Publicar na crônica
+    <section className="cp-cartao" aria-label="Crônica da campanha">
+      <div className="cp-cartao__cabeca">
+        <h2 className="cp-cartao__titulo"><BookText size={17} aria-hidden="true" /> Crônica da campanha {entradas?.length ? <small>{entradas.length} {entradas.length === 1 ? 'página' : 'páginas'}</small> : null}</h2>
+        {entradas?.length ? (
+          <button type="button" onClick={() => setEscrevendo((atual) => !atual)} aria-expanded={escrevendo} className="cp-botao cp-botao--fantasma cp-botao--mini">
+            {escrevendo ? <><X size={13} aria-hidden="true" /> Fechar</> : <><Feather size={13} aria-hidden="true" /> Escrever</>}
           </button>
-        </div>
-      </form>
+        ) : null}
+      </div>
+      <p className="cp-cartao__sub">O que o grupo viveu, contado por vocês. O "Anteriormente" guarda os números; aqui fica a história.</p>
+
+      {erro ? <p role="alert" className="cp-erro mb-3">{erro}</p> : null}
+
+      {formAberto ? (
+        <form onSubmit={publicar} className="cp-cronica__form">
+          <input type="text" value={tituloNovo} onChange={(evento) => setTituloNovo(evento.target.value)} placeholder="Título (opcional)" aria-label="Título da página" maxLength={120} className="cp-campo" />
+          <textarea value={textoNovo} onChange={(evento) => setTextoNovo(evento.target.value)} placeholder="O que aconteceu..." aria-label="Texto da página" maxLength={LIMITE} rows={4} className="cp-campo" />
+          <div className="cp-cronica__acoes">
+            <span className="cp-cronica__contador" aria-hidden="true">{textoNovo.length}/{LIMITE}</span>
+            <button type="submit" disabled={!textoNovo.trim() || publicando} className="cp-botao">
+              {publicando ? <Loader2 size={14} className="animate-spin" aria-hidden="true" /> : <Feather size={14} aria-hidden="true" />}
+              Publicar na crônica
+            </button>
+          </div>
+        </form>
+      ) : null}
 
       {entradas === null ? (
-        <p className="text-sm text-gray-500" aria-busy="true">Abrindo a crônica...</p>
+        <p className="cp-vazio" aria-busy="true">Abrindo a crônica...</p>
       ) : entradas.length === 0 ? (
-        <p className="text-sm text-gray-500">Ninguém escreveu nada ainda. Seja a primeira entrada.</p>
+        <p className="cp-vazio">Ninguém escreveu nada ainda. A primeira página é sua.</p>
       ) : (
-        <ul className="space-y-3">
+        <div className="cp-paginas">
           {entradas.map((entrada) => (
-            <li key={entrada.id} className="rounded-2xl border border-white/[0.07] bg-black/25 p-3">
+            <article key={entrada.id} className="cp-pagina">
               {editandoId === entrada.id ? (
-                <div className="space-y-2">
-                  <input
-                    type="text"
-                    value={tituloEdicao}
-                    onChange={(evento) => setTituloEdicao(evento.target.value)}
-                    maxLength={120}
-                    className={campoTexto}
-                  />
-                  <textarea
-                    value={textoEdicao}
-                    onChange={(evento) => setTextoEdicao(evento.target.value)}
-                    maxLength={4000}
-                    rows={3}
-                    className={`resize-y ${campoTexto}`}
-                  />
-                  <div className="flex justify-end gap-2">
-                    <button type="button" onClick={() => setEditandoId(null)} className="rounded-lg px-3 py-1.5 text-xs font-bold text-gray-400 hover:text-white">
-                      Cancelar
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => void salvarEdicao(entrada.id)}
-                      disabled={!textoEdicao.trim() || salvandoEdicao}
-                      className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold text-black disabled:cursor-not-allowed disabled:opacity-40"
-                      style={{ backgroundColor: cor }}
-                    >
-                      {salvandoEdicao ? <Loader2 size={12} className="animate-spin" /> : null} Salvar
+                <div className="grid gap-2">
+                  <input type="text" value={tituloEdicao} onChange={(evento) => setTituloEdicao(evento.target.value)} aria-label="Título da página" maxLength={120} className="cp-campo" />
+                  <textarea value={textoEdicao} onChange={(evento) => setTextoEdicao(evento.target.value)} aria-label="Texto da página" maxLength={LIMITE} rows={4} className="cp-campo" />
+                  <div className="cp-cronica__acoes">
+                    <button type="button" onClick={() => setEditandoId(null)} className="cp-botao cp-botao--fantasma cp-botao--mini">Cancelar</button>
+                    <button type="button" onClick={() => void salvarEdicao(entrada.id)} disabled={!textoEdicao.trim() || salvandoEdicao} className="cp-botao cp-botao--mini">
+                      {salvandoEdicao ? <Loader2 size={12} className="animate-spin" aria-hidden="true" /> : null} Salvar
                     </button>
                   </div>
                 </div>
               ) : (
                 <>
-                  <div className="flex items-start justify-between gap-2">
-                    <span className="min-w-0">
-                      {entrada.titulo ? <span className="block font-bold text-white">{entrada.titulo}</span> : null}
-                      <span className="text-[11px] text-gray-500">
-                        {entrada.publicado_por} · {new Date(entrada.criado_em).toLocaleDateString('pt-BR', { day: 'numeric', month: 'short' })}
-                      </span>
-                    </span>
+                  <div className="cp-pagina__cabeca">
+                    <div className="min-w-0">
+                      {entrada.titulo ? <h3 className="cp-pagina__titulo">{entrada.titulo}</h3> : null}
+                      <p className="cp-pagina__meta">Por {entrada.publicado_por} · {dataCurta(entrada.criado_em)}</p>
+                    </div>
                     {entrada.pode_editar ? (
-                      <span className="flex shrink-0 items-center gap-1">
-                        <button type="button" onClick={() => iniciarEdicao(entrada)} aria-label="Editar entrada" className="rounded-lg p-1.5 text-gray-500 hover:bg-white/5 hover:text-white">
-                          <Pencil size={13} />
-                        </button>
-                        <button type="button" onClick={() => void apagar(entrada.id)} aria-label="Apagar entrada" className="rounded-lg p-1.5 text-gray-500 hover:bg-red-500/10 hover:text-red-400">
-                          <Trash2 size={13} />
-                        </button>
+                      <span className="cp-pagina__acoes">
+                        <button type="button" onClick={() => iniciarEdicao(entrada)} aria-label="Editar entrada" className="cp-botao-icone"><Pencil size={13} /></button>
+                        <button type="button" onClick={() => void apagar(entrada.id)} aria-label="Apagar entrada" className="cp-botao-icone cp-botao-icone--perigo"><Trash2 size={13} /></button>
                       </span>
                     ) : null}
                   </div>
-                  <p className="mt-1.5 whitespace-pre-line text-sm leading-6 text-gray-300">{entrada.texto}</p>
+                  <p className="cp-pagina__texto">{entrada.texto}</p>
                 </>
               )}
-            </li>
+            </article>
           ))}
-        </ul>
+        </div>
       )}
     </section>
   );
