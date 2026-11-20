@@ -146,13 +146,17 @@ defesas, concentração, Cansaço ou limites de uso.
 
 ### Relíquias da Criação
 
-São 23 peças: 17 armas e 6 artefatos, sendo 9 delas à distância ou híbridas. O texto
-delas não é escrito à mão no JSON.
+São 68 peças: 17 armas (9 à distância ou híbridas), 18 artefatos, 8 implantes,
+6 armaduras, 6 escudos, 6 bens imóveis, 6 veículos e 1 consumível. O texto delas não
+é escrito à mão no JSON.
 A curadoria oficial mora em `tools/retrofit-creation-relics.mjs`. Relíquia nova entra
 no bloco `novas` (ficha de combate, preço e tipo) e no bloco `curadoria` (lore, vitrine
 e Ressonância); o script cria a entrada que ainda não existe. Edite lá e rode
 `npm run reliquias:retrofit`. Para conferir se o catálogo ainda bate com a
-curadoria, `npm run reliquias:check`.
+curadoria, `npm run reliquias:check`. Texto de Relíquia corrigido direto no JSON se
+perde na próxima rodada do script: corrija também a curadoria. As etiquetas
+"Sanidade máxima" e "Sistema" dos implantes são de `tools/normalizar-implantes.mjs`,
+e o script das Relíquias só as mantém no lugar.
 
 Cada Relíquia publica `natureza: "reliquia-criacao"`, que é o campo lido pelo site
 para reconhecer a peça, mais `lore` (texto de mesa) e `descricao`. As armas trazem

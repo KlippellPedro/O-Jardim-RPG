@@ -1,6 +1,18 @@
 {
   "itens": [
     {
+      "id": "2026-11-20-reliquia-dharma",
+      "data": "2026-11-20",
+      "tipo": "novo",
+      "area": "Loja",
+      "titulo": "Relíquia nova: o Dharma, a roda que aprende",
+      "detalhes": [
+        "A Loja ganhou uma Relíquia da Criação: o Dharma, uma roda de oito raios que flutua acima da cabeça de quem a usa.",
+        "Cada vez que o mesmo tipo de dano ou a mesma condição atinge você, a roda gira um raio e você aguenta um pouco mais. No oitavo raio a volta fecha e você fica imune àquilo até o fim da cena.",
+        "Como toda Relíquia, pede a autorização do Mestre."
+      ]
+    },
+    {
       "id": "2026-11-18-site-mais-leve",
       "data": "2026-11-18",
       "tipo": "melhoria",
@@ -1025,18 +1037,6 @@
         "Com o personagem ao lado de uma porta, clique nela para abrir ou fechar. Porta trancada só o Mestre abre.",
         "Algumas paredes escondem portas secretas. Quando o Mestre revela uma, ela aparece no mapa como porta comum.",
         "Um portal pode levar o seu personagem para outro lugar da aventura, numa outra cena. O Mestre fica sabendo na hora."
-      ]
-    },
-    {
-      "id": "2026-11-03-camadas-anotacoes-e-flip-no-mapa",
-      "data": "2026-11-03",
-      "tipo": "melhoria",
-      "area": "Sessão",
-      "titulo": "Mapa: camadas, plaquinhas e tokens espelhados",
-      "detalhes": [
-        "Separe itens do Acervo, montarias e personagens em camadas e escolha o que cada jogador pode ver.",
-        "Escreva plaquinhas no mapa, escolha a letra, o tamanho e as cores, e arraste para mudar de lugar.",
-        "Espelhe um token na horizontal ou na vertical pelo menu Visual."
       ]
     }
   ]

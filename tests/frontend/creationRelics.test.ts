@@ -13,9 +13,10 @@ const artefatos = reliquias.filter((entrada) => entrada.tipo === 'artefato');
 
 test('as Relíquias da Criação cobrem armas, artefatos e os demais tipos do catálogo', () => {
   // +1 artefato em 2026-10-28: o Colar das Nove Lascas, que um Soberano usa (questionário final, pergunta 45).
-  assert.equal(reliquias.length, 67, 'o catálogo ganhou ou perdeu Relíquias da Criação');
+  // +1 artefato em 2026-11-20: o Dharma, a roda de oito raios que se adapta ao que fere o portador.
+  assert.equal(reliquias.length, 68, 'o catálogo ganhou ou perdeu Relíquias da Criação');
   assert.equal(armas.length, 17);
-  assert.equal(artefatos.length, 17);
+  assert.equal(artefatos.length, 18);
   const tipos = new Set(reliquias.map((entrada) => entrada.tipo));
   for (const tipo of ['implante', 'armadura', 'propriedade', 'veiculo-completo', 'consumivel']) {
     assert.ok(tipos.has(tipo), `nenhuma Relíquia da Criação do tipo ${tipo}`);

@@ -36,6 +36,15 @@ const peca = (tipo, ...tags) => ['Relíquia da Criação', tipo, ...tags];
  * catálogo para sempre. */
 const camposDescontinuados = ['efeito', 'manifestacao'];
 
+/* Etiquetas que outro script escreve na vitrine e que esta curadoria não controla.
+ * tools/normalizar-implantes.mjs põe "Sanidade máxima −N" e "Sistema: X" logo
+ * depois de "Relíquia da Criação" nos implantes (com `sistema` e `custoSanidade`,
+ * que ficam intocados por não estarem na curadoria). Aqui elas só são mantidas no
+ * mesmo lugar, para os dois scripts poderem rodar em qualquer ordem. */
+const etiquetasDeOutrosScripts = [/^Sanidade máxima\s*[−-]\s*\d+$/, /^Sistema: /];
+const ehEtiquetaDeOutroScript = (etiqueta) =>
+  etiquetasDeOutrosScripts.some((padrao) => padrao.test(String(etiqueta)));
+
 /* Fichas das Relíquias que ainda não existem no catálogo. O bloco só é usado na
  * criação da entrada; depois disso o JSON é a fonte da ficha de combate e a
  * curadoria abaixo continua mandando no texto. */
@@ -483,6 +492,21 @@ const novas = {
     titulo: 'Cornucópia',
     base: { preco: { 'Fragmentos de Estrela': 460 }, raridade: 'reliquia da criacao', subtipo: 'reliquia-criacao' },
   },
+  'reliquia-dharma': {
+    tipo: 'artefato',
+    titulo: 'Dharma',
+    base: { preco: { 'Fragmentos de Estrela': 650 }, raridade: 'reliquia da criacao', subtipo: 'reliquia-criacao' },
+  },
+  'reliquia-colar-nove-lascas': {
+    tipo: 'artefato',
+    titulo: 'Colar das Nove Lascas',
+    base: { preco: { 'Fragmentos de Estrela': 700 }, raridade: 'reliquia da criacao', subtipo: 'reliquia-criacao' },
+  },
+  'reliquia-ambrosia': {
+    tipo: 'consumivel',
+    titulo: 'Ambrosia',
+    base: { preco: { 'Fragmentos de Estrela': 320 }, raridade: 'reliquia da criacao', subtipo: 'reliquia-criacao', consumivel: true },
+  },
 };
 
 const curadoria = {
@@ -588,11 +612,11 @@ const curadoria = {
   },
   'reliquia-ampulheta-instante': {
     ...comum,
-    atributos: artefato('Recusa a própria ação', '1/descanso completo'),
+    atributos: artefato('Recusa a própria ação', '1/descanso'),
     lore: 'A areia cai para os dois lados e nunca encontra o meio. Cada grão guarda um instante que alguém se recusou a viver até o fim: a palavra engolida, a porta que ficou fechada, o golpe que o braço quis desfazer no meio do caminho. Virar a ampulheta traz esse instante de volta para ser encarado outra vez, com o mesmo corpo cansado de antes.',
-    descricao: 'Uma vez por descanso completo, imediatamente depois de concluir sua própria ação, o portador pode retornar ao espaço onde a iniciou e desfazer apenas os efeitos daquela ação sobre ele. Ações, Mana, munição, cargas e outros recursos continuam gastos; dano e condições causados a terceiros, informações descobertas e reações provocadas permanecem.',
+    descricao: 'Uma vez por descanso, imediatamente depois de concluir sua própria ação, o portador pode retornar ao espaço onde a iniciou e desfazer apenas os efeitos daquela ação sobre ele. Ações, Mana, munição, cargas e outros recursos continuam gastos; dano e condições causados a terceiros, informações descobertas e reações provocadas permanecem.',
     ativacao: 'Imediatamente depois da própria ação',
-    frequencia: '1/descanso completo',
+    frequencia: '1/descanso',
   },
   'reliquia-chave-axis': {
     ...comum,
@@ -605,7 +629,7 @@ const curadoria = {
   'reliquia-manto-abismo': {
     ...comum,
     atributos: artefato('Invisível e intangível', 'Custo: 8 Mana'),
-    lore: 'O tecido é a última sombra de um lugar que parou de existir. Por baixo dele não tem forro nem corpo, tem a lembrança de um mundo depois que a luz final se apagou. Vestir o manto é aceitar que, por alguns passos, a realidade pode esquecer de encostar em você.',
+    lore: 'O tecido é a última sombra de um lugar que parou de existir. Por baixo dele fica só a lembrança de um mundo depois que a luz final se apagou: nem forro, nem corpo. Vestir o manto é aceitar que, por alguns passos, a realidade pode esquecer de encostar em você.',
     descricao: 'Uma vez por cena, gaste uma Ação de Movimento e 8 de Mana para ficar invisível e intangível até o começo do próximo turno. Enquanto durar, você atravessa espaços ocupados, mas não barreiras seladas, e não pode terminar dentro de matéria sólida. Atacar, conjurar ou interagir com um objeto encerra o efeito imediatamente.',
     ativacao: 'Ação de Movimento',
     frequencia: '1/cena',
@@ -1026,11 +1050,11 @@ const curadoria = {
   },
   'reliquia-frasco-pandora': {
     ...comum,
-    atributos: artefato('Libera um efeito imprevisível', '1/sessão'),
+    atributos: artefato('Libera um efeito imprevisível', '1/descanso'),
     lore: 'Abrir não era a instrução, mas curiosidade sempre foi mais forte do que aviso. O que saiu de dentro nunca voltou a caber, e o que sobrou no fundo do frasco, uma esperança pequena e teimosa, ainda mora ali, esperando outra mão sem paciência.',
-    descricao: 'Uma vez por sessão, gaste uma Ação Padrão para abrir o frasco numa área de 9 m. O Mestre sorteia um efeito de caos entre praga, medo em massa, sorte reversa ou tempestade repentina, afetando todos ali menos você. Se você mantiver o frasco fechado até o fim da cena sem abri-lo, todos os aliados dentro do alcance ganham vantagem no próximo teste que fizerem.',
+    descricao: 'Uma vez por descanso, gaste uma Ação Padrão para abrir o frasco numa área de 9 m. O Mestre sorteia um efeito de caos entre praga, medo em massa, sorte reversa ou tempestade repentina, afetando todos ali menos você. Se você mantiver o frasco fechado até o fim da cena sem abri-lo, todos os aliados dentro do alcance ganham vantagem no próximo teste que fizerem.',
     ativacao: 'Ação Padrão, área 9 m',
-    frequencia: '1/sessão',
+    frequencia: '1/descanso',
     efeito: 'Libera um efeito de caos escolhido pelo Mestre entre quatro opções',
   },
   'reliquia-taca-dioniso': {
@@ -1044,11 +1068,11 @@ const curadoria = {
   },
   'reliquia-lamparina-maravilhosa': {
     ...comum,
-    atributos: artefato('Invoca um auxiliar temporário', '1/sessão'),
+    atributos: artefato('Invoca um auxiliar temporário', '1/descanso'),
     lore: 'Um mercador de rua vendeu a lamparina como bugiganga velha, sem imaginar o que dormia dentro dela. Quem esfrega o metal desperta uma vontade presa há séculos, ansiosa por trabalhar em troca de liberdade que nunca chega de verdade.',
-    descricao: 'Uma vez por sessão, esfregue a lamparina como Ação Padrão para invocar um auxiliar com VD igual ao seu nível, obediente por até 1 hora ou até ser derrotado. Ele desaparece ao fim do prazo, sem deixar despojos.',
+    descricao: 'Uma vez por descanso, esfregue a lamparina como Ação Padrão para invocar um auxiliar com VD igual ao seu nível, obediente por até 1 hora ou até ser derrotado. Ele desaparece ao fim do prazo, sem deixar despojos.',
     ativacao: 'Ação Padrão',
-    frequencia: '1/sessão',
+    frequencia: '1/descanso',
     duracao: '1 hora',
     efeito: 'Invoca um auxiliar com VD igual ao seu nível',
   },
@@ -1060,6 +1084,34 @@ const curadoria = {
     ativacao: 'Ação Padrão',
     frequencia: '1/dia',
     efeito: 'Produz comida e água para 10 pessoas por um dia, ou um item comum de até 1 espaço',
+  },
+  'reliquia-dharma': {
+    ...comum,
+    atributos: artefato('Adapta-se ao que fere', 'Imune na volta completa'),
+    lore: 'A roda tem oito raios e flutua um palmo acima da cabeça de quem a carrega, girando sem encostar em nada. Cada vez que alguma coisa fere o portador, um raio estala e anda uma casa, devagar como ponteiro de relógio. Quando a volta fecha, ela soa feito um sino grave, e o golpe que antes abria a pele passa a escorrer por ela igual chuva em pedra.',
+    descricao: 'A roda flutua acima da sua cabeça e se adapta a uma coisa por vez: um tipo de dano ou uma condição que atrapalha você. Ela começa pela primeira que atingir você na cena e gira um raio cada vez que essa coisa atinge você, contando a primeira: cada acerto daquele tipo de dano, ou cada vez que você recebe aquela condição ou começa o turno com ela. Cada raio soma Resistência 5 contra aquele dano (35 no sétimo raio) ou +1 nos seus testes contra aquela condição. No oitavo raio a volta fecha e você fica imune àquele dano ou àquela condição até o fim da cena; se a condição estiver em você, ela termina na hora. Aí a roda volta ao zero e começa a aprender a próxima coisa que atingir você. Se outra coisa atingir você no meio de uma volta, você escolhe se a roda segue onde está ou recomeça com a nova. No fim da cena a roda para e todos os raios voltam ao zero. Dano verdadeiro, Cansaço e o que vem de chegar a 0 de Vida não giram a roda.',
+    ativacao: 'Passiva',
+    frequencia: 'Sempre ativa',
+    duracao: 'A volta completa vale até o fim da cena',
+    efeito: 'Cada raio dá Resistência 5 contra o dano ou +1 contra a condição em adaptação; no oitavo raio, imunidade até o fim da cena',
+  },
+  'reliquia-colar-nove-lascas': {
+    ...comum,
+    atributos: artefato('Fluxos instalados', 'Vantagem em conjuração'),
+    lore: 'Nove lascas de matéria, uma de cada Árvore, presas num fio que ninguém sabe de que é feito. Cada lasca foi tirada sozinha, com anos de intervalo, por alguém que não podia sair do lugar. O colar pesa pouco e esquenta no pescoço quando alguém perto erra uma magia.',
+    descricao: 'Enquanto você usa o colar, o Mestre marca na ficha os Fluxos naturais como instalados: você aprende e conjura magias, rituais, selos e encantamentos de qualquer um deles, e o do Fim continua pedindo a autorização dele. A Marca de círculo segue só do seu Fluxo nativo. Uma vez por cena, ao conjurar uma magia de um Fluxo que não é o seu, role o teste com vantagem. Uma vez por descanso, conjure uma magia de qualquer Fluxo natural que você ainda não aprendeu, de um círculo que você já alcança, pagando a Mana normal; ela não fica no seu grimório.',
+    ativacao: 'Passiva enquanto usado; a vantagem é Ação Livre',
+    frequencia: '1/cena para a vantagem, 1/descanso para a magia que você não aprendeu',
+  },
+  'reliquia-ambrosia': {
+    ...comum,
+    atributos: peca('Consumível', 'Cura total', 'Uso único'),
+    lore: 'Os deuses jamais explicaram de onde vinha. Explicavam só o gosto, e cada um descrevia um diferente. Quem bebe a Ambrosia sente um segundo de saudade de uma casa em que nunca morou, e logo depois a dor vai embora.',
+    descricao: 'Ao beber, você recupera toda a Vida, toda a Mana e toda a Estamina, remove todas as condições e fica imune a doenças e venenos por 1 hora. A Ambrosia se consome no uso.',
+    ativacao: 'Ação Padrão',
+    frequencia: 'Uso único',
+    duracao: '1 hora',
+    efeito: 'Recupera toda Vida, Mana e Estamina, remove todas as condições, imunidade a doenças e venenos por 1 hora',
   },
 };
 
@@ -1082,8 +1134,15 @@ for (const entry of entries) {
   if (!curated) continue;
   found.add(entry.id);
   const preserved = { ...entry.conteudo };
-  for (const campo of camposDescontinuados) delete preserved[campo];
-  entry.conteudo = { ...preserved, ...curated };
+  // Campo que a curadoria ainda publica fica onde está; só some o que ela deixou de publicar.
+  for (const campo of camposDescontinuados) if (!(campo in curated)) delete preserved[campo];
+  const conteudo = { ...preserved, ...curated };
+  const alheias = (Array.isArray(preserved.atributos) ? preserved.atributos : []).filter(ehEtiquetaDeOutroScript);
+  if (alheias.length && Array.isArray(curated.atributos)) {
+    const proprias = curated.atributos.filter((etiqueta) => !ehEtiquetaDeOutroScript(etiqueta));
+    conteudo.atributos = [...proprias.slice(0, 1), ...alheias, ...proprias.slice(1)];
+  }
+  entry.conteudo = conteudo;
 }
 
 const missing = Object.keys(curadoria).filter((id) => !found.has(id));

@@ -21965,7 +21965,7 @@
         "tier_poder": "reliquia",
         "nivelMinimoLoja": 4,
         "ativacao": "Passiva enquanto usado; a vantagem é Ação Livre",
-        "frequencia": "1/cena para a vantagem, 1/sessão para a magia que você não aprendeu",
+        "frequencia": "1/cena para a vantagem, 1/descanso para a magia que você não aprendeu",
         "natureza": "reliquia-criacao",
         "nivel_recomendado": 35,
         "requisitoNivel": 35,
@@ -21987,13 +21987,13 @@
           "Relíquia da Criação",
           "Artefato",
           "Recusa a própria ação",
-          "1/descanso completo"
+          "1/descanso"
         ],
         "subtipo": "reliquia-criacao",
         "tier_poder": "reliquia",
         "nivelMinimoLoja": 4,
         "ativacao": "Imediatamente depois da própria ação",
-        "frequencia": "1/descanso completo",
+        "frequencia": "1/descanso",
         "natureza": "reliquia-criacao",
         "nivel_recomendado": 35,
         "requisitoNivel": 35,
@@ -38516,12 +38516,12 @@
           "Relíquia da Criação",
           "Artefato",
           "Libera um efeito imprevisível",
-          "1/sessão"
+          "1/descanso"
         ],
         "lore": "Abrir não era a instrução, mas curiosidade sempre foi mais forte do que aviso. O que saiu de dentro nunca voltou a caber, e o que sobrou no fundo do frasco, uma esperança pequena e teimosa, ainda mora ali, esperando outra mão sem paciência.",
         "descricao": "Uma vez por descanso, gaste uma Ação Padrão para abrir o frasco numa área de 9 m. O Mestre sorteia um efeito de caos entre praga, medo em massa, sorte reversa ou tempestade repentina, afetando todos ali menos você. Se você mantiver o frasco fechado até o fim da cena sem abri-lo, todos os aliados dentro do alcance ganham vantagem no próximo teste que fizerem.",
         "ativacao": "Ação Padrão, área 9 m",
-        "frequencia": "1/sessão",
+        "frequencia": "1/descanso",
         "efeito": "Libera um efeito de caos escolhido pelo Mestre entre quatro opções"
       }
     },
@@ -38574,12 +38574,12 @@
           "Relíquia da Criação",
           "Artefato",
           "Invoca um auxiliar temporário",
-          "1/sessão"
+          "1/descanso"
         ],
         "lore": "Um mercador de rua vendeu a lamparina como bugiganga velha, sem imaginar o que dormia dentro dela. Quem esfrega o metal desperta uma vontade presa há séculos, ansiosa por trabalhar em troca de liberdade que nunca chega de verdade.",
         "descricao": "Uma vez por descanso, esfregue a lamparina como Ação Padrão para invocar um auxiliar com VD igual ao seu nível, obediente por até 1 hora ou até ser derrotado. Ele desaparece ao fim do prazo, sem deixar despojos.",
         "ativacao": "Ação Padrão",
-        "frequencia": "1/sessão",
+        "frequencia": "1/descanso",
         "duracao": "1 hora",
         "efeito": "Invoca um auxiliar com VD igual ao seu nível"
       }
@@ -38611,6 +38611,36 @@
         "ativacao": "Ação Padrão",
         "frequencia": "1/dia",
         "efeito": "Produz comida e água para 10 pessoas por um dia, ou um item comum de até 1 espaço"
+      }
+    },
+    {
+      "tipo": "artefato",
+      "id": "reliquia-dharma",
+      "titulo": "Dharma",
+      "conteudo": {
+        "preco": {
+          "Fragmentos de Estrela": 650
+        },
+        "raridade": "reliquia da criacao",
+        "subtipo": "reliquia-criacao",
+        "natureza": "reliquia-criacao",
+        "tier_poder": "reliquia",
+        "nivel_recomendado": 35,
+        "requisitoNivel": 35,
+        "nivelMinimoLoja": 4,
+        "requer_autorizacao_mestre": true,
+        "atributos": [
+          "Relíquia da Criação",
+          "Artefato",
+          "Adapta-se ao que fere",
+          "Imune na volta completa"
+        ],
+        "lore": "A roda tem oito raios e flutua um palmo acima da cabeça de quem a carrega, girando sem encostar em nada. Cada vez que alguma coisa fere o portador, um raio estala e anda uma casa, devagar como ponteiro de relógio. Quando a volta fecha, ela soa feito um sino grave, e o golpe que antes abria a pele passa a escorrer por ela igual chuva em pedra.",
+        "descricao": "A roda flutua acima da sua cabeça e se adapta a uma coisa por vez: um tipo de dano ou uma condição que atrapalha você. Ela começa pela primeira que atingir você na cena e gira um raio cada vez que essa coisa atinge você, contando a primeira: cada acerto daquele tipo de dano, ou cada vez que você recebe aquela condição ou começa o turno com ela. Cada raio soma Resistência 5 contra aquele dano (35 no sétimo raio) ou +1 nos seus testes contra aquela condição. No oitavo raio a volta fecha e você fica imune àquele dano ou àquela condição até o fim da cena; se a condição estiver em você, ela termina na hora. Aí a roda volta ao zero e começa a aprender a próxima coisa que atingir você. Se outra coisa atingir você no meio de uma volta, você escolhe se a roda segue onde está ou recomeça com a nova. No fim da cena a roda para e todos os raios voltam ao zero. Dano verdadeiro, Cansaço e o que vem de chegar a 0 de Vida não giram a roda.",
+        "ativacao": "Passiva",
+        "frequencia": "Sempre ativa",
+        "duracao": "A volta completa vale até o fim da cena",
+        "efeito": "Cada raio dá Resistência 5 contra o dano ou +1 contra a condição em adaptação; no oitavo raio, imunidade até o fim da cena"
       }
     },
     {

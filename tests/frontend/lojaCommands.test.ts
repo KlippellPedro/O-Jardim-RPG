@@ -435,7 +435,8 @@ test('todo item declara a loja mínima e a Vila fica restrita ao catálogo simpl
   // +7 em 2026-11-10: as partes de saque dos sete chefes dos segredos de Fluxo (Vó Benta ao Mensageiro).
   // +17 em 2026-11-12: implantes novos, de Comum a Lendário (Relógio Subcutâneo ao Exoesqueleto de Guerra).
   // +52 em 2026-11-12: modificações novas para cada tipo de item, com o grupo de Implantes.
-  assert.equal(entradas.length - geradas, 1361);
+  // +1 em 2026-11-20: Dharma (Relíquia da Criação).
+  assert.equal(entradas.length - geradas, 1362);
   assert.ok(entradas.every((item) => Number.isInteger(nivel(item)) && nivel(item) >= 1 && nivel(item) <= 4));
   assert.ok([1, 2, 3, 4].every((loja) => entradas.some((item) => nivel(item) === loja)));
 
