@@ -181,6 +181,37 @@ TABELAS: tuple[str, ...] = (
     "entrevistas",
     "playlist",
     "playlist_faixa",
+
+    # Tabelas que os bots ganharam depois e ficavam de fora (o log avisava todo
+    # dia, 2026-11-23). Também sem FK; o pai lógico vem antes do filho.
+    # Banqueiro:
+    "alertas_banco",
+    "cassino_config",
+    "cassino_jogadores",
+    "cassino_rodadas",
+    "cassino_conquistas",
+    "cassino_corridas",
+    "cassino_corrida_apostas",
+    "cassino_torneios",
+    "cassino_torneio_entradas",
+    "cassino_contrato_atividades",
+    "cassino_contrato_resgates",
+    "custodia_moeda",
+    "encomendas_mercado_negro",
+    "ferimentos",
+    "lavagem_dinheiro",
+    "loteria_rodadas",
+    "mercadoria_quente",
+    "preparos_roubo",
+    "roubo_calor",
+    "seguro_cofre",
+    # Jornalista:
+    "baus_no_ar",
+    "entrevista_preferencias",
+    "jornal_desafios",
+    "jornal_orcamento_config",
+    "jornal_orcamento_movimentos",
+    "jornal_rumores_agendados",
 )
 
 # Ficam de fora de propósito: são estado efêmero e material sensível que não

@@ -516,6 +516,31 @@ class BackupTests(unittest.TestCase):
         for tabela in ("sessoes_mesa", "sessao_participantes", "registros_mesa", "notificacoes"):
             self.assertIn(tabela, TABELAS)
 
+    def test_tabelas_dos_bots_entraram_no_backup(self):
+        """Os bots criam tabelas no mesmo banco; o teste de integração só vê as da plataforma.
+
+        Em 2026-11-23 o log avisava todo dia de 26 tabelas de Banqueiro e
+        Jornalista fora do backup. Este teste lê o código dos bots e falha
+        quando aparece tabela nova sem lugar em TABELAS.
+        """
+        import re
+
+        raiz_bots = Path(__file__).resolve().parents[2] / "bots"
+        if not raiz_bots.is_dir():
+            self.skipTest("pasta dos bots ausente")
+        criadas: dict[str, str] = {}
+        for arquivo in raiz_bots.rglob("*.py"):
+            partes = set(arquivo.parts)
+            if "tests" in partes or ".venv" in partes or ".venv-test" in partes:
+                continue
+            texto = arquivo.read_text(encoding="utf-8", errors="replace")
+            for nome in re.findall(r"CREATE TABLE IF NOT EXISTS\s+(\w+)", texto):
+                criadas.setdefault(nome, arquivo.relative_to(raiz_bots).as_posix())
+        self.assertTrue(criadas, "nenhuma tabela achada no código dos bots")
+        cobertas = set(TABELAS) | TABELAS_IGNORADAS
+        fora = {nome: onde for nome, onde in criadas.items() if nome not in cobertas}
+        self.assertEqual(fora, {}, "adicione em core/backup.py")
+
     def test_tabela_desconhecida_e_denunciada_no_cabecalho(self):
         cabecalho, _, resumo = self.gerar([*TABELAS, "tabela_nova_do_futuro"])
         self.assertIn("tabela_nova_do_futuro", cabecalho["fora_do_backup"])
