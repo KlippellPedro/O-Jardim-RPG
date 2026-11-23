@@ -9,6 +9,7 @@ import {
   CAMPO_STATUS_RECURSO,
   custoDePoder,
   gastarComTemporario,
+  ganharTemporario,
   obterTemporario,
   RECURSOS_CUSTO_OPCOES,
   RECURSOS_CUSTO_VALIDOS,
@@ -30,8 +31,23 @@ test('Estamina aceita extra temporário como Vida e Mana, ao contrário do Cansa
   assert.equal(campoTemporario('estaminaAtual'), 'estaminaTemporaria');
 });
 
-test('cura acima do máximo vira extra de Estamina, e o gasto paga o extra primeiro', () => {
-  const curado = atualizarStatusVital({ estaminaAtual: 8 }, 'estaminaAtual', 5, 10, 10);
+test('extra temporário de fontes diferentes soma com o que já havia', () => {
+  const somado = ganharTemporario({ vidaAtual: 20, vidaTemporaria: 5 }, 'vidaAtual', 3);
+  assert.equal(somado.vidaTemporaria, 8);
+  const primeiro = ganharTemporario({ vidaAtual: 20 }, 'vidaAtual', 6);
+  assert.equal(primeiro.vidaTemporaria, 6);
+  assert.equal(ganharTemporario({ vidaAtual: 20, vidaTemporaria: 5 }, 'vidaAtual', 0).vidaTemporaria, 5);
+  assert.equal('cansacoTemporaria' in ganharTemporario({ cansacoAtual: 1 }, 'cansacoAtual', 4), false);
+});
+
+test('cura acima do máximo se perde e não vira extra temporário', () => {
+  const curado = atualizarStatusVital({ vidaAtual: 18, vidaTemporaria: 2 }, 'vidaAtual', 9, 20, 10);
+  assert.equal(curado.vidaAtual, 20);
+  assert.equal(curado.vidaTemporaria, 2);
+});
+
+test('o extra de Estamina vem de um efeito, e o gasto paga o extra primeiro', () => {
+  const curado = ganharTemporario(atualizarStatusVital({ estaminaAtual: 8 }, 'estaminaAtual', 5, 10, 10), 'estaminaAtual', 3);
   assert.equal(curado.estaminaAtual, 10);
   assert.equal(curado.estaminaTemporaria, 3);
   assert.equal(obterTemporario(curado, 'estaminaAtual'), 3);

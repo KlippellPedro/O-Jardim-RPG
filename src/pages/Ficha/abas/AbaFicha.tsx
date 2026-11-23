@@ -21,6 +21,7 @@ import {
   adicionarCondicaoOficial,
   atualizarStatusVital,
   campoTemporario,
+  ganharTemporario,
   obterTemporario,
   bonusIniciativaFicha,
   desvantagensAutomaticasTeste,
@@ -330,6 +331,11 @@ export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMes
   const handleStatus = (field: string, change: number, max: number, ignorarTemporario = false) => {
     const proximoStatus = atualizarStatusVital(status, field, change, max, attrs.constituicao, { ignorarTemporario });
     onUpdate(['ficha', 'status'], proximoStatus);
+  };
+
+  const ganharTemporarioNaFicha = (campo: string, valor: number) => {
+    const proximo = ganharTemporario(status, campo, valor);
+    if (proximo !== status) onUpdate(['ficha', 'status'], proximo);
   };
 
   const limparTemporario = (campo: string) => {
@@ -1183,6 +1189,7 @@ export const AbaFicha = ({ character, onUpdate, abrirModoMesa = false, onModoMes
           sanidade: obterTemporario(status, 'sanidadeAtual'),
         }}
         onLimparTemporario={limparTemporario}
+        onGanharTemporario={ganharTemporarioNaFicha}
         onSanidadeMaximaChange={handleSanidadeMaxima}
         onOpenInfo={setActiveModal}
         onOpenAdjust={abrirAjustes}

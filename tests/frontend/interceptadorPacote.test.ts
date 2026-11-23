@@ -20,7 +20,7 @@ test('o Pacote Descartado é habilidade do nível 1 e saiu da lista de poderes',
   assert.deepEqual(pacote.niveis, [1]);
   assert.equal(pacote.custo_mana, 4);
   assert.equal(pacote.acao, 'Reação');
-  assert.match(pacote.descricao, /DT padrão do VD/);
+  assert.match(pacote.descricao, /DT Padrão do VD dela \(tabela de DT em Perícias\)/);
   assert.equal(poder('pacote-descartado'), undefined);
   assert.ok(recompensas(1).includes('Pacote Descartado'));
   // 11 poderes para as 8 vagas: o Ruído Branco entrou no lugar do Pacote, e o Choque de

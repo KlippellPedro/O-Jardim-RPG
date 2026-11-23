@@ -274,8 +274,17 @@ const COR_TEMPORARIO: Record<string, { de: string; ate: string }> = {
 };
 
 /** `chaveVital` liga a barra à vinheta de tela cheia (Vida e Sanidade da ficha).
- * `temporario` é o extra acima do máximo, mostrado numa barrinha à parte. */
-export const ResourceBar = ({ label, color, current, max, temporario = 0, onLimparTemporario, onAdd, onSub, onHelpClick, onAdjustClick, onMaxChange, chaveVital }: any) => {
+ * `temporario` é o extra acima do máximo, mostrado numa barrinha à parte. A cura
+ * para no máximo; o extra só entra por `onGanharTemporario` (Livro, Vida temporária). */
+export const ResourceBar = ({ label, color, current, max, temporario = 0, onLimparTemporario, onGanharTemporario, onAdd, onSub, onHelpClick, onAdjustClick, onMaxChange, chaveVital }: any) => {
+  const [temporarioAberto, setTemporarioAberto] = useState(false);
+  const [temporarioDigitado, setTemporarioDigitado] = useState('');
+  const confirmarTemporario = () => {
+    const valor = Math.trunc(Number(temporarioDigitado));
+    if (Number.isFinite(valor) && valor > 0) onGanharTemporario?.(valor);
+    setTemporarioDigitado('');
+    setTemporarioAberto(false);
+  };
   const maxSeguro = Math.max(1, Number(max) || 1);
   const percent = Math.min(100, Math.max(0, (Number(current) / maxSeguro) * 100));
   const bgColors: Record<string, { bg: string; glow: string }> = {
@@ -385,9 +394,43 @@ export const ResourceBar = ({ label, color, current, max, temporario = 0, onLimp
           <button type="button" className="opacity-50 transition-opacity hover:opacity-100" onClick={onHelpClick} aria-label={`Ajuda sobre ${label}`}>
             <HelpCircle size={14} className="text-[#c7a44c]" />
           </button>
+          {onGanharTemporario ? (
+            <button
+              type="button"
+              onClick={() => setTemporarioAberto((aberto) => !aberto)}
+              className="rounded px-1 font-mono text-[10px] font-bold uppercase tracking-wider text-amber-200/70 transition-colors hover:bg-white/10 hover:text-amber-100"
+              title={`Ganhar ${label} temporária de um efeito. Soma com a que você já tem.`}
+              aria-label={`Ganhar ${label} temporária`}
+              aria-expanded={temporarioAberto}
+            >
+              +temp
+            </button>
+          ) : null}
           {onAdjustClick ? <AjusteButton onClick={onAdjustClick} label={label} /> : null}
         </div>
       </div>
+      {temporarioAberto && onGanharTemporario ? (
+        <form
+          className="flex items-center gap-2 text-[11px] text-gray-300"
+          onSubmit={(event) => { event.preventDefault(); confirmarTemporario(); }}
+        >
+          <span>{label} temporária:</span>
+          <input
+            type="number"
+            min={1}
+            autoFocus
+            value={temporarioDigitado}
+            onChange={(event) => setTemporarioDigitado(event.target.value)}
+            onKeyDown={(event) => { if (event.key === 'Escape') setTemporarioAberto(false); }}
+            className="w-16 rounded border border-white/10 bg-[#15141b] px-1.5 py-0.5 text-right font-mono text-white outline-none focus:border-amber-300/50"
+            aria-label={`Quanto de ${label} temporária`}
+          />
+          <button type="submit" className="rounded border border-amber-300/30 px-2 py-0.5 font-bold text-amber-100 hover:bg-amber-300/10">Ganhar</button>
+          <button type="button" onClick={() => setTemporarioAberto(false)} className="text-gray-500 hover:text-white" aria-label="Fechar">
+            <X size={12} />
+          </button>
+        </form>
+      ) : null}
       <div className="flex items-start gap-2">
         <div className="flex gap-1">
           <button type="button" onClick={() => onSub(5)} className="w-8 h-8 rounded bg-[#15141b] border border-white/5 text-gray-400 text-xs font-mono hover:text-white">-5</button>

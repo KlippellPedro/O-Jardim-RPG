@@ -1,0 +1,424 @@
+{
+ "correcoes": [
+  {
+   "achado": "[INCOERÊNCIA] dt_efeitos (Canalizador)",
+   "classe": "canalizador",
+   "no": "dt_efeitos",
+   "campo": "descricao",
+   "de": "Quando um efeito seu obriga o alvo a testar Fortitude, Reflexos, Vontade ou Percepção, role Misticismo no momento em que conjura. O resultado da sua rolagem é a DT que o alvo precisa alcançar. Isso é diferente da DT de conjuração normal (7 + 2,5 × o círculo da magia, arredondado para baixo), que já vale sozinha para toda magia que você lança.",
+   "para": "Quando uma magia sua pede Fortitude, Reflexos ou Vontade do alvo, a DT dele é o total do seu teste de conjuração (d20 + Mod. Fluxo + metade do nível + Grau de Misticismo + bônus). Você rola uma vez por acionamento: o total vale para todos os alvos e para os testes repetidos daquele efeito, e é o mesmo que precisa alcançar a DT de conjuração do círculo."
+  },
+  {
+   "achado": "[INCOERÊNCIA] dt_efeitos (Sintonizador)",
+   "classe": "sintonizador",
+   "no": "dt_efeitos",
+   "campo": "descricao",
+   "de": "Quando um efeito seu obriga o alvo a testar Fortitude, Reflexos, Vontade ou Percepção, role Misticismo no momento em que conjura. O resultado da sua rolagem é a DT que o alvo precisa alcançar. Isso é diferente da DT de conjuração normal (7 + 2,5 × o círculo da magia, arredondado para baixo), que já vale sozinha para toda magia que você lança.",
+   "para": "Quando uma magia sua pede Fortitude, Reflexos ou Vontade do alvo, a DT dele é o total do seu teste de conjuração (d20 + Mod. Fluxo + metade do nível + Grau de Misticismo + bônus). Você rola uma vez por acionamento: o total vale para todos os alvos e para os testes repetidos daquele efeito, e é o mesmo que precisa alcançar a DT de conjuração do círculo."
+  },
+  {
+   "achado": "[ERRO] contrafluxo",
+   "classe": "canalizador",
+   "no": "contrafluxo",
+   "campo": "descricao",
+   "de": "receber +3 na Defesa contra uma magia.",
+   "para": "receber +3 na Defesa contra uma magia de ataque e nos testes de Fortitude, Reflexos e Vontade contra uma magia."
+  },
+  {
+   "achado": "[ERRO] contrafluxo momento",
+   "classe": "canalizador",
+   "no": "contrafluxo",
+   "campo": "momento",
+   "de": null,
+   "para": "antes da rolagem contra você"
+  },
+  {
+   "achado": "[MELHORIA] apice-do-fluxo",
+   "classe": "canalizador",
+   "no": "apice-do-fluxo",
+   "campo": "descricao",
+   "de": "ao tipo de dano dela.",
+   "para": "ao tipo de dano dela. Imunidade e redução de dano continuam valendo."
+  },
+  {
+   "achado": "[LACUNA] vantagem natural dos Fluxos",
+   "classe": "canalizador",
+   "no": "canalizacao-nativa@1",
+   "campo": "descricao",
+   "de": "use Misticismo para conjurá-las.",
+   "para": "use Misticismo para conjurá-las. A vantagem e a desvantagem natural dos Fluxos só contam quando duas manifestações de Fluxo se enfrentam diretamente, como em Elementos: quem está em vantagem rola o teste com vantagem, quem está em desvantagem rola com desvantagem, e as duas se anulam. Não dão dano extra."
+  },
+  {
+   "achado": "[LACUNA] vantagem natural: Comunicação",
+   "classe": "canalizador",
+   "no": "comunicacao",
+   "campo": "descricao",
+   "de": "desvantagem contra Físico.",
+   "para": "desvantagem contra Tecnologia."
+  },
+  {
+   "achado": "[LACUNA] segunda chance",
+   "classe": "canalizador",
+   "no": "canalizacao-nativa@15",
+   "campo": "descricao",
+   "de": "Uma vez por cena, repita um teste de conjuração.",
+   "para": "Uma vez por cena, repita um teste de conjuração. A Mana não é cobrada de novo, e vale o novo resultado. Um teste só é rolado de novo uma vez, venha de onde vier."
+  },
+  {
+   "achado": "[LACUNA] alcance-expandido",
+   "classe": "canalizador",
+   "no": "alcance-expandido",
+   "campo": "descricao",
+   "de": "Aumente em 6 m o alcance de uma magia.",
+   "para": "Aumente em 6 m o alcance de uma magia que não seja Pessoal. O novo alcance vale também para contar as faixas de distância."
+  },
+  {
+   "achado": "[LACUNA] forma de defesa",
+   "classe": "canalizador",
+   "no": "forma-de-defesa",
+   "campo": "descricao",
+   "de": "recebe +2 no efeito: mais cura, ou mais Resistência concedida.",
+   "para": "rende +2: +2 de Vida curada em cada alvo, ou +2 na Resistência que a magia concede, para o mesmo tipo de dano dela."
+  },
+  {
+   "achado": "[MELHORIA] manifestacao-moldada",
+   "classe": "canalizador",
+   "no": "manifestacao-moldada",
+   "campo": "descricao",
+   "de": "Altere a forma de uma área sem aumentar tamanho ou dano.",
+   "para": "Troque a forma da área de uma magia por cone, linha ou esfera, com a mesma área total. Tipo de dano, resistência e efeito continuam os mesmos."
+  },
+  {
+   "achado": "[LACUNA] redução de dano: Sintonia 1",
+   "classe": "sintonizador",
+   "no": "sintonia-catalisada@1",
+   "campo": "descricao",
+   "de": "o dano das magias desse Fluxo que atingirem você.",
+   "para": "o dano das magias desse Fluxo que atingirem você. A redução entra depois da Resistência, não vale contra dano verdadeiro e soma com reduções de outras fontes."
+  },
+  {
+   "achado": "[LACUNA] redução de dano: Aterramento",
+   "classe": "sintonizador",
+   "no": "aterramento",
+   "campo": "descricao",
+   "de": "menos dano verdadeiro.",
+   "para": "menos dano verdadeiro. Soma com reduções de outras fontes."
+  },
+  {
+   "achado": "[LACUNA] redução de dano: Aterramento momento",
+   "classe": "sintonizador",
+   "no": "aterramento",
+   "campo": "momento",
+   "de": null,
+   "para": "ao sofrer o dano"
+  },
+  {
+   "achado": "[LACUNA] redução de dano: Frequência Protetora",
+   "classe": "sintonizador",
+   "no": "frequencia-protetora",
+   "campo": "descricao",
+   "de": "reduza em 5 o dano de cada magia do mesmo Fluxo do catalisador ativo que atingir você.",
+   "para": "reduza em 5 o dano de cada magia do Fluxo do catalisador ativo no momento do dano que atingir você. A redução entra depois da Resistência, não vale contra dano verdadeiro e soma com reduções de outras fontes."
+  },
+  {
+   "achado": "[INCOERÊNCIA] troca-instantanea",
+   "classe": "sintonizador",
+   "no": "troca-instantanea",
+   "campo": "descricao",
+   "de": "A troca também reativa",
+   "para": "Exceção à regra de Fusão Controlada: a troca também reativa"
+  },
+  {
+   "achado": "[INCOERÊNCIA] convergencia-segura acao",
+   "classe": "sintonizador",
+   "no": "convergencia-segura",
+   "campo": "descricao",
+   "de": "ative esta habilidade sem gastar ação.",
+   "para": "ative esta habilidade como Ação Livre."
+  },
+  {
+   "achado": "[INCOERÊNCIA] ressonancia-compartilhada",
+   "classe": "sintonizador",
+   "no": "ressonancia-compartilhada",
+   "campo": "descricao",
+   "de": "recebem +2 de Defesa contra magia e poder de criatura do mesmo Fluxo dele.",
+   "para": "recebem +2 de Defesa contra magia de ataque e +2 nos testes de Fortitude, Reflexos e Vontade contra magia e poder de criatura do mesmo Fluxo dele."
+  },
+  {
+   "achado": "[LACUNA] foco-reserva",
+   "classe": "sintonizador",
+   "no": "foco-reserva",
+   "campo": "descricao",
+   "de": "Prepare um catalisador adicional para manter em reserva.",
+   "para": "Seu limite de catalisadores preparados sobe em 1. O catalisador de reserva fica preparado e pode ser tornado ativo como qualquer outro."
+  },
+  {
+   "achado": "[LACUNA] sintonia-distante",
+   "classe": "sintonizador",
+   "no": "sintonia-distante",
+   "campo": "descricao",
+   "de": "Ative um catalisador preparado a até 12 m.",
+   "para": "Torne ativo um catalisador preparado que esteja a até 12 m de você, sem precisar tocá-lo. Não reativa catalisador desativado."
+  },
+  {
+   "achado": "[LACUNA] leitura-de-artefato acao",
+   "classe": "sintonizador",
+   "no": "leitura-de-artefato",
+   "campo": "acao",
+   "de": "Ação Padrão",
+   "para": "Fora de combate"
+  },
+  {
+   "achado": "[LACUNA] leitura-de-artefato texto",
+   "classe": "sintonizador",
+   "no": "leitura-de-artefato",
+   "campo": "descricao",
+   "de": "um risco de um catalisador.",
+   "para": "um risco de um catalisador. Não pede teste."
+  },
+  {
+   "achado": "[LACUNA] pulso-vivo",
+   "classe": "sintonizador",
+   "no": "pulso-vivo",
+   "campo": "descricao",
+   "de": "efeito hostil que superar Fortitude impede cura até o próximo turno.",
+   "para": "no efeito hostil, o alvo que falhar em Fortitude não recupera Vida até o começo do próximo turno do Sintonizador."
+  },
+  {
+   "achado": "[LACUNA] prorrogação",
+   "classe": "sintonizador",
+   "no": "eco",
+   "campo": "descricao",
+   "de": "Atrasa a resolução até o próximo turno ou aumenta em uma rodada uma duração medida em rodadas.",
+   "para": "Atrasa a resolução até o começo do próximo turno do Sintonizador: o teste é rolado nessa hora, e a Mana já foi paga. Ou aumenta em uma rodada uma duração medida em rodadas. Não aplica Desgaste do Tempo, que só vale para magia cujo Fluxo principal é o Tempo."
+  },
+  {
+   "achado": "[LACUNA] encerramento",
+   "classe": "sintonizador",
+   "no": "encerramento",
+   "campo": "descricao",
+   "de": "um efeito temporário de círculo igual ou menor que o da magia fundida já presente no alvo.",
+   "para": "um efeito mágico temporário de círculo igual ou menor que o da magia fundida já presente no alvo. Se for de criatura hostil, ela rola a resistência da magia; um efeito sem dono ou de aliado termina sem teste. Não encerra aflição, lesão, Ferido nem condição de longo prazo."
+  },
+  {
+   "achado": "[LACUNA] materialização",
+   "classe": "sintonizador",
+   "no": "materializacao",
+   "campo": "descricao",
+   "de": "o dano da magia passa a ser desse elemento.",
+   "para": "o dano da magia passa a ser desse elemento (numa magia sem dano, só vale a segunda escolha)."
+  },
+  {
+   "achado": "[LACUNA] materialização 2",
+   "classe": "sintonizador",
+   "no": "materializacao",
+   "campo": "descricao",
+   "de": "do terreno difícil até o próximo turno.",
+   "para": "do terreno difícil até o próximo turno. Mover o alvo pede a mesma resistência da magia, se ela tiver. A magia não vira Elemental e não ganha derivação."
+  },
+  {
+   "achado": "[INCOERÊNCIA] descarga-do-catalisador",
+   "classe": "sintonizador",
+   "no": "descarga-do-catalisador",
+   "campo": "descricao",
+   "de": "em vez dos dez minutos.",
+   "para": "em vez dos dez minutos. Mutação e Fusão Perfeita impedem essa desativação, e Reacender e Religação de Emergência reativam o catalisador antes do descanso."
+  },
+  {
+   "achado": "[ERRO] assistente-treinado",
+   "classe": "ritualista",
+   "no": "assistente-treinado",
+   "campo": "descricao",
+   "de": "Um participante sem treino em Misticismo ajuda no rito como se fosse Aprendiz, somando os +2 de Ajudar em vez de atrapalhar. O teto de dois ajudantes continua valendo.",
+   "para": "Um participante que ajuda no rito dá +3 em vez de +2. O teto de dois ajudantes e de +4 do Livro continua valendo."
+  },
+  {
+   "achado": "[ERRO] grande-oficiante usos",
+   "classe": "ritualista",
+   "no": "grande-oficiante",
+   "campo": "usos",
+   "de": "Uma vez por sessão",
+   "para": "Uma vez por descanso"
+  },
+  {
+   "achado": "[ERRO] grande-oficiante acao",
+   "classe": "ritualista",
+   "no": "grande-oficiante",
+   "campo": "acao",
+   "de": "Fora de combate",
+   "para": "Ação Completa"
+  },
+  {
+   "achado": "[ERRO] grande-oficiante texto",
+   "classe": "ritualista",
+   "no": "grande-oficiante",
+   "campo": "descricao",
+   "de": "Uma vez por sessão, escolha",
+   "para": "Uma vez por descanso, escolha"
+  },
+  {
+   "achado": "[INCOERÊNCIA] rito guardado",
+   "classe": "ritualista",
+   "no": "livro-de-rituais@5",
+   "campo": "descricao",
+   "de": "Ele espera até o fim da sessão, e você solta com uma Ação Padrão de onde estiver, inclusive no meio de uma luta.",
+   "para": "Ele espera até o fim da sessão, e se não for solto até lá, o rito se desfaz e a Mana comprometida se perde. Você solta com uma Ação Padrão de onde estiver, inclusive no meio de uma luta (exceção à regra de que ritos não entram em combate)."
+  },
+  {
+   "achado": "[LACUNA] reduções de tempo",
+   "classe": "ritualista",
+   "no": "livro-de-rituais@15",
+   "campo": "descricao",
+   "de": "Todo rito seu leva 25% menos tempo, arredondando para baixo,",
+   "para": "Todo rito seu leva 25% menos tempo, arredondando para baixo, e as reduções de tempo do Ritualista (esta, Economia e Círculo Permanente) se multiplicam, com o tempo final nunca menor que 1 minuto,"
+  },
+  {
+   "achado": "[LACUNA] precisão nível 3",
+   "classe": "ritualista",
+   "no": "precisao",
+   "campo": "escalonamento",
+   "de": "trate a falha como comum e ignore qualquer consequência agravada escrita nele.",
+   "para": "a Mana comprometida não se perde, e a consequência da falha, se houver, não acontece."
+  },
+  {
+   "achado": "[LACUNA] ancora-ritual texto",
+   "classe": "ritualista",
+   "no": "ancora-ritual",
+   "campo": "descricao",
+   "de": "Uma vez por rito, quando você falhar num teste de interrupção causado pelo ambiente, o rito não quebra: ele para no lugar e volta a correr no seu próximo turno de trabalho.",
+   "para": "Uma vez por descanso, quando você falhar num teste de interrupção causado pelo ambiente, o rito não quebra: ele para no lugar, sem perder a Mana, e volta a correr quando o ambiente permitir."
+  },
+  {
+   "achado": "[LACUNA] ancora-ritual acao",
+   "classe": "ritualista",
+   "no": "ancora-ritual",
+   "campo": "acao",
+   "de": "Reação",
+   "para": "Fora de combate"
+  },
+  {
+   "achado": "[LACUNA] ancora-ritual usos",
+   "classe": "ritualista",
+   "no": "ancora-ritual",
+   "campo": "usos",
+   "de": "Uma vez por rito",
+   "para": "Uma vez por descanso"
+  },
+  {
+   "achado": "[LACUNA] ancora-ritual momento",
+   "classe": "ritualista",
+   "no": "ancora-ritual",
+   "campo": "momento",
+   "de": null,
+   "para": "ao falhar no teste de interrupção"
+  },
+  {
+   "achado": "[LACUNA] vigilia texto",
+   "classe": "ritualista",
+   "no": "vigilia",
+   "campo": "descricao",
+   "de": "Um uso por rito.",
+   "para": "Uma vez por descanso."
+  },
+  {
+   "achado": "[LACUNA] vigilia usos",
+   "classe": "ritualista",
+   "no": "vigilia",
+   "campo": "usos",
+   "de": null,
+   "para": "Uma vez por descanso"
+  },
+  {
+   "achado": "[INCOERÊNCIA] apogeu Estado de Avatar",
+   "classe": "elementarista",
+   "no": "apogeu-elemental",
+   "campo": "descricao",
+   "de": "você pode declarar dois elementos aprendidos e usar a relação de vantagem mais favorável e a menor Resistência aplicável ao alvo, sem duplicar dano ou efeitos;",
+   "para": "você pode declarar dois elementos aprendidos: o dano é do primeiro; a relação de vantagem e a Resistência do alvo são as mais favoráveis a você entre os dois, e a vulnerabilidade conta só a do primeiro, sem duplicar dano ou efeitos;"
+  },
+  {
+   "achado": "[MELHORIA] ruptura pre_requisitos",
+   "classe": "elementarista",
+   "no": "ruptura-derivada",
+   "campo": "pre_requisitos",
+   "de": "Derivações Harmônicas 1",
+   "para": "Derivações Harmônicas"
+  },
+  {
+   "achado": "[LACUNA] dt_efeitos Elementarista",
+   "classe": "elementarista",
+   "no": "dt_efeitos",
+   "campo": "descricao",
+   "de": "role Misticismo usando Fluxo. O resultado é a DT que o alvo precisa alcançar.",
+   "para": "role Misticismo usando Fluxo uma vez por acionamento. O resultado é a DT da Elementarista: vale para todos os alvos e para os testes repetidos daquele efeito, inclusive os de quem tenta encerrar o efeito com outra perícia."
+  },
+  {
+   "achado": "[MELHORIA] luz-pureza",
+   "classe": "elementarista",
+   "no": "luz-pureza",
+   "campo": "descricao",
+   "de": "ou, se Cego possuir duração medida em rodadas, reduz essa duração restante em 1 rodada, mínimo zero.",
+   "para": "ou, quando a fonte de Cego tiver duração em rodadas, reduz em 1 rodada a duração restante dela, mínimo zero."
+  },
+  {
+   "achado": "[MELHORIA] revestimento-elemental",
+   "classe": "elementarista",
+   "no": "revestimento-elemental",
+   "campo": "descricao",
+   "de": "Receba Resistência 8 contra esse elemento e Resistência 4",
+   "para": "Receba Resistência 8 contra esse elemento e contra as derivações dele (não vale contra clima) e Resistência 4"
+  }
+ ],
+ "resolvidos": [
+  {
+   "achado": "[INCOERÊNCIA] Magma pede Reflexos na classe e não no Livro",
+   "regra": "Já feito pela sessão principal: zona de Magma no Livro"
+  },
+  {
+   "achado": "[INCOERÊNCIA] Fumaça como cobertura parcial e camuflagem",
+   "regra": "Já feito pela sessão principal: Fumaça como camuflagem"
+  },
+  {
+   "achado": "[INCOERÊNCIA] Elementarista fora da grade (habilidades, poderes e eventos)",
+   "regra": "Grade (regra geral 7): algumas classes fogem dela, com nota no Livro"
+  },
+  {
+   "achado": "[LACUNA] habilidades da Elementarista sem acao e janelas por rodada",
+   "regra": "Já feito pela sessão principal: ações das habilidades"
+  },
+  {
+   "achado": "[LACUNA] marca-elemental usos",
+   "regra": "Já feito pela sessão principal: usos da Marca Elemental"
+  },
+  {
+   "achado": "[LACUNA] pulso-vivo Vida temporária sem regra",
+   "regra": "Vida temporária (regra geral 1)"
+  },
+  {
+   "achado": "[LACUNA] marca-elemental: dano que repete no fim do turno",
+   "regra": "Dano que repete (regra geral 2): a fonte diz que continua, então vale"
+  }
+ ],
+ "mantidos": [
+  {
+   "achado": "[ERRO] convergencia-segura: +3 na Defesa e resistências",
+   "motivo": "é Defesa geral, não Defesa contra magia; critério 8 não se aplica. Só a ação foi corrigida."
+  },
+  {
+   "achado": "[MELHORIA] circulo-de-protecao redundante com o preparo Proteção",
+   "motivo": "redundância é escolha de build e mudar o número altera a força (critério 16)"
+  },
+  {
+   "achado": "[INCOERÊNCIA] rito-memoravel e janelas por sessão",
+   "motivo": "rerrolagem é sorte: fica por sessão (critério 2)"
+  },
+  {
+   "achado": "[LACUNA] ruptura-derivada: dano de derivações sem tipo próprio",
+   "motivo": "o Livro já diz que toda derivação é um tipo de dano"
+  },
+  {
+   "achado": "[LACUNA] dupla-frequencia: catalisador desativado depois da primeira conjuração",
+   "motivo": "a regra geral de Fusão Controlada já vale"
+  }
+ ]
+}

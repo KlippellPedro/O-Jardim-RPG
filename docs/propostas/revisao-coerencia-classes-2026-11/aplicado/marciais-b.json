@@ -1,0 +1,270 @@
+{
+  "correcoes": [
+    {
+      "achado": "[ERRO] hierarquia · estágio 1",
+      "classe": "ninja",
+      "no": "hierarquia@1",
+      "campo": "usos",
+      "de": "Uma vez por missão para consultar os arquivos do clã",
+      "para": "Uma vez por sessão para consultar os arquivos do clã"
+    },
+    {
+      "achado": "[INCOERÊNCIA] hierarquia · estágio 20",
+      "classe": "ninja",
+      "no": "hierarquia@20",
+      "campo": "acao",
+      "de": "Ação Completa",
+      "para": "Fora de combate"
+    },
+    {
+      "achado": "[LACUNA] corte-fatal",
+      "classe": "ninja",
+      "no": "corte-fatal",
+      "campo": "descricao",
+      "de": "Só em arma de margem 20:",
+      "para": "Só em arma de margem 20 e multiplicador x2 ou x3:"
+    },
+    {
+      "achado": "[MELHORIA] ataque-oculto",
+      "classe": "ninja",
+      "no": "ataque-oculto",
+      "campo": "descricao",
+      "de": "ao atacar em alcance corpo a corpo ou curto um alvo que não percebeu você, cause +1d8 de dano.",
+      "para": "ao atacar um alvo a distância Adjacente ou Curto que não percebeu você, cause +1d8 de dano (uma vez só, mesmo em crítico)."
+    },
+    {
+      "achado": "[MELHORIA] mensagem-oculta",
+      "classe": "ninja",
+      "no": "mensagem-oculta",
+      "campo": "acao",
+      "de": "Ação Completa",
+      "para": "Fora de combate"
+    },
+    {
+      "achado": "[MELHORIA] veneno-de-contato",
+      "classe": "ninja",
+      "no": "veneno-de-contato",
+      "campo": "descricao",
+      "de": "o alvo sofre -2 para resistir a veneno até o fim da cena",
+      "para": "o alvo sofre -2 nos testes de Fortitude contra veneno até o fim da cena"
+    },
+    {
+      "achado": "[ERRO] bases-seguras",
+      "classe": "cacador",
+      "no": "bases-seguras",
+      "campo": "escalonamento",
+      "de": "o descanso ali conta como Bom, mesmo em condições ruins.",
+      "para": "o descanso ali tem qualidade Boa, mesmo em condições ruins, e não se soma ao Dormitório de uma base."
+    },
+    {
+      "achado": "[INCOERÊNCIA] cacada-em-grupo",
+      "classe": "cacador",
+      "no": "cacada-em-grupo",
+      "campo": "acao",
+      "de": "Passivo",
+      "para": "Ação Livre"
+    },
+    {
+      "achado": "[INCOERÊNCIA] cacada-em-grupo",
+      "classe": "cacador",
+      "no": "cacada-em-grupo",
+      "campo": "momento",
+      "de": null,
+      "para": "antes do primeiro ataque"
+    },
+    {
+      "achado": "[INCOERÊNCIA] cacada-em-grupo",
+      "classe": "cacador",
+      "no": "cacada-em-grupo",
+      "campo": "duracao",
+      "de": "Uma cena",
+      "para": "Até o primeiro ataque de cada um (nível 3: a cena inteira)"
+    },
+    {
+      "achado": "[MELHORIA] terror-da-presa",
+      "classe": "cacador",
+      "no": "especializacao@15",
+      "campo": "descricao",
+      "de": "+2 em ataques e resistências",
+      "para": "+2 em ataques e nos testes de Fortitude, Reflexos e Vontade contra ela"
+    },
+    {
+      "achado": "[MELHORIA] vinganca-da-guilda",
+      "classe": "cacador",
+      "no": "vinganca-da-guilda",
+      "campo": "escalonamento",
+      "de": "Nível 2: a Guilda também cobre seu resgate ou tratamento.",
+      "para": "Nível 2: a Guilda também cobre seu resgate ou tratamento. Não traz ninguém de volta da morte."
+    },
+    {
+      "achado": "[ERRO] dt_efeitos",
+      "classe": "piloto",
+      "no": "dt_efeitos",
+      "campo": "descricao",
+      "de": "manobra é Pilotagem contra DT 15,",
+      "para": "manobra é Pilotagem contra a DT Padrão do nível da cena,"
+    },
+    {
+      "achado": "[INCOERÊNCIA] dt_efeitos perseguição",
+      "classe": "piloto",
+      "no": "dt_efeitos",
+      "campo": "descricao",
+      "de": "Perseguição roda em cinco faixas de distância, e cada rodada empurra o alvo uma faixa para um lado ou para o outro.",
+      "para": "Perseguição roda em cinco faixas de distância. No fim de cada rodada, fugitivo e perseguidor fazem teste oposto: a vitória move uma faixa, a vitória por 10 ou mais move duas, e quem tem maior deslocamento recebe +2 no teste."
+    },
+    {
+      "achado": "[ERRO] tarefas_bancada DT 15",
+      "classe": "piloto",
+      "no": "Conduzir",
+      "campo": "dt",
+      "de": "DT 15 sob perigo",
+      "para": "DT Padrão do nível da cena sob perigo"
+    },
+    {
+      "achado": "[ERRO] tarefas_bancada DT 15",
+      "classe": "piloto",
+      "no": "Acelerar",
+      "campo": "dt",
+      "de": "DT 15",
+      "para": "DT Padrão do nível da cena"
+    },
+    {
+      "achado": "[ERRO] tarefas_bancada DT 15",
+      "classe": "piloto",
+      "no": "Evasão",
+      "campo": "dt",
+      "de": "DT 15",
+      "para": "DT Padrão do nível da cena"
+    },
+    {
+      "achado": "[ERRO] tarefas_bancada DT 15",
+      "classe": "piloto",
+      "no": "Recuperar controle",
+      "campo": "dt",
+      "de": "DT 15",
+      "para": "DT Padrão do nível da cena"
+    },
+    {
+      "achado": "[ERRO] cabine T3",
+      "classe": "piloto",
+      "no": "cabine",
+      "campo": "escalonamento",
+      "de": "T3: os ocupantes recebem Resistência 5 a dano de área.",
+      "para": "T3: os ocupantes reduzem em 5 o dano de cada efeito de área que sofrerem, depois da Resistência."
+    },
+    {
+      "achado": "[LACUNA] sistema-fantasma",
+      "classe": "piloto",
+      "no": "sistema-fantasma",
+      "campo": "descricao",
+      "de": "e quem já estava perseguindo perde uma faixa de distância na primeira rodada.",
+      "para": "e a distância da perseguição aumenta uma faixa a seu favor na primeira rodada, sem teste."
+    },
+    {
+      "achado": "[MELHORIA] caixa-preta",
+      "classe": "piloto",
+      "no": "caixa-preta",
+      "campo": "descricao",
+      "de": "Se o veículo for destruído, a caixa sobrevive",
+      "para": "Se o veículo for destruído (por um efeito que declare destruição), a caixa sobrevive"
+    },
+    {
+      "achado": "[MELHORIA] camuflagem T3",
+      "classe": "piloto",
+      "no": "camuflagem",
+      "campo": "escalonamento",
+      "de": "o veículo parado fica invisível a olho nu enquanto não atirar",
+      "para": "o veículo parado fica Invisível enquanto não atirar"
+    },
+    {
+      "achado": "[ERRO] dt_efeitos",
+      "classe": "interceptador",
+      "no": "dt_efeitos",
+      "campo": "descricao",
+      "de": "a DT é a DT padrão do VD dela (15 + metade do VD).",
+      "para": "a DT é a DT Padrão do VD dela (tabela de DT em Perícias)."
+    },
+    {
+      "achado": "[ERRO] pacote-descartado",
+      "classe": "interceptador",
+      "no": "pacote-descartado",
+      "campo": "descricao",
+      "de": "a DT é a DT padrão do VD dela: 15 + metade do VD.",
+      "para": "a DT é a DT Padrão do VD dela (tabela de DT em Perícias)."
+    },
+    {
+      "achado": "[ERRO] latencia",
+      "classe": "interceptador",
+      "no": "latencia",
+      "campo": "acao",
+      "de": "Reação",
+      "para": "Ação Livre"
+    },
+    {
+      "achado": "[ERRO] latencia",
+      "classe": "interceptador",
+      "no": "latencia",
+      "campo": "momento",
+      "de": null,
+      "para": "ao interceptar com Atrasar"
+    },
+    {
+      "achado": "[INCOERÊNCIA] redirecionar",
+      "classe": "interceptador",
+      "no": "redirecionar",
+      "campo": "descricao",
+      "de": "para outro alvo válido dentro do alcance original dele.",
+      "para": "para outro alvo válido dentro do alcance original dele, que não seja o conjurador."
+    },
+    {
+      "achado": "[MELHORIA] refluxo-hostil",
+      "classe": "interceptador",
+      "no": "eco-hostil",
+      "campo": "descricao",
+      "de": "quando o efeito dela se desfaz",
+      "para": "no momento do cancelamento"
+    },
+    {
+      "achado": "[MELHORIA] apagao-local",
+      "classe": "interceptador",
+      "no": "apagao-local",
+      "campo": "descricao",
+      "de": "sofre desvantagem no ataque mágico,",
+      "para": "sofre desvantagem no ataque de magia,"
+    },
+    {
+      "achado": "[MELHORIA] choque-de-malha",
+      "classe": "interceptador",
+      "no": "choque-de-malha",
+      "campo": "descricao",
+      "de": "que carregue item mágico, de Fluxo ou da A.X.I.S, ou que tenha Mana.",
+      "para": "que tenha Mana ou carregue item mágico, de Fluxo ou da A.X.I.S."
+    },
+    {
+      "achado": "[MELHORIA] acesso-a-malha",
+      "classe": "interceptador",
+      "no": "acesso-a-malha@1",
+      "campo": "descricao",
+      "de": "troque a calibração num descanso curto",
+      "para": "troque a calibração ao Relaxar"
+    }
+  ],
+  "pulados": [
+    {
+      "achado": "[LACUNA] arquivo-de-criaturas · usos",
+      "motivo": "Acrescenta um limite de uso (uma vez por sessão) que o texto não tinha. Decisão do Pedro."
+    },
+    {
+      "achado": "[LACUNA] golpe-certeiro · margem nunca passa de 18-20",
+      "motivo": "Acrescenta um limite que o texto não tinha. Decisão do Pedro."
+    },
+    {
+      "achado": "[MELHORIA] camuflagem T4 do Piloto (6 m por rodada)",
+      "motivo": "O texto original é ambíguo e a correção seria interpretação nova. Decisão do Pedro."
+    },
+    {
+      "achado": "Hierarquia (Ninja), momento nos estágios 1 a 15",
+      "motivo": "retirado na conferência: o texto do momento ficava confuso ao lado de Passivo"
+    }
+  ]
+}

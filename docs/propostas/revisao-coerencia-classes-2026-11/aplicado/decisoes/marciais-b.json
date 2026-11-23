@@ -1,0 +1,608 @@
+{
+ "correcoes": [
+  {
+   "achado": "[LACUNA] fio-mortal",
+   "classe": "ninja",
+   "no": "fio-mortal",
+   "campo": "descricao",
+   "de": "A arma marcada causa +1 dado de dano.",
+   "para": "A arma marcada causa +1 dado de dano, do mesmo tipo dos dados dela. No crítico, esse dado extra entra uma vez só."
+  },
+  {
+   "achado": "[LACUNA] repetição das melhorias",
+   "classe": "ninja",
+   "no": "arma-ninja",
+   "campo": "descricao",
+   "de": "Melhorias sem bônus numérico e efeitos que declaram não acumular só funcionam uma vez por arma.",
+   "para": "Repetíveis: Fio Mortal, Precisão Cirúrgica, Reflexo de Lâmina, Fio Longo e Alcance da Sombra. As demais, e os efeitos que declaram não acumular, só funcionam uma vez por arma."
+  },
+  {
+   "achado": "[LACUNA] alcance-da-sombra",
+   "classe": "ninja",
+   "no": "alcance-da-sombra",
+   "campo": "descricao",
+   "de": "O alcance dela aumenta em metade.",
+   "para": "O alcance dela, em metros, aumenta em metade (arredonde para múltiplos de 1,5 m), e o −5 por faixa passa a contar a partir do alcance novo."
+  },
+  {
+   "achado": "[LACUNA] precisao-cirurgica",
+   "classe": "ninja",
+   "no": "precisao-cirurgica",
+   "campo": "descricao",
+   "de": "ignoram 3 pontos de Resistência do alvo:",
+   "para": "ignoram 3 pontos da Resistência do alvo ao tipo de dano do golpe, sem afetar a redução de dano:"
+  },
+  {
+   "achado": "[LACUNA] golpe-certeiro (pulado)",
+   "classe": "ninja",
+   "no": "golpe-certeiro",
+   "campo": "descricao",
+   "de": "Vale uma vez por arma e não entra",
+   "para": "A margem nunca passa de 18-20. Vale uma vez por arma e não entra"
+  },
+  {
+   "achado": "[INCOERÊNCIA] dano-desarmado",
+   "classe": "ninja",
+   "no": "dano-desarmado",
+   "campo": "descricao",
+   "de": "seus ataques desarmados contam como Arma Ninja e causam 1d6 de dano.",
+   "para": "seus ataques desarmados causam 1d6 de impacto + Mod. Força, com crítico 20/x2, e contam como uma Arma Ninja além das marcadas: recebem as melhorias de arma corpo a corpo que você já tem."
+  },
+  {
+   "achado": "[INCOERÊNCIA] dano-desarmado",
+   "classe": "ninja",
+   "no": "dano-desarmado",
+   "campo": "dano",
+   "de": "1d6",
+   "para": "1d6 de impacto + Mod. Força"
+  },
+  {
+   "achado": "[INCOERÊNCIA] pulo-duplo",
+   "classe": "ninja",
+   "no": "pulo-duplo",
+   "campo": "descricao",
+   "de": "contra DT 18",
+   "para": "contra a DT Padrão do seu nível"
+  },
+  {
+   "achado": "[INCOERÊNCIA] clone-das-sombras",
+   "classe": "ninja",
+   "no": "clone-das-sombras",
+   "campo": "acao",
+   "de": "Ação de Movimento",
+   "para": "Ação Padrão"
+  },
+  {
+   "achado": "[INCOERÊNCIA] clone-das-sombras",
+   "classe": "ninja",
+   "no": "clone-das-sombras",
+   "campo": "momento",
+   "de": "para comandar",
+   "para": "para criar; comandar o clone gasta a sua Ação de Movimento"
+  },
+  {
+   "achado": "[INCOERÊNCIA] clone-das-sombras",
+   "classe": "ninja",
+   "no": "clone-das-sombras",
+   "campo": "descricao",
+   "de": "Um ataque que o atinja, de qualquer tipo, o desfaz.",
+   "para": "Um ataque que o atinja, de qualquer tipo, o desfaz. Só existe um clone por vez: criar outro desfaz o anterior."
+  },
+  {
+   "achado": "[LACUNA] kemuridama",
+   "classe": "ninja",
+   "no": "kemuridama",
+   "campo": "descricao",
+   "de": "Crie uma nuvem de fumaça e se teleporte para um local ao alcance em que possa se esconder.",
+   "para": "Crie uma nuvem de fumaça de 3 m de raio, que fica onde você estava até o começo do seu próximo turno e conta como Camuflagem. Você se teleporta para um ponto que veja, a até o dobro do seu Movimento, onde possa se esconder."
+  },
+  {
+   "achado": "[LACUNA] substituicao",
+   "classe": "ninja",
+   "no": "substituicao",
+   "campo": "descricao",
+   "de": "e você se desloca até o seu Movimento para qualquer ponto próximo",
+   "para": "e você se desloca até o seu Movimento, sem provocar reação, para qualquer ponto próximo"
+  },
+  {
+   "achado": "[LACUNA] substituicao",
+   "classe": "ninja",
+   "no": "substituicao",
+   "campo": "descricao",
+   "de": "da linha de visão de quem te atacou.",
+   "para": "da linha de visão de quem te atacou. Vale contra ataques, e não contra efeitos de área."
+  },
+  {
+   "achado": "[INCOERÊNCIA] sombra-suprema",
+   "classe": "ninja",
+   "no": "sombra-suprema",
+   "campo": "descricao",
+   "de": "ative esta habilidade sem gastar ação",
+   "para": "ative esta habilidade com uma Ação Livre"
+  },
+  {
+   "achado": "[INCOERÊNCIA] sombra-suprema",
+   "classe": "ninja",
+   "no": "sombra-suprema",
+   "campo": "descricao",
+   "de": "No início de cada turno, até realizar uma ação hostil, você não pode ser escolhido como alvo direto por criaturas que não consigam detectá-lo por um sentido especial.",
+   "para": "Você fica Invisível durante o efeito, e atacar não encerra a condição. Criaturas que não o detectem por um sentido especial não podem escolhê-lo como alvo direto até você fazer uma ação hostil."
+  },
+  {
+   "achado": "[INCOERÊNCIA] companheiro iniciativa",
+   "classe": "cacador",
+   "no": "companheiro",
+   "campo": "descricao",
+   "de": "Ele compartilha sua iniciativa;",
+   "para": "Por exceção à regra de Aliados, ele compartilha sua iniciativa e age no seu turno;"
+  },
+  {
+   "achado": "[INCOERÊNCIA] companheiro requisito",
+   "classe": "cacador",
+   "no": "companheiro",
+   "campo": "descricao",
+   "de": "de tamanho igual ou menor que o seu, não superior ao seu nível de Caçador.",
+   "para": "de tamanho igual ou menor que o seu e de VD não superior ao seu nível de Caçador."
+  },
+  {
+   "achado": "[LACUNA] companheiro ataque",
+   "classe": "cacador",
+   "no": "companheiro",
+   "campo": "descricao",
+   "de": "2d8 no 15 e 3d8 no 20.",
+   "para": "2d8 no 15 e 3d8 no 20. Garra causa corte; mordida e bico causam perfuração. O companheiro precisa alcançar o alvo para atacar. Se ele morrer, você escolhe outro num descanso completo."
+  },
+  {
+   "achado": "[INCOERÊNCIA] simbiose-animal pré-requisito",
+   "classe": "cacador",
+   "no": "simbiose-animal",
+   "campo": "pre_requisitos",
+   "de": null,
+   "para": [
+    "Poder Companheiro"
+   ]
+  },
+  {
+   "achado": "[LACUNA] armadilha",
+   "classe": "cacador",
+   "no": "armadilha",
+   "campo": "descricao",
+   "de": "a primeira criatura que falhar em Reflexos contra a DT do Caçador sofre 2d8 e fica Imobilizada até o fim do turno.",
+   "para": "a primeira criatura hostil a você que a acione testa Reflexos contra a DT do Caçador. Na falha, sofre 2d8 de perfuração e fica Imobilizada até o fim do turno. No sucesso, sofre metade do dano e não fica Imobilizada. Quem procurar a armadilha a encontra com Percepção contra a mesma DT."
+  },
+  {
+   "achado": "[LACUNA] armadilha",
+   "classe": "cacador",
+   "no": "armadilha",
+   "campo": "dano",
+   "de": "2d8",
+   "para": "2d8 de perfuração"
+  },
+  {
+   "achado": "[LACUNA] dt_efeitos",
+   "classe": "cacador",
+   "no": "dt_efeitos",
+   "campo": "descricao",
+   "de": "O resultado da sua rolagem é a DT que ela precisa alcançar.",
+   "para": "O resultado da sua rolagem é a DT que ela precisa alcançar. É uma rolagem por acionamento, válida para todos os alvos e para os testes repetidos daquele efeito. Na Armadilha, a rolagem é feita ao instalar."
+  },
+  {
+   "achado": "[LACUNA] predador-perfeito",
+   "classe": "cacador",
+   "no": "predador-perfeito",
+   "campo": "descricao",
+   "de": "e ignoram até 10 pontos de Resistência.",
+   "para": "e ignoram até 10 pontos da Resistência dela ao tipo do golpe (não afeta redução de dano)."
+  },
+  {
+   "achado": "[LACUNA] marca-do-cacador",
+   "classe": "cacador",
+   "no": "marca-do-cacador",
+   "campo": "descricao",
+   "de": "reduza em 3 o dano de cada golpe dela e",
+   "para": "reduza em 3 o dano de cada golpe dela, depois da Resistência (não vale contra dano verdadeiro), e"
+  },
+  {
+   "achado": "[LACUNA] instinto-predador",
+   "classe": "cacador",
+   "no": "instinto-predador",
+   "campo": "descricao",
+   "de": "contra sua presa.",
+   "para": "contra uma criatura marcada por Presa ou pela Marca do Caçador, ou contra uma presa especializada."
+  },
+  {
+   "achado": "[LACUNA] arquivo-de-criaturas (pulado)",
+   "classe": "cacador",
+   "no": "arquivo-de-criaturas",
+   "campo": "usos",
+   "de": null,
+   "para": "Uma vez por sessão"
+  },
+  {
+   "achado": "[INCOERÊNCIA] escolta-da-guilda",
+   "classe": "cacador",
+   "no": "escolta-da-guilda",
+   "campo": "duracao",
+   "de": "Uma missão",
+   "para": "Até o fim da cena"
+  },
+  {
+   "achado": "[INCOERÊNCIA] escolta-da-guilda",
+   "classe": "cacador",
+   "no": "escolta-da-guilda",
+   "campo": "descricao",
+   "de": "peça o acompanhamento de um caçador novato da Guilda numa missão.",
+   "para": "peça o acompanhamento de um caçador novato da Guilda: um humanoide do Bestiário de VD igual à metade do seu nível de Caçador, para baixo, mínimo 1, que age na iniciativa dele até o fim da cena."
+  },
+  {
+   "achado": "[INCOERÊNCIA] escolta-da-guilda",
+   "classe": "cacador",
+   "no": "escolta-da-guilda",
+   "campo": "escalonamento",
+   "de": "na mesma missão",
+   "para": "na mesma cena"
+  },
+  {
+   "achado": "[INCOERÊNCIA] escolta-da-guilda",
+   "classe": "cacador",
+   "no": "escolta-da-guilda",
+   "campo": "escalonamento",
+   "de": "companheiro animal treinado pela Guilda.",
+   "para": "companheiro animal treinado pela Guilda, que age na iniciativa do caçador."
+  },
+  {
+   "achado": "[LACUNA] contratos-exclusivos",
+   "classe": "cacador",
+   "no": "contratos-exclusivos",
+   "campo": "escalonamento",
+   "de": "sobe um degrau de raridade.",
+   "para": "sobe 50%."
+  },
+  {
+   "achado": "[LACUNA] benefícios econômicos",
+   "classe": "cacador",
+   "no": "agencia-dos-cacadores",
+   "campo": "descricao",
+   "de": "Benefícios econômicos não se acumulam entre si.",
+   "para": "Benefícios econômicos (Contratos Exclusivos, Avaliação de Troféus, Apoio Logístico e Financiamento de Expedição) não se acumulam entre si. O que a Guilda dá de graça não pode ser vendido nem segurado, e não vira aliado, propriedade, implante ou Fruto do Éden."
+  },
+  {
+   "achado": "[LACUNA] presas-da-noite",
+   "classe": "cacador",
+   "no": "presas-da-noite",
+   "campo": "descricao",
+   "de": "Em pouca luz, receba",
+   "para": "Em pouca luz ou na escuridão, receba"
+  },
+  {
+   "achado": "[MELHORIA] prestigio-de-cacador (título)",
+   "classe": "cacador",
+   "no": "prestigio-de-cacador",
+   "campo": "titulo",
+   "de": "Prestígio de Caçador",
+   "para": "Nome de Caçador"
+  },
+  {
+   "achado": "[MELHORIA] olhos-da-selva",
+   "classe": "cacador",
+   "no": "olhos-da-selva",
+   "campo": "descricao",
+   "de": "para rastrear ou navegar em ambiente natural.",
+   "para": "para rastrear, navegar ou buscar comida e água em ambiente natural, inclusive nos papéis de Guia e Forrageiro."
+  },
+  {
+   "achado": "[MELHORIA] caça lendária",
+   "classe": "cacador",
+   "no": "especializacao@20",
+   "campo": "descricao",
+   "de": "uma criatura que já derrotou",
+   "para": "uma criatura de um tipo que você já derrotou"
+  },
+  {
+   "achado": "[LACUNA] tarefas_bancada Preparar abordagem",
+   "classe": "piloto",
+   "no": "tarefas_bancada",
+   "campo": "descricao",
+   "de": "o resto custa a Ação Padrão.",
+   "para": "o resto custa a Ação Padrão. Preparar abordagem (Ação Padrão, só em Contato, teste oposto: mantém o Contato até o início do próximo turno do condutor) também está no capítulo de Veículos."
+  },
+  {
+   "achado": "[LACUNA] Fechar passagem",
+   "classe": "piloto",
+   "no": "Fechar passagem",
+   "campo": "nota",
+   "de": "Contato ou Curta. ",
+   "para": ""
+  },
+  {
+   "achado": "[INCOERÊNCIA] meu-xodo montaria",
+   "classe": "piloto",
+   "no": "meu-xodo",
+   "campo": "descricao",
+   "de": "e o que o texto diz do veículo vale para o animal.",
+   "para": "e o que o texto diz do veículo vale para o animal, menos o que fala de avaria, chassi e Utilidade: montaria não recebe avaria veicular nem Utilidade."
+  },
+  {
+   "achado": "[INCOERÊNCIA] suspensao",
+   "classe": "piloto",
+   "no": "suspensao",
+   "campo": "descricao",
+   "de": "do primeiro terreno ruim de cada cena",
+   "para": "do primeiro terreno difícil de cada cena"
+  },
+  {
+   "achado": "[LACUNA] armamento perfil",
+   "classe": "piloto",
+   "no": "armamento",
+   "campo": "descricao",
+   "de": "2d8 de dano a até 24 m,",
+   "para": "2d8 de dano balístico a até 24 m, com ataque de Pontaria e crítico 20/x2,"
+  },
+  {
+   "achado": "[LACUNA] armamento perfil",
+   "classe": "piloto",
+   "no": "armamento",
+   "campo": "dano",
+   "de": "2d8",
+   "para": "2d8 balístico"
+  },
+  {
+   "achado": "[LACUNA] armamento T3",
+   "classe": "piloto",
+   "no": "armamento",
+   "campo": "escalonamento",
+   "de": "T3: dois disparos por rodada, se houver alguém no posto.",
+   "para": "T3: no turno do artilheiro, a arma dispara duas vezes com uma só Ação Padrão, se houver alguém no posto."
+  },
+  {
+   "achado": "[LACUNA] motor T4",
+   "classe": "piloto",
+   "no": "motor",
+   "campo": "escalonamento",
+   "de": "T4: +18 m de deslocamento na primeira rodada de cada perseguição.",
+   "para": "T4: na primeira rodada de cada perseguição, o veículo conta como o de maior deslocamento (+2 no teste)."
+  },
+  {
+   "achado": "[LACUNA] tuning custo mensal",
+   "classe": "piloto",
+   "no": "tuning",
+   "campo": "descricao",
+   "de": "sem custar Lunaris.",
+   "para": "sem custar Lunaris. Camuflagem Ativa, Torre de Sensores, Guincho e Cabine contam como módulo de utilidade na manutenção mensal (1 Componente Veicular a mais cada), e as que se ligam contam no limite de sistemas ativos do Núcleo."
+  },
+  {
+   "achado": "[LACUNA] tuning mecânico",
+   "classe": "piloto",
+   "no": "tuning",
+   "campo": "descricao",
+   "de": "e esse contato passa a existir na campanha.",
+   "para": "e esse contato passa a existir na campanha, como contato Amigo do ramo Ofício, que não conta no seu limite de contatos e faz o Tuning sem Dívida."
+  },
+  {
+   "achado": "[LACUNA] guincho",
+   "classe": "piloto",
+   "no": "guincho",
+   "campo": "descricao",
+   "de": "Prenda um veículo ou objeto grande a até 18 m e arraste, ou puxe o seu veículo para fora de um atoleiro.",
+   "para": "Faça um ataque de Pontaria contra a Defesa do alvo para prender um veículo ou objeto grande a até 18 m e arrastá-lo, ou puxe o seu veículo para fora de um atoleiro, sem teste. O cabo segura até você soltar (Ação Livre) ou ele ser cortado."
+  },
+  {
+   "achado": "[LACUNA] guincho",
+   "classe": "piloto",
+   "no": "guincho",
+   "campo": "duracao",
+   "de": "Instantânea",
+   "para": "Até soltar"
+  },
+  {
+   "achado": "[LACUNA] link-compartilhado",
+   "classe": "piloto",
+   "no": "link-compartilhado",
+   "campo": "pre_requisitos",
+   "de": null,
+   "para": [
+    "Poder Rede Neural"
+   ]
+  },
+  {
+   "achado": "[LACUNA] link-compartilhado",
+   "classe": "piloto",
+   "no": "link-compartilhado",
+   "campo": "descricao",
+   "de": "o maior bônus de Pilotagem entre vocês,",
+   "para": "o maior bônus de Pilotagem entre vocês, sem contar o bônus do Meu Xodó,"
+  },
+  {
+   "achado": "[LACUNA] ia",
+   "classe": "piloto",
+   "no": "ia",
+   "campo": "descricao",
+   "de": "faz Percepção com o seu Grau em Pilotagem enquanto você está ocupado.",
+   "para": "faz testes de Percepção com o grau de Pilotagem e o seu Mod. Sabedoria quando você gasta a Ação Padrão em outra coisa."
+  },
+  {
+   "achado": "[INCOERÊNCIA] reparo-rapido",
+   "classe": "piloto",
+   "no": "reparo-rapido",
+   "campo": "descricao",
+   "de": "restaure um décimo",
+   "para": "sem teste, restaure um décimo"
+  },
+  {
+   "achado": "[LACUNA] zero-km",
+   "classe": "piloto",
+   "no": "zero-km",
+   "campo": "descricao",
+   "de": "O que estava destruído continua destruído; isto só conserta o que ainda está de pé.",
+   "para": "Um veículo Incapacitado (0 de Vida) conta como de pé. Só o que um efeito declarou destruído continua perdido."
+  },
+  {
+   "achado": "[LACUNA] as-impossivel",
+   "classe": "piloto",
+   "no": "as-impossivel",
+   "campo": "descricao",
+   "de": "ative esta habilidade sem gastar ação",
+   "para": "ative esta habilidade com uma Ação Livre"
+  },
+  {
+   "achado": "[LACUNA] as-impossivel",
+   "classe": "piloto",
+   "no": "as-impossivel",
+   "campo": "descricao",
+   "de": "uma Ação de Movimento adicional exclusiva para manobras veiculares",
+   "para": "uma Ação de Movimento adicional, que só pode ser gasta em Conduzir ou Recuperar controle"
+  },
+  {
+   "achado": "[MELHORIA] escapa-sozinho janela",
+   "classe": "piloto",
+   "no": "meu-xodo@10",
+   "campo": "descricao",
+   "de": "Uma vez por sessão, um dispositivo",
+   "para": "Uma vez por descanso, um dispositivo"
+  },
+  {
+   "achado": "[MELHORIA] escapa-sozinho janela",
+   "classe": "piloto",
+   "no": "meu-xodo@10",
+   "campo": "usos",
+   "de": "Uma vez por sessão para o escape",
+   "para": "Uma vez por descanso para o escape"
+  },
+  {
+   "achado": "[MELHORIA] compartimento",
+   "classe": "piloto",
+   "no": "meu-xodo@1",
+   "campo": "descricao",
+   "de": "guarda até 2 itens",
+   "para": "guarda até 2 espaços de itens"
+  },
+  {
+   "achado": "[MELHORIA] compartimento",
+   "classe": "piloto",
+   "no": "meu-xodo@10",
+   "campo": "descricao",
+   "de": "guarda até 12 itens",
+   "para": "guarda até 12 espaços de itens"
+  },
+  {
+   "achado": "[MELHORIA] camuflagem T4 (pulado)",
+   "classe": "piloto",
+   "no": "camuflagem",
+   "campo": "escalonamento",
+   "de": "a camuflagem acompanha o veículo em movimento até 6 m por rodada.",
+   "para": "a camuflagem continua ligada enquanto o veículo anda até 6 m por rodada."
+  },
+  {
+   "achado": "[LACUNA] dt_efeitos",
+   "classe": "interceptador",
+   "no": "dt_efeitos",
+   "campo": "descricao",
+   "de": "O resultado da sua rolagem é a DT que o alvo precisa alcançar.",
+   "para": "O resultado da sua rolagem é a DT que o alvo precisa alcançar. É uma rolagem por acionamento, válida para todos os alvos e para os testes repetidos daquele efeito."
+  },
+  {
+   "achado": "[LACUNA] redirecionar novo alvo",
+   "classe": "interceptador",
+   "no": "redirecionar",
+   "campo": "descricao",
+   "de": "que não seja o conjurador.",
+   "para": "que não seja o conjurador. O mesmo total de conjuração é lido contra a Defesa ou a resistência do novo alvo."
+  },
+  {
+   "achado": "[LACUNA] proxy novo alvo",
+   "classe": "interceptador",
+   "no": "proxy",
+   "campo": "descricao",
+   "de": "o que o Redirecionar não permite.",
+   "para": "o que o Redirecionar não permite. O mesmo total de conjuração é lido contra a Defesa ou a resistência do novo alvo."
+  },
+  {
+   "achado": "[LACUNA] atrasar",
+   "classe": "interceptador",
+   "no": "atrasar",
+   "campo": "descricao",
+   "de": "até o fim do turno da fonte.",
+   "para": "até o fim do turno da fonte. O efeito acontece nos mesmos alvos e pontos; se a fonte não puder mais agir, ele se perde."
+  },
+  {
+   "achado": "[MELHORIA] nucleo-exposto",
+   "classe": "interceptador",
+   "no": "nucleo-exposto",
+   "campo": "descricao",
+   "de": "a fonte fica com a Defesa reduzida em 2 até o fim do próximo turno dela.",
+   "para": "a fonte fica Exposta até o fim do próximo turno dela, no lugar de acabar no começo do turno dela."
+  },
+  {
+   "achado": "[LACUNA] firewall-de-fluxo",
+   "classe": "interceptador",
+   "no": "firewall-de-fluxo",
+   "campo": "descricao",
+   "de": "Um alvo recebe +3 na Defesa contra magia natural.",
+   "para": "Um alvo recebe +3 na Defesa contra magia de ataque natural e nos testes de Fortitude, Reflexos e Vontade contra magia natural."
+  },
+  {
+   "achado": "[LACUNA] rastrear-assinatura",
+   "classe": "interceptador",
+   "no": "rastrear-assinatura",
+   "campo": "descricao",
+   "de": "Identifique a direção do conjurador por uma cena.",
+   "para": "Escolha um conjurador cuja conjuração você percebeu: por uma cena, você sabe a direção dele enquanto ele estiver dentro do seu alcance de detecção."
+  },
+  {
+   "achado": "[LACUNA] desmontar-selo",
+   "classe": "interceptador",
+   "no": "desmontar-selo",
+   "campo": "descricao",
+   "de": "contra a DT do selo; em sucesso, suprima-o por uma cena.",
+   "para": "contra a DT de inscrição do selo; em sucesso, ele não dispara por uma cena. Falhar por 5 ou mais dispara o selo contra você."
+  },
+  {
+   "achado": "[LACUNA] acesso-administrador",
+   "classe": "interceptador",
+   "no": "acesso-administrador",
+   "campo": "descricao",
+   "de": "e pode realizar uma interceptação por rodada sem gastar sua Reação.",
+   "para": "e pode realizar, além da interceptação da Reação, mais uma por rodada sem gastar a Reação."
+  },
+  {
+   "achado": "[LACUNA] pacote-descartado Mana",
+   "classe": "interceptador",
+   "no": "pacote-descartado",
+   "campo": "descricao",
+   "de": "(tabela de DT em Perícias).",
+   "para": "(tabela de DT em Perícias). O conjurador não recupera a Mana gasta."
+  }
+ ],
+ "resolvidos": [
+  {
+   "achado": "[LACUNA] Piloto: Modo Sobrevivente e Ás Impossível somam Defesa",
+   "regra": "Bônus de fontes diferentes somam (regra geral 6)"
+  },
+  {
+   "achado": "[LACUNA] Interceptador: Firewall de Fluxo com Blindagem de Malha",
+   "regra": "Bônus de fontes diferentes somam, a mesma fonte não soma com ela mesma (regra geral 6)"
+  }
+ ],
+ "mantidos": [
+  {
+   "achado": "[MELHORIA] Ninja dt_efeitos sem uso",
+   "motivo": "Nenhum poder do Ninja obriga teste hoje. A DT fica como reserva para a ficha; não há texto errado."
+  },
+  {
+   "achado": "[INCOERÊNCIA] Caçador simbiose-animal: penalidade de Cego",
+   "motivo": "O texto já cobra o preço (não percebe o corpo, sem Reações dali). Acrescentar Cego enfraqueceria o poder sem o Livro mandar (critério 16). Só o pré-requisito entra."
+  },
+  {
+   "achado": "[LACUNA] Caçador avaliacao-de-trofeus: metade do valor",
+   "motivo": "Conferido em BalcaoDeVenda.tsx: o balcão paga metade do preço novo. O texto já bate."
+  },
+  {
+   "achado": "[MELHORIA] Caçador camuflagem: nome igual à Camuflagem do Combate",
+   "motivo": "O poder já diz Invisível no texto. O nome é conhecido da mesa, e mudar só o título traria mais confusão que a colisão."
+  },
+  {
+   "achado": "[LACUNA] Piloto suspensao: redundância com Sei Onde Passa",
+   "motivo": "Só o termo foi corrigido (terreno difícil). Cortar o efeito enfraqueceria o poder (critério 16)."
+  }
+ ]
+}

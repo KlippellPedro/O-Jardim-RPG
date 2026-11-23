@@ -167,11 +167,15 @@ const MECANICAS: IMecanica[] = [
   },
   {
     id: 'ferido', nome: 'Ferido', formas: ['Ferido'], topico: 'ferimentos', secao: 'Remover Ferido',
-    resumo: 'Quem cai e volta acorda com Ferido 1. Cada ponto soma à DT dos testes de Morrendo, e um descanso completo Bom ou melhor, com tratamento, tira 1.',
+    resumo: 'Quem cai e volta acorda com Ferido 1. Cada ponto soma à DT dos testes de Morrendo, e um descanso completo de qualidade Boa ou melhor, com tratamento, tira 1.',
   },
   {
     id: 'deficit-de-vida', nome: 'Déficit de Vida', formas: ['Déficit de Vida'], topico: 'ferimentos', secao: 'Vida negativa',
     resumo: 'O dano que passou de 0 PV. A cura preenche o Déficit primeiro, e se ele chegar à Vida máxima a personagem morre na hora.',
+  },
+  {
+    id: 'vida-temporaria', nome: 'Vida temporária', formas: ['Vida temporária', 'Mana temporária', 'Estamina temporária'], topico: 'ferimentos', secao: 'Vida temporária',
+    resumo: 'Uma camada por cima da Vida: o dano tira dela primeiro. Fontes diferentes somam, e ela some no fim da fonte ou no descanso. A cura para no máximo e nunca vira Vida temporária. Mana e Estamina temporárias seguem a mesma regra.',
   },
   {
     id: 'mutilacao', nome: 'Mutilação', formas: ['Mutilação'], topico: 'ferimentos', secao: 'Mutilação',

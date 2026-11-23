@@ -49,3 +49,23 @@ test('as classes usam os nomes das regras para perícia, dano, condição e Inic
   });
   assert.deepEqual(achados, []);
 });
+
+// Revisão de coerência de novembro de 2026 (docs/propostas/revisao-coerencia-classes-2026-11).
+test('as classes falam a língua do Livro atual: DT, Resistência, janelas, ações e descanso', () => {
+  const proibidos: Array<[RegExp, string]> = [
+    [/Fácil do seu nível/, 'a DT mais baixa do Livro é a Rotineira'],
+    [/15 \+ metade do VD/, 'DT de criatura sai da tabela de DT Padrão pelo VD'],
+    [/Resistência \d+ (a|contra) dano de área|Resistência \d+ contra dano vindo de fora/, 'Resistência é por tipo; efeito amplo reduz o dano de cada golpe'],
+    [/\b(neste|este|cada|fim do) combate\b/i, 'um combate inteiro é uma cena'],
+    [/ative esta habilidade sem gastar ação/, 'Ação Livre é uma das sete ações'],
+    [/\b(conta como|qualidade) (Bom|Ótimo)\b/, 'as qualidades de descanso são Péssima, Ruim, Boa, Maravilhosa e Excelente'],
+    [/por missão/, 'as janelas de uso são rodada, turno, cena, descanso e sessão'],
+    [/desastre/, 'o Livro chama de falha crítica'],
+    [/ritmo acelerado/, 'o ritmo de viagem é Forçado'],
+  ];
+  const achados = proibidos.flatMap(([padrao, motivo]) => {
+    const encontrado = padrao.exec(classesTexto);
+    return encontrado ? [`${motivo}: ...${classesTexto.slice(Math.max(0, encontrado.index - 50), encontrado.index + 40)}...`] : [];
+  });
+  assert.deepEqual(achados, []);
+});

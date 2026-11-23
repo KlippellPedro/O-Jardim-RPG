@@ -905,6 +905,12 @@ export const REGRAS_OFICIAIS: RegrasCatalog = {
         <p>Você tem três fontes de vantagem e uma de desvantagem. Uma vantagem cancela a desvantagem, e as duas que sobram valem uma vantagem só: você rola dois d20 e usa o maior.</p>
       </div>
 
+      <h3 class="regras-subtitle">Rolar de novo e somar bônus</h3>
+      <ul class="regras-list">
+        <li>Um efeito que manda rolar de novo vale uma vez para aquele teste ou aquele dado. Se duas fontes podem rolar de novo o mesmo teste, você escolhe uma: um teste, ou um dado, nunca é rolado de novo duas vezes.</li>
+        <li>Bônus de fontes diferentes (habilidade, poder, item, magia) somam no mesmo teste, sem teto geral. Quem tem limite próprio continua com ele, como Ajudar (+4) e o ajuste de Prestígio e Fama (±2), e a mesma fonte não soma com ela mesma.</li>
+      </ul>
+
       <h3 class="regras-subtitle">DT Padrão, DT Difícil e ajuste de nível</h3>
       <p>Vários tópicos pedem um teste "contra a DT Padrão do nível", "contra a DT Difícil" ou "contra a DT Rotineira". São dificuldades que crescem junto com o nível do grupo, do lugar ou do inimigo. A Rotineira fica 5 abaixo da Padrão, e a Difícil, 5 acima. Num nível entre duas linhas, vale a linha do nível menor. A DT sobe mais depressa nos níveis em que um grau de perícia novo abre, como o Veterano no 19: ela acompanha quem treinou.</p>
       <div class="regras-table-wrap"><table class="regras-table">
@@ -1280,7 +1286,7 @@ ${HTML_MORAL}
       <h3 class="regras-subtitle">As cinco famílias</h3>
       <ul class="regras-sublist regras-sublist--grid">
         <li><strong>Físicos:</strong> corte, perfuração, impacto e balístico.</li>
-        <li><strong>Persistentes:</strong> sangramento, fogo, veneno e ácido; batem de novo no fim do turno até alguém remover.</li>
+        <li><strong>Persistentes:</strong> sangramento, fogo, veneno e ácido. O golpe cai uma vez, venha de magia, poder, arma ou criatura. O dano só volta no fim do turno quando a fonte deixa a condição (Sangramento, Queimando, Envenenado) ou diz que continua, e aí bate de novo até alguém remover.</li>
         <li><strong>Mágico:</strong> elemental (os sete elementos e as quatorze derivações) e os outros nove Fluxos naturais. Magia que não diz o tipo causa o dano do próprio Fluxo (dano de Vazio, dano do Fim...).</li>
         <li><strong>Tecnológico:</strong> vem do Fluxo artificial de Tecnologia (A.X.I.S). Usa a mesma Mana e a mesma regra de Resistência que qualquer Fluxo, mas não conta como dano mágico.</li>
         <li><strong>Mental:</strong> tira Sanidade quando ataca a mente pelo lado emocional ou existencial, e Mana quando ataca diretamente o canal mágico de quem conjura. Os ataques de Comunicação tiram Vida, com dano de Comunicação; dano mental é só o que a fonte chama assim. Como a Sanidade vai de 0 a 100 e volta devagar, dano mental usa dados pequenos.</li>
@@ -1335,6 +1341,7 @@ ${HTML_MORAL}
         <p>Um ataque de Fogo causa 10 de dano. O alvo é vulnerável a Fogo e tem Resistência 5 a Fogo. Primeiro a vulnerabilidade dobra o dano para 20, e só então a Resistência tira 5: o alvo sofre 15. Subtraindo a Resistência antes de dobrar, o resultado seria 10.</p>
       </div>
       <p class="regras-note">Resistência física geral cobre todos os danos físicos: corte, perfuração, impacto e balístico. Resistência de um tipo específico não faz nada contra os outros tipos.</p>
+      <p class="regras-note">Resistências ao mesmo tipo vindas de fontes diferentes (raça, classe, item, magia) somam. Reduções de dano de fontes diferentes também somam entre si, e somam com a Resistência.</p>
     `,
     corpoMestre: `
       <p class="regras-lead">Tipo de dano é a etiqueta que faz Resistência, vulnerabilidade e imunidade funcionarem sem ambiguidade. Ao criar monstro, item ou poder novo, escolha o tipo daqui em vez de inventar um rótulo solto.</p>
@@ -1551,6 +1558,8 @@ ${HTML_MORAL}
           <li>Ao chegar a 0 PV você cai inconsciente. O dano que passou de 0 é o seu <strong>Déficit de Vida</strong>, e se ele chegar à sua Vida máxima você morre na hora.</li>
           <li>Você recebe Morrendo 1 e, no fim de cada turno seu, rola Fortitude contra <strong>DT 12 + (2 × Gravidade) + Ferido</strong>, mais o ajuste do seu nível. Em Morrendo 3 você morre.</li>
           <li>Estabilizar interrompe os testes, mas só quem volta a 1 PV ou mais acorda. Quem acorda ganha Ferido 1.</li>
+          <li>Efeito que deixa você com 1 de Vida ao cair apaga o Déficit, sem Morrendo e sem Ferido, mas não evita a morte na hora.</li>
+          <li>Vida temporária é gasta antes da Vida, soma com a de outras fontes e some no fim da fonte ou no descanso.</li>
           <li>Um golpe que tira metade ou mais dos PV máximos, ou uma falha crítica em Morrendo, pede a tabela de trauma (2d6).</li>
           <li>A Mutilação sempre é anunciada antes, e um sucesso no teste evita a perda.</li>
           <li>Fora de combate, qualquer um trata um ferido: 10 minutos e Cura contra a DT Padrão do nível do paciente devolvem 1d6 de Vida, ou um décimo da Vida máxima do paciente, o que for maior.</li>
@@ -1591,6 +1600,18 @@ ${HTML_MORAL}
       <div class="regras-note regras-note--exemplo">
         <p>Davi está no nível 3 (ajuste +1), tem 40 de Vida máxima e leva um golpe que o deixa em −12. O Déficit de Vida é 12, ou 30% da Vida máxima: Gravidade 2. Ele cai inconsciente com Morrendo 1. No fim do turno dele, rola Fortitude contra DT 12 + (2 × 2) + 0 + 1 = 17, porque ainda não tem Ferido. Falhou: Morrendo 2. Uma aliada o estabiliza com um teste de Cura contra a mesma DT 17, e os testes de Morrendo param. Ele só acorda quando alguém curar o bastante para levá-lo de volta a 1 PV, e então ganha Ferido 1.</p>
       </div>
+
+      <h3 class="regras-subtitle">Ficar com 1 de Vida</h3>
+      <p>Algumas habilidades seguram quem cai: "quando um aliado cair a 0 de Vida, ele fica com 1 de Vida". Nesses casos, o Déficit de Vida some e a pessoa continua de pé, com 1 de Vida. Ela não fica Morrendo e não ganha Ferido. O efeito não vale contra a morte na hora (Déficit igual à Vida máxima), a não ser que diga isso com todas as letras. Se o golpe tirou metade ou mais dos PV máximos, a tabela de trauma continua valendo.</p>
+
+      <h3 class="regras-subtitle">Vida temporária</h3>
+      <ul class="regras-list">
+        <li>Vida temporária é uma camada por cima da Vida: o dano tira dela primeiro, e só o que sobra chega à Vida.</li>
+        <li>Vida temporária de fontes diferentes soma: cada efeito novo acrescenta o que dá ao que você já tem. Como nos bônus, a mesma fonte não soma com ela mesma: usar de novo o mesmo efeito troca o valor dele pelo novo.</li>
+        <li>A cura enche a Vida até o máximo, e o que passar se perde. Vida temporária só vem de um efeito que diga que dá Vida temporária, e ela não conta para acordar quem caiu.</li>
+        <li>Ela some no fim da duração da fonte ou no próximo descanso, o que vier antes.</li>
+        <li>Mana temporária e Estamina temporária seguem a mesma regra: são gastas antes das normais, somam entre fontes e somem do mesmo jeito.</li>
+      </ul>
 
       <h3 class="regras-subtitle">Tratar ferimentos</h3>
       <p>Fora de combate, com dez minutos e um teste de Cura contra a DT Padrão do nível do paciente, qualquer um trata um ferido, que recupera <strong>1d6 de Vida</strong> ou um décimo da Vida máxima dele, o que for maior. Assim o curativo vale no nível 3 e no nível 30. Cada pessoa recebe esse tratamento uma vez por descanso curto. O Médico cura mais, e também em combate, pelo que diz a classe dele.</p>
@@ -2932,9 +2953,9 @@ ${HTML_DEVOCAO}
           <tr><td>Cristal <small>rara</small></td><td>Quem falhar na resistência fica Exposto até o começo do seu próximo turno.</td></tr>
           <tr><td rowspan="2"><strong>Água</strong></td><td>Gelo <small>comum</small></td><td>Um espaço de 1,5 m afetado vira terreno difícil até o começo do seu próximo turno.</td></tr>
           <tr><td>Sangue <small>rara</small></td><td>Uma criatura viva que falhar na resistência não recupera Vida até o começo do seu próximo turno. Nunca controla as ações ou o movimento do alvo.</td></tr>
-          <tr><td rowspan="2"><strong>Fogo</strong></td><td>Magma <small>comum</small></td><td>Um espaço de 1,5 m afetado fica em brasa até o começo do seu próximo turno; cada criatura sofre 1d6 de Magma na primeira vez que entrar ou começar o turno ali.</td></tr>
+          <tr><td rowspan="2"><strong>Fogo</strong></td><td>Magma <small>comum</small></td><td>Um espaço de 1,5 m afetado fica em brasa até o começo do seu próximo turno. Cada criatura, na primeira vez que entrar ou começar o turno ali, testa Reflexos contra a DT de quem conjurou e sofre 1d6 de Magma, ou metade se passar.</td></tr>
           <tr><td>Fogo Astral <small>rara</small></td><td>Quem sofrer dano da magia tem desvantagem no próximo teste de concentração que fizer até o começo do seu próximo turno.</td></tr>
-          <tr><td rowspan="2"><strong>Ar</strong></td><td>Fumaça <small>comum</small></td><td>Cria uma área de fumaça de 3 m num ponto afetado, com cobertura parcial até o começo do seu próximo turno.</td></tr>
+          <tr><td rowspan="2"><strong>Ar</strong></td><td>Fumaça <small>comum</small></td><td>Cria uma área de fumaça de 3 m num ponto afetado até o começo do seu próximo turno. Quem está dentro fica camuflado: ataques contra ele têm −2.</td></tr>
           <tr><td>Vácuo <small>rara</small></td><td>Quem falhar na resistência perde as reações até o começo do seu próximo turno. Não causa morte instantânea nem ignora defesas.</td></tr>
           <tr><td rowspan="2"><strong>Raio</strong></td><td>Plasma <small>comum</small></td><td>Depois de causar dano, outra criatura a até 3 m do alvo sofre 1d6 de Plasma, sem novo teste. Um salto por magia.</td></tr>
           <tr><td>Magnetismo <small>rara</small></td><td>Move até 3 m uma criatura afetada que carregue ou vista metal. Se for hostil, só move quando falhar na resistência.</td></tr>
@@ -3337,7 +3358,7 @@ ${HTML_DEVOCAO}
       </div>
 
       <h3 class="regras-subtitle">A grade de uma classe</h3>
-      <p>As ${classesData.length} classes seguem a mesma grade, contada pelo nível daquela classe. Se você tem duas classes, cada uma corre a própria grade separadamente.</p>
+      <p>As ${classesData.length} classes seguem a mesma grade, contada pelo nível daquela classe. Se você tem duas classes, cada uma corre a própria grade separadamente. Algumas fogem dela num ponto ou outro, quase todas especiais: a Elementarista tem mais habilidades, treze poderes e três eventos, o Viajante tem treze poderes e o Ninja ganha um evento a mais no nível 17. A Progressão de cada classe mostra a grade dela.</p>
       <div class="regras-table-wrap">
         <table class="regras-table">
           <thead><tr><th>Recompensa</th><th>Nos níveis</th><th>Quantas</th></tr></thead>
@@ -3375,7 +3396,7 @@ ${HTML_DEVOCAO}
       <p>O fecho da classe, no nível 20, uma por classe. Ela chega sozinha como qualquer habilidade e costuma ser o efeito que define o que aquela classe virou no fim da estrada.</p>
 
       <h3 class="regras-subtitle">Grau de perícia</h3>
-      <p>Um degrau de graça em uma perícia à sua escolha, entregue na hora, sem cumprir tempo nem requisito extra. O nível total mínimo do grau, em <span class="regras-ref regras-ref--pericias">Perícias</span>, continua valendo. É a exceção às regras do tópico <span class="regras-ref regras-ref--treinar">Treinamento</span>, e os dois caminhos convivem: o grau dado pela classe sobe agora, o conquistado por treino cobra os dias da tabela.</p>
+      <p>Um degrau de graça em uma perícia à sua escolha, entregue na hora, sem cumprir tempo nem requisito extra. O nível total mínimo do grau, em <span class="regras-ref regras-ref--pericias">Perícias</span>, continua valendo. É a exceção às regras do tópico <span class="regras-ref regras-ref--treinar">Treinamento</span>, e os dois caminhos convivem: o grau dado pela classe sobe agora, o conquistado por treino cobra os dias da tabela. Nas classes especiais, cada entrega dá dois graus em vez de um, na mesma perícia ou em duas.</p>
 
       <h3 class="regras-subtitle">Evento</h3>
       <p>Evento é um gancho que a classe entrega ao Mestre: uma arena que chama o Guerreiro, um clã que cobra o Ninja, um contato que procura o Comerciante. Ele não tem número, não gasta ação e não entra no cálculo de nada.</p>

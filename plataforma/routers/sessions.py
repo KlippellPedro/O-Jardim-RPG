@@ -1036,10 +1036,10 @@ def atualizar_participante(
             vida_temporaria -= absorvido
             vida_atual -= payload.dano - absorvido
         if payload.cura:
-            # Cura que passa do máximo vira extra temporário, como na ficha.
+            # A cura para no máximo e a sobra se perde (Livro, Ferimentos ›
+            # Vida temporária). O extra só muda pelo campo vida_temporaria.
             excesso = max(0, vida_atual + payload.cura - vida_maxima) if vida_maxima else 0
             vida_atual += payload.cura - excesso
-            vida_temporaria += excesso
         if payload.vida_temporaria is not None:
             vida_temporaria = payload.vida_temporaria
         # Vida negativa é informação de jogo (o quanto passou de zero), mas não

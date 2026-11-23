@@ -1,0 +1,632 @@
+{
+  "correcoes": [
+    {
+      "achado": "[INCOERÊNCIA] medicina@1 · cura fora de combate",
+      "classe": "medico",
+      "no": "medicina@1",
+      "campo": "descricao",
+      "de": "Cada criatura recebe esta cura uma vez por cena.",
+      "para": "Cada criatura recebe esta cura uma vez por cena. Fora de combate, a cura é a maior entre esta e a do tratamento comum (um décimo da Vida máxima do paciente)."
+    },
+    {
+      "achado": "[LACUNA] medicina@10 · bônus",
+      "classe": "medico",
+      "no": "medicina@10",
+      "campo": "descricao",
+      "de": "O bônus de cura sobe para +2d6 + Mod.Sabedoria e você pode",
+      "para": "Quando você avalia antes, o dado extra da cura sobe de +1d6 para +2d6, e o Mod.Sabedoria entra uma vez só. Você pode"
+    },
+    {
+      "achado": "[LACUNA] medicina@10 · dano",
+      "classe": "medico",
+      "no": "medicina@10",
+      "campo": "dano",
+      "de": "+2d6 + Mod.Sabedoria",
+      "para": "+2d6 se avaliou (no lugar de +1d6)"
+    },
+    {
+      "achado": "[INCOERÊNCIA] medicina@5 · avaliar",
+      "classe": "medico",
+      "no": "medicina@5",
+      "campo": "descricao",
+      "de": "Você identifica Vida, Mana e condições visíveis; sua cura remove",
+      "para": "Você identifica Vida, Mana e condições visíveis de um alvo. Essa identificação conta como a avaliação do Tratamento, sem gastar a Ação de Movimento. Sua cura remove"
+    },
+    {
+      "achado": "[LACUNA] contra-o-veneno",
+      "classe": "medico",
+      "no": "contra-o-veneno",
+      "campo": "descricao",
+      "de": "a cura reduz um estágio extra dela.",
+      "para": "o teste de Cura do Tratamento também conta como tratamento da aflição, contra a DT dela, e um sucesso reduz 1 estágio. Respeita o limite de uma tentativa por intervalo."
+    },
+    {
+      "achado": "[MELHORIA] contra-o-medo",
+      "classe": "medico",
+      "no": "contra-o-medo",
+      "campo": "descricao",
+      "de": "a cura também concede a ele um novo teste de Vontade contra a DT da fonte do medo.",
+      "para": "a cura o liberta sem esperar o fim do turno dele: ele faz na hora o teste de Vontade contra a DT da fonte do medo."
+    },
+    {
+      "achado": "[INCOERÊNCIA] contra-a-queda (pulado)",
+      "classe": "medico",
+      "no": "contra-a-queda",
+      "campo": "descricao",
+      "de": "sem gastar a própria Ação de Movimento.",
+      "para": "sem gastar a própria Ação de Movimento. Levantar assim ainda provoca reações, como em Caído."
+    },
+    {
+      "achado": "[LACUNA] socorro@3 · Déficit",
+      "classe": "medico",
+      "no": "socorro-de-emergencia@3",
+      "campo": "descricao",
+      "de": "ele ignora o Déficit de Vida, volta com 1 de Vida e então recupera 1d6.",
+      "para": "ele ignora o Déficit de Vida, e fica com 1 de Vida, como em Ferimentos. Então recupera 1d6. O golpe que tirou metade da Vida ainda pede a tabela de trauma."
+    },
+    {
+      "achado": "[LACUNA] último recurso",
+      "classe": "medico",
+      "no": "medicina@20",
+      "campo": "descricao",
+      "de": "encerrar uma condição grave que possa ser tratada.",
+      "para": "encerrar uma condição grave que Cura possa tratar (lesão de longo prazo ou aflição no estágio 3 ou mais). Não remove Ferido."
+    },
+    {
+      "achado": "[INCOERÊNCIA] milagre · descricao",
+      "classe": "medico",
+      "no": "milagre",
+      "campo": "descricao",
+      "de": "Uma vez a cada cinco sessões, durante um descanso completo e com 12 Mana, restaure um membro perdido ou remova uma condição gravíssima. Não ressuscita",
+      "para": "Uma vez por sessão, durante um descanso completo e com 12 Mana, restaure um membro ou sentido perdido ou encerre uma maldição. Vale como a Regeneração de Ferimentos. Não ressuscita"
+    },
+    {
+      "achado": "[INCOERÊNCIA] milagre · usos",
+      "classe": "medico",
+      "no": "milagre",
+      "campo": "usos",
+      "de": "Uma vez a cada cinco sessões",
+      "para": "Uma vez por sessão"
+    },
+    {
+      "achado": "[LACUNA] mestre-da-vida · morrer",
+      "classe": "medico",
+      "no": "mestre-da-vida",
+      "campo": "descricao",
+      "de": "nenhum aliado a até 12 m de você morre:",
+      "para": "nenhum aliado a até 12 m de você morre por perda de Vida:"
+    },
+    {
+      "achado": "[LACUNA] mestre-da-vida · 0 de Vida",
+      "classe": "medico",
+      "no": "mestre-da-vida",
+      "campo": "descricao",
+      "de": "quem estiver a 0 de Vida se levanta",
+      "para": "quem cair a 0 de Vida se levanta"
+    },
+    {
+      "achado": "[LACUNA] mestre-da-vida · área",
+      "classe": "medico",
+      "no": "mestre-da-vida",
+      "campo": "descricao",
+      "de": "cada aliado na área recupera",
+      "para": "cada aliado a até 12 m recupera"
+    },
+    {
+      "achado": "[LACUNA] mestre-da-vida · Fim",
+      "classe": "medico",
+      "no": "mestre-da-vida",
+      "campo": "descricao",
+      "de": "Esta habilidade não ressuscita mortos.",
+      "para": "Esta habilidade não ressuscita mortos e não impede o Fim."
+    },
+    {
+      "achado": "[LACUNA] maleta-medica",
+      "classe": "medico",
+      "no": "maleta-medica",
+      "campo": "descricao",
+      "de": "tenha instrumentos adequados e possa tratar condições médias que exijam equipamento.",
+      "para": "com os instrumentos na mão, a remoção de condição da sua cura também alcança uma condição média (Atordoado, Cego, Imobilizado ou Paralisado) de um alvo, com um teste de Cura contra a DT Padrão do nível do paciente."
+    },
+    {
+      "achado": "[LACUNA] isso-e-bom",
+      "classe": "medico",
+      "no": "isso-e-bom",
+      "campo": "descricao",
+      "de": "Ao usar um kit médico, além da cura normal",
+      "para": "Ao fazer o Tratamento, além da cura normal"
+    },
+    {
+      "achado": "[LACUNA] isso-e-bom · momento",
+      "classe": "medico",
+      "no": "isso-e-bom",
+      "campo": "momento",
+      "de": null,
+      "para": "ao curar"
+    },
+    {
+      "achado": "[MELHORIA] escudo-de-urgencia",
+      "classe": "medico",
+      "no": "escudo-de-urgencia",
+      "campo": "descricao",
+      "de": "recebe +2 de Defesa até o início do seu próximo turno.",
+      "para": "fica Resguardado até o início do próximo turno dele."
+    },
+    {
+      "achado": "[MELHORIA] reflexo-de-emergencia",
+      "classe": "medico",
+      "no": "reflexo-de-emergencia",
+      "campo": "descricao",
+      "de": "recupera acesso à própria Reação nesta rodada, caso a tivesse perdido ao cair.",
+      "para": "recupera a própria Reação nesta rodada, se já a tivesse gasto (exceção à regra de uma reação por rodada)."
+    },
+    {
+      "achado": "[MELHORIA] contra-o-choque · titulo",
+      "classe": "medico",
+      "no": "contra-o-choque",
+      "campo": "titulo",
+      "de": "Contra o Choque",
+      "para": "Segura o Golpe"
+    },
+    {
+      "achado": "[MELHORIA] folego-extra · titulo",
+      "classe": "medico",
+      "no": "folego-extra",
+      "campo": "titulo",
+      "de": "Fôlego Extra",
+      "para": "Pulso Extra"
+    },
+    {
+      "achado": "[LACUNA] cirurgia",
+      "classe": "medico",
+      "no": "cirurgia",
+      "campo": "descricao",
+      "de": "ele recupera toda a Vida, mas mantém condições não tratadas.",
+      "para": "ele recupera toda a Vida, conta como tratado para tirar Ferido no descanso e a Cirurgia vale como a operação de Lesão Interna, sem teste. Mantém as outras condições não tratadas."
+    },
+    {
+      "achado": "[MELHORIA] dt_efeitos médico",
+      "classe": "medico",
+      "no": "dt_efeitos",
+      "campo": "descricao",
+      "de": "no momento do tratamento. O resultado da sua rolagem é a DT que o alvo precisa alcançar.",
+      "para": "ao acionar. O resultado da sua rolagem é a DT que o alvo precisa alcançar: uma rolagem por acionamento, válida para todos os alvos e para os testes repetidos daquele efeito."
+    },
+    {
+      "achado": "[LACUNA] estrela-eterna · 1 de Vida",
+      "classe": "pop-star",
+      "no": "estrela-eterna",
+      "campo": "descricao",
+      "de": "ele permanece com 1 de Vida.",
+      "para": "ele fica com 1 de Vida, como em Ferimentos."
+    },
+    {
+      "achado": "[LACUNA] fama@5",
+      "classe": "pop-star",
+      "no": "fama@5",
+      "campo": "descricao",
+      "de": "Com um teste de Atuação (DT 15, ou 20 se ela estiver hostil) você acalma ou anima uma multidão pequena, até umas cinquenta pessoas, sem precisar de palco montado.",
+      "para": "Com um teste de Atuação contra a DT Padrão do nível do lugar (Difícil se a multidão estiver hostil), você acalma uma multidão pequena, até umas cinquenta pessoas, que não vira tumulto até o fim da cena, ou a anima, e ela dá +1 nos testes sociais do grupo diante dela até o fim da cena. Não precisa de palco montado."
+    },
+    {
+      "achado": "[LACUNA] fama@5 · usos",
+      "classe": "pop-star",
+      "no": "fama@5",
+      "campo": "usos",
+      "de": null,
+      "para": "Uma vez por cena"
+    },
+    {
+      "achado": "[LACUNA] fama@15 · contato",
+      "classe": "pop-star",
+      "no": "fama@15",
+      "campo": "descricao",
+      "de": "consiga na região uma audiência com quem manda, um contato de peso ou um palco livre para se apresentar.",
+      "para": "consiga na região uma audiência com quem manda (você pode pedir, e o Mestre decide a resposta), um contato Conhecido de um ramo à sua escolha, que não conta no seu limite de contatos, ou um palco livre para se apresentar."
+    },
+    {
+      "achado": "[LACUNA] energetico",
+      "classe": "pop-star",
+      "no": "energetico",
+      "campo": "descricao",
+      "de": "remove 1 de Cansaço de quem beber.",
+      "para": "remove 1 de Cansaço de quem beber. Não remove o Cansaço de fome e sede enquanto a causa continua."
+    },
+    {
+      "achado": "[LACUNA] destilaria nível 2",
+      "classe": "pop-star",
+      "no": "destilaria",
+      "campo": "escalonamento",
+      "de": "isso vale um teste de Investigação de graça.",
+      "para": "você faz um teste de Investigação sobre isso sem gastar tempo, e uma falha não pinta o relógio do caso."
+    },
+    {
+      "achado": "[LACUNA] agencia · Crise",
+      "classe": "pop-star",
+      "no": "agencia-de-marketing",
+      "campo": "descricao",
+      "de": "e quem só ouviu falar deixa de acreditar.",
+      "para": "e quem só ouviu falar deixa de acreditar. Isso não baixa Procura nem Fama e não apaga o que testemunhas viram."
+    },
+    {
+      "achado": "[LACUNA] agencia · Busca",
+      "classe": "pop-star",
+      "no": "agencia-de-marketing",
+      "campo": "descricao",
+      "de": "contanto que a pessoa tenha rosto conhecido em algum lugar.",
+      "para": "contanto que a pessoa tenha rosto conhecido em algum lugar. Vale como todos os dias de Procurar uma pessoa específica, mas não entrega pista essencial de caso."
+    },
+    {
+      "achado": "[LACUNA] turne-mundial · estalagem",
+      "classe": "pop-star",
+      "no": "turne-mundial",
+      "campo": "descricao",
+      "de": "para o grupo, contanto",
+      "para": "para o grupo (estalagem e carroça), contanto"
+    },
+    {
+      "achado": "[LACUNA] turne-mundial · passagem",
+      "classe": "pop-star",
+      "no": "turne-mundial",
+      "campo": "descricao",
+      "de": "e estrutura para isso.",
+      "para": "e estrutura para isso. Não cobre passagem de Trem ou Aeronave nem rota entre Árvores."
+    },
+    {
+      "achado": "[LACUNA] autografo",
+      "classe": "pop-star",
+      "no": "autografo",
+      "campo": "descricao",
+      "de": "em um degrau na escada do Prestígio, até o fim da cena.",
+      "para": "em um degrau na escada do Prestígio até o fim da cena. Vale o ajuste de teste social do degrau novo, e só isso: não dá Acesso nem desconto e não altera o Prestígio da ficha."
+    },
+    {
+      "achado": "[LACUNA] pose-de-diva",
+      "classe": "pop-star",
+      "no": "pose-de-diva",
+      "campo": "descricao",
+      "de": "A primeira criatura que tentar atacar você testa Vontade contra a sua DT de Palco; em falha, ela gasta o ataque em outro alvo válido ao alcance dela.",
+      "para": "Ao usar, role Atuação: o total é a sua DT de Palco desta rodada. A primeira criatura que tentar atacar você testa Vontade contra ela; em falha, ela gasta o ataque em outro alvo válido ao alcance dela. Se não houver, o ataque se perde."
+    },
+    {
+      "achado": "[MELHORIA] dt_efeitos pop-star",
+      "classe": "pop-star",
+      "no": "dt_efeitos",
+      "campo": "descricao",
+      "de": "valendo para todos que estiverem vendo.",
+      "para": "valendo para todos que estiverem vendo e para os testes repetidos daquele número."
+    },
+    {
+      "achado": "[INCOERÊNCIA] rede@1 · praça",
+      "classe": "comerciante",
+      "no": "rede-de-negocios@1",
+      "campo": "descricao",
+      "de": "Escolha uma praça na lista abaixo e diga ao Mestre em que região a sua rede começou. Dentro dela você tem +2 em Ofício (Comércio) e conhece um contato confiável: alguém com nome, cara e um motivo para te atender. O contato some se você queimar ele.",
+      "para": "Escolha uma praça na lista abaixo e diga ao Mestre em que cidade mora o seu contato. Em qualquer cidade, no comércio dessa praça, você tem +2 em Ofício (Comércio) e conhece um contato Amigo (Confiança 2) do ramo da praça: alguém com nome, cara e um motivo para te atender. Ele não conta no seu limite de contatos, e perder a Confiança dele segue Contatos e Laços."
+    },
+    {
+      "achado": "[LACUNA] rede@5 · contato",
+      "classe": "comerciante",
+      "no": "rede-de-negocios@5",
+      "campo": "descricao",
+      "de": "com o mesmo +2 e mais um contato.",
+      "para": "com o mesmo +2 e mais um contato Amigo, que também não conta no limite."
+    },
+    {
+      "achado": "[INCOERÊNCIA] rede@15 · favor (pulado)",
+      "classe": "comerciante",
+      "no": "rede-de-negocios@15",
+      "campo": "descricao",
+      "de": "um contato seu fornece ao grupo transporte, hospedagem ou informação comum, sem cobrar na hora. O favor entra na conta: o Mestre pode cobrar em serviço mais adiante.",
+      "para": "um contato seu faz ao grupo um favor Grande (transporte, hospedagem ou informação comum), sem teste e sem cobrar na hora. O contato guarda uma Dívida, como em Contatos e Laços, e o Mestre pode cobrá-la em serviço mais adiante."
+    },
+    {
+      "achado": "[LACUNA] mercado-mundial · locais",
+      "classe": "comerciante",
+      "no": "mercado-mundial",
+      "campo": "descricao",
+      "de": "de raridade Rara ou inferior, com preço",
+      "para": "de raridade Rara ou inferior, que a Loja venda nos locais abertos da campanha, com preço"
+    },
+    {
+      "achado": "[LACUNA] mercado-mundial · exclusões",
+      "classe": "comerciante",
+      "no": "mercado-mundial",
+      "campo": "descricao",
+      "de": "Eles não podem ser vendidos,",
+      "para": "Não vale para criatura, propriedade, implante nem Fruto do Éden. Eles não podem ser vendidos, segurados,"
+    },
+    {
+      "achado": "[LACUNA] estoque · não vendável",
+      "classe": "comerciante",
+      "no": "estoque",
+      "campo": "descricao",
+      "de": "fica com você até o próximo descanso completo.",
+      "para": "fica com você até o próximo descanso completo. Item consignado não pode ser vendido nem segurado, e não vira aliado, propriedade, implante nem Fruto."
+    },
+    {
+      "achado": "[LACUNA] provisões nível 2",
+      "classe": "comerciante",
+      "no": "provisoes-e-acampamento",
+      "campo": "escalonamento",
+      "de": "em uma categoria.",
+      "para": "em uma categoria, até Maravilhosa."
+    },
+    {
+      "achado": "[LACUNA] provisões nível 3",
+      "classe": "comerciante",
+      "no": "provisoes-e-acampamento",
+      "campo": "escalonamento",
+      "de": "equipamento para clima extremo.",
+      "para": "equipamento que conta como roupa certa e baixa o clima um grau (Extremo vira Severo)."
+    },
+    {
+      "achado": "[LACUNA] documentos nível 4",
+      "classe": "comerciante",
+      "no": "documentos-e-selos",
+      "campo": "escalonamento",
+      "de": "autorização que atravessa fronteira de Árvore.",
+      "para": "autorização que vale como papelada para atravessar fronteira de Árvore, sem dispensar o Portal nem a taxa de acesso."
+    },
+    {
+      "achado": "[LACUNA] venenos · local",
+      "classe": "comerciante",
+      "no": "venenos-e-reagentes",
+      "campo": "descricao",
+      "de": "sempre com comprador.",
+      "para": "sempre com comprador. O veneno só entra no estoque se a campanha tiver aberto o Mercado Negro, ou com aval do Mestre."
+    },
+    {
+      "achado": "[ERRO] venenos nível 4 (pulado)",
+      "classe": "comerciante",
+      "no": "venenos-e-reagentes",
+      "campo": "escalonamento",
+      "de": "Nível 4: aflição rara.",
+      "para": "Nível 4: aflição publicada de DT Fortitude 16 ou mais."
+    },
+    {
+      "achado": "[MELHORIA] saque-e-uso · usos",
+      "classe": "comerciante",
+      "no": "saque-e-uso",
+      "campo": "usos",
+      "de": "Uma vez por rodada",
+      "para": "Uma vez por turno"
+    },
+    {
+      "achado": "[MELHORIA] saque-e-uso · descricao",
+      "classe": "comerciante",
+      "no": "saque-e-uso",
+      "campo": "descricao",
+      "de": "Uma vez por rodada, use",
+      "para": "Uma vez por turno, use"
+    },
+    {
+      "achado": "[LACUNA] seguro · conversão (pulado)",
+      "classe": "comerciante",
+      "no": "seguro",
+      "campo": "descricao",
+      "de": "metade do valor dele em Lunaris depois",
+      "para": "metade do valor dele em Lunaris (convertido pelo câmbio, se for cotado em outra moeda) depois"
+    },
+    {
+      "achado": "[LACUNA] seguro · exclusões (pulado)",
+      "classe": "comerciante",
+      "no": "seguro",
+      "campo": "descricao",
+      "de": "uma apólice por vez.",
+      "para": "uma apólice por vez. Não cobre item consignado, emprestado, de demonstração ou vindo de habilidade de classe, nem item destruído de propósito pelo segurado."
+    },
+    {
+      "achado": "[LACUNA] mercadoria proibida · Procura (pulado)",
+      "classe": "comerciante",
+      "no": "Mover mercadoria proibida por um posto de fiscalização",
+      "campo": "nota",
+      "de": "Falha custa a carga, e às vezes o contato.",
+      "para": "Falha custa a carga, e às vezes o contato. Se você foi identificado, a Procura sobe 1 no lugar."
+    },
+    {
+      "achado": "[LACUNA] eu-conheco-alguem · Confiança (pulado)",
+      "classe": "comerciante",
+      "no": "eu-conheco-alguem",
+      "campo": "descricao",
+      "de": "ela existe a partir de agora e lembra de você.",
+      "para": "ela existe a partir de agora e lembra de você. Vira um contato Conhecido (Confiança 1), que não conta no seu limite de contatos."
+    },
+    {
+      "achado": "[LACUNA] clausula-de-saida (pulado)",
+      "classe": "comerciante",
+      "no": "clausula-de-saida",
+      "campo": "descricao",
+      "de": "Use a reação para rerrolar um teste social ligado a contrato, acordo ou preço.",
+      "para": "Use a reação, depois de rolar um teste social seu ligado a contrato, acordo ou preço, para rerrolar."
+    },
+    {
+      "achado": "[MELHORIA] amostra-gratis · não vendável",
+      "classe": "comerciante",
+      "no": "amostra-gratis",
+      "campo": "descricao",
+      "de": "e não pode ser vendido.",
+      "para": "e não pode ser vendido nem segurado."
+    },
+    {
+      "achado": "[MELHORIA] dt_efeitos comerciante",
+      "classe": "comerciante",
+      "no": "dt_efeitos",
+      "campo": "descricao",
+      "de": "role Ofício (Comércio) na hora da conversa.",
+      "para": "role Ofício (Comércio) na hora da conversa, uma vez por acionamento, valendo para todos os alvos e para os testes repetidos daquele efeito."
+    },
+    {
+      "achado": "[ERRO] primeira leitura",
+      "classe": "detetive",
+      "no": "deducao-metodica@1",
+      "campo": "descricao",
+      "de": "role Investigação contra a DT definida pela dificuldade da pista. Em sucesso, o Mestre revela um detalhe relevante sustentado pelo que foi examinado. Mesmo numa falha, revela um detalhe real secundário, nunca a pista central.",
+      "para": "role Investigação contra a DT Padrão do nível do caso. A pista essencial você acha sem rolar, como qualquer um. Em sucesso, o Mestre revela um detalhe relevante a mais, sustentado pelo que foi examinado. Numa falha, revela um detalhe real secundário e custa o que a regra de Investigações manda."
+    },
+    {
+      "achado": "[LACUNA] ponto fraco · Leitura Rápida",
+      "classe": "detetive",
+      "no": "deducao-metodica@10",
+      "campo": "descricao",
+      "de": "revela uma Resistência ou uma vulnerabilidade dela, se ela tiver.",
+      "para": "revela uma Resistência ou uma vulnerabilidade dela, se ela tiver. Isso também identifica o ponto fraco dela, sem o teste do Golpe Certeiro de Lógica."
+    },
+    {
+      "achado": "[LACUNA] ponto fraco · Golpe Certeiro",
+      "classe": "detetive",
+      "no": "golpe-certeiro-de-logica",
+      "campo": "descricao",
+      "de": "Investigação contra 15 + metade do VD dele",
+      "para": "Investigação contra a DT Padrão do VD dele"
+    },
+    {
+      "achado": "[LACUNA] peça que faltava",
+      "classe": "detetive",
+      "no": "deducao-metodica@20",
+      "campo": "descricao",
+      "de": "nem informação que não deixou evidência acessível na cena.",
+      "para": "nem informação que não deixou evidência acessível na cena. A resposta não pinta o relógio do caso."
+    },
+    {
+      "achado": "[LACUNA] peça que faltava · momento",
+      "classe": "detetive",
+      "no": "deducao-metodica@20",
+      "campo": "momento",
+      "de": null,
+      "para": "ao fim do exame"
+    },
+    {
+      "achado": "[MELHORIA] golpe-de-vista · momento",
+      "classe": "detetive",
+      "no": "golpe-de-vista",
+      "campo": "momento",
+      "de": null,
+      "para": "ao observar"
+    },
+    {
+      "achado": "[MELHORIA] caso-encerrado · momento",
+      "classe": "detetive",
+      "no": "caso-encerrado",
+      "campo": "momento",
+      "de": null,
+      "para": "ao apontar"
+    },
+    {
+      "achado": "[LACUNA] pergunta-certa · Limite",
+      "classe": "detetive",
+      "no": "pergunta-certa",
+      "campo": "descricao",
+      "de": "responde com sinceridade a uma pergunta, usando",
+      "para": "responde com sinceridade a uma pergunta que não passe do Limite dela, usando"
+    },
+    {
+      "achado": "[LACUNA] pergunta-certa · Conflito Social",
+      "classe": "detetive",
+      "no": "pergunta-certa",
+      "campo": "descricao",
+      "de": "ela pode responder que não sabe.",
+      "para": "ela pode responder que não sabe. Dentro de um Conflito Social, a falha também tira 1 de Resistência."
+    },
+    {
+      "achado": "[INCOERÊNCIA] rede-de-informantes · usos",
+      "classe": "detetive",
+      "no": "rede-de-informantes",
+      "campo": "usos",
+      "de": null,
+      "para": "Uma vez por sessão"
+    },
+    {
+      "achado": "[INCOERÊNCIA] rede-de-informantes · acao",
+      "classe": "detetive",
+      "no": "rede-de-informantes",
+      "campo": "acao",
+      "de": "Ação Livre",
+      "para": "Fora de combate"
+    },
+    {
+      "achado": "[INCOERÊNCIA] rede-de-informantes · momento",
+      "classe": "detetive",
+      "no": "rede-de-informantes",
+      "campo": "momento",
+      "de": null,
+      "para": "uma conversa na rua"
+    },
+    {
+      "achado": "[INCOERÊNCIA] rede-de-informantes · descricao",
+      "classe": "detetive",
+      "no": "rede-de-informantes",
+      "campo": "descricao",
+      "de": "Uma vez por cena, pergunte",
+      "para": "Uma vez por sessão, pergunte"
+    },
+    {
+      "achado": "[MELHORIA] sexto-sentido (pulado)",
+      "classe": "detetive",
+      "no": "sexto-sentido",
+      "campo": "descricao",
+      "de": "para receber vantagem nesse teste.",
+      "para": "para receber vantagem nesse teste. Ao andar atento, sem procurar, você passa a rolar o teste com vantagem no lugar de usar 10 + bônus de Percepção."
+    },
+    {
+      "achado": "[MELHORIA] pericia-forense (pulado)",
+      "classe": "detetive",
+      "no": "pericia-forense",
+      "campo": "descricao",
+      "de": "role Investigação para determinar",
+      "para": "role Investigação contra a DT Padrão do nível do caso para determinar"
+    },
+    {
+      "achado": "[MELHORIA] leitura-de-documentos (pulado)",
+      "classe": "detetive",
+      "no": "leitura-de-documentos",
+      "campo": "descricao",
+      "de": "em qualquer documento, mapa ou registro escrito.",
+      "para": "em qualquer documento, mapa ou registro escrito. Falsificação grosseira sai sem teste; o resto pede Investigação contra a DT Padrão do nível do caso."
+    },
+    {
+      "achado": "[MELHORIA] dt_efeitos detetive",
+      "classe": "detetive",
+      "no": "dt_efeitos",
+      "campo": "descricao",
+      "de": "que o alvo precisa alcançar.",
+      "para": "que o alvo precisa alcançar: uma rolagem por acionamento, válida para todos os alvos e para os testes repetidos daquele efeito."
+    }
+  ],
+  "resolvidos": [
+    {
+      "achado": "[LACUNA] rerrolagem de 1 (Mão Experiente, Mão Firme, Eu Sei Curar)",
+      "regra": "Rolar de novo (regra geral 5)"
+    },
+    {
+      "achado": "[LACUNA] estrela-eterna · Mana e Estamina temporárias",
+      "regra": "Vida temporária e recursos temporários (regra geral 1)"
+    },
+    {
+      "achado": "[LACUNA] cosmeticos, pose-de-diva, lancamento-surpresa, fama · bônus sociais empilhados",
+      "regra": "Bônus de fontes diferentes somam, sem teto geral (regra geral 6)"
+    },
+    {
+      "achado": "[LACUNA] clausula-de-saida e bis · rerrolagem empilhada",
+      "regra": "Rolar de novo (regra geral 5)"
+    }
+  ],
+  "mantidos": [
+    {
+      "achado": "[MELHORIA] medicina · Contra o Medo e Contra a Queda × estágio 5 (redundância com Diagnóstico)",
+      "motivo": "O texto novo de Contra o Medo e Contra a Queda já mostra o que cada um acrescenta; nenhuma troca de força."
+    },
+    {
+      "achado": "[LACUNA] publi/energetico · nível 4 remove 2 de Cansaço",
+      "motivo": "Critério 16: não mudar a força. Só ganhou a ressalva de fome e sede."
+    },
+    {
+      "achado": "[LACUNA] bis · escopo de 'teste'",
+      "motivo": "Critério 16: vale para qualquer teste do aliado, como está; o limite de uma rerrolagem vem da regra geral 5."
+    },
+    {
+      "achado": "[MELHORIA] saque-e-uso · explosivo",
+      "motivo": "Ficou como está: só a janela virou 'por turno'."
+    }
+  ]
+}

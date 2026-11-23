@@ -1,0 +1,68 @@
+{
+  "correcoes": [
+    {
+      "achado": "Bobina de Choque: metade no sucesso (questionário 8A)",
+      "classe": "engenheiro",
+      "no": "bobina-de-choque",
+      "campo": "descricao",
+      "de": "quem falhar sofre 1d8 de dano de raio e perde a Ação de Movimento no próximo turno.",
+      "para": "quem falhar sofre 1d8 de dano de raio e perde a Ação de Movimento no próximo turno; quem passar sofre metade do dano e não perde a ação."
+    },
+    {
+      "achado": "Bobina de Choque: o nível 5 deixa de repetir a metade",
+      "classe": "engenheiro",
+      "no": "bobina-de-choque",
+      "campo": "escalonamento",
+      "de": "Nível 5: o dano sobe para 3d8, e quem passar no teste ainda sofre metade do dano, sem perder a Ação de Movimento.",
+      "para": "Nível 5: o dano sobe para 3d8."
+    },
+    {
+      "achado": "Frasco Congelante: metade no sucesso (questionário 8A)",
+      "classe": "alquimista",
+      "no": "frasco-congelante",
+      "campo": "descricao",
+      "de": "Estoura em 3 m e causa 2d6 de dano de gelo. Quem falhar em Fortitude contra a sua DT de Alquimista perde 3 m de Movimento até o fim do próximo turno.",
+      "para": "Estoura em 3 m. Cada criatura na área testa Fortitude contra a sua DT de Alquimista: quem falhar sofre 2d6 de dano de Gelo e perde 3 m de Movimento até o fim do próximo turno; quem passar sofre metade do dano."
+    },
+    {
+      "achado": "Veneno de Contato: metade no sucesso (questionário 8A)",
+      "classe": "alquimista",
+      "no": "veneno-de-contato",
+      "campo": "descricao",
+      "de": "em falha, sofre 2d6 de dano de veneno e fica com −2 em testes físicos até o fim do próximo turno dele.",
+      "para": "em falha, sofre 2d6 de dano de veneno e fica com −2 em testes físicos até o fim do próximo turno dele; em sucesso, sofre metade do dano."
+    },
+    {
+      "achado": "Ácido Corrosivo: dano com teste e metade no sucesso (questionário 8A)",
+      "classe": "alquimista",
+      "no": "acido-corrosivo",
+      "campo": "descricao",
+      "de": "Acerta uma criatura ou um objeto a até 12 m com 2d6 de dano de ácido, ignorando 5 de Resistência. Em falha no teste de Reflexos, a armadura ou a arma que o alvo estiver usando perde 1 de bônus até alguém consertar.",
+      "para": "Arremesse numa criatura ou num objeto a até 12 m. A criatura testa Reflexos contra a sua DT de Alquimista: em falha, sofre 2d6 de dano de ácido, ignorando 5 de Resistência, e a armadura ou a arma que estiver usando perde 1 de bônus até alguém consertar; em sucesso, sofre metade do dano. Um objeto que ninguém segura sofre o dano inteiro."
+    },
+    {
+      "achado": "Avanço: tipo de dano e metade no sucesso (questionário 8A)",
+      "classe": "campeao-dimensional",
+      "no": "avanco",
+      "campo": "descricao",
+      "de": "criaturas no caminho testam Reflexos contra a DT do Campeão Dimensional ou sofrem 1d10 e são empurradas 1,5 m.",
+      "para": "criaturas no caminho testam Reflexos contra a DT do Campeão Dimensional: em falha, sofrem 1d10 de dano de impacto e são empurradas 1,5 m; em sucesso, sofrem metade e não são empurradas."
+    },
+    {
+      "achado": "Avanço: tipo de dano no campo",
+      "classe": "campeao-dimensional",
+      "no": "avanco",
+      "campo": "dano",
+      "de": "1d10",
+      "para": "1d10 de impacto"
+    },
+    {
+      "achado": "Venenos e Reagentes: toda aflição começa no estágio 1",
+      "classe": "comerciante",
+      "no": "venenos-e-reagentes",
+      "campo": "escalonamento",
+      "de": "Nível 4: aflição rara, com o estágio inicial mais alto.",
+      "para": "Nível 4: aflição rara."
+    }
+  ]
+}

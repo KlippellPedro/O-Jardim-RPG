@@ -78,6 +78,7 @@ export const CONDICOES_OFICIAIS: ICondicaoRegra[] = [
   { id: 'apressado', titulo: 'Apressado', categoria: 'combate', positiva: true, duracao: '3 rodadas.', efeitos: ['Movimento +3 m.', 'Iniciativa +2.', 'Não acumula consigo mesmo.'], remocao: 'Termina ao fim da duração.' },
   { id: 'revigorado', titulo: 'Revigorado', categoria: 'física', positiva: true, duracao: '3 rodadas.', efeitos: ['No começo do seu turno, recupere 1d4 de Vida.', 'Não acumula consigo mesmo.'], remocao: 'Termina ao fim da duração.' },
   { id: 'invisivel', titulo: 'Invisível', categoria: 'combate', positiva: true, duracao: 'Conforme a fonte.', efeitos: ['Quem não consegue ver você ataca com desvantagem, e os seus ataques contra essa criatura têm vantagem.', 'Você pode tentar se esconder mesmo sem cobertura.', 'Não acumula consigo mesma.'], remocao: 'Termina ao fim da duração da fonte, ao ficar Revelado ou quando a fonte disser que acaba, como ao atacar.' },
+  { id: 'incorporeo', titulo: 'Incorpóreo', categoria: 'combate', positiva: true, duracao: 'Conforme a fonte.', efeitos: ['Atravessa criaturas e objetos, mas não pode terminar o movimento dentro deles.', 'Não pode ser agarrado, derrubado nem empurrado.', 'Sofre metade do dano físico que não venha de magia nem de arma mágica. Um efeito que diga que atinge incorpóreos ignora essa metade.', 'Não acumula consigo mesmo.'], remocao: 'Termina ao fim da duração da fonte. Uma criatura que é incorpórea por natureza fica assim para sempre.' },
 ];
 
 export const CRISES_SANIDADE: ICondicaoRegra[] = [

@@ -16,6 +16,8 @@ interface StatusVitaisSectionProps {
   /** Extra acima do máximo (vida, mana, estamina, sanidade). */
   temporario?: { vida: number; mana: number; estamina: number; sanidade: number };
   onLimparTemporario?: (campo: string) => void;
+  /** Ganhar extra temporário de um efeito (soma com o que já havia). */
+  onGanharTemporario?: (campo: string, valor: number) => void;
   onSanidadeMaximaChange: (maximo: number) => void;
   onOpenInfo: (modal: any) => void;
   onOpenAdjust: (
@@ -34,6 +36,7 @@ export function StatusVitaisSection({
   onStatusChange,
   temporario = { vida: 0, mana: 0, estamina: 0, sanidade: 0 },
   onLimparTemporario,
+  onGanharTemporario,
   onSanidadeMaximaChange,
   onOpenInfo,
   onOpenAdjust,
@@ -79,6 +82,7 @@ export function StatusVitaisSection({
           max={maximo.vida}
           temporario={temporario.vida}
           onLimparTemporario={onLimparTemporario ? () => onLimparTemporario('vidaAtual') : undefined}
+          onGanharTemporario={onGanharTemporario ? (valor: number) => onGanharTemporario('vidaAtual', valor) : undefined}
           onAdd={(valor: number) => onStatusChange('vidaAtual', valor, maximo.vida)}
           onSub={(valor: number, ignorarTemporario?: boolean) => onStatusChange('vidaAtual', -valor, maximo.vida, ignorarTemporario)}
           onAdjustClick={() => onOpenAdjust(chaveAjuste('recurso', 'vidaMaxima'), 'Vida máxima', composicao.vida.automaticos)}
@@ -92,6 +96,7 @@ export function StatusVitaisSection({
           max={maximo.mana}
           temporario={temporario.mana}
           onLimparTemporario={onLimparTemporario ? () => onLimparTemporario('manaAtual') : undefined}
+          onGanharTemporario={onGanharTemporario ? (valor: number) => onGanharTemporario('manaAtual', valor) : undefined}
           onAdd={(valor: number) => onStatusChange('manaAtual', valor, maximo.mana)}
           onSub={(valor: number, ignorarTemporario?: boolean) => onStatusChange('manaAtual', -valor, maximo.mana, ignorarTemporario)}
           onAdjustClick={() => onOpenAdjust(chaveAjuste('recurso', 'manaMaxima'), 'Mana máxima', composicao.mana.automaticos)}
@@ -104,6 +109,7 @@ export function StatusVitaisSection({
           max={maximo.estamina}
           temporario={temporario.estamina}
           onLimparTemporario={onLimparTemporario ? () => onLimparTemporario('estaminaAtual') : undefined}
+          onGanharTemporario={onGanharTemporario ? (valor: number) => onGanharTemporario('estaminaAtual', valor) : undefined}
           onAdd={(valor: number) => onStatusChange('estaminaAtual', valor, maximo.estamina)}
           onSub={(valor: number, ignorarTemporario?: boolean) => onStatusChange('estaminaAtual', -valor, maximo.estamina, ignorarTemporario)}
           onAdjustClick={() => onOpenAdjust(chaveAjuste('recurso', 'estaminaMaxima'), 'Estamina máxima', composicao.estamina.automaticos)}
@@ -117,6 +123,7 @@ export function StatusVitaisSection({
           max={maximo.sanidade}
           temporario={temporario.sanidade}
           onLimparTemporario={onLimparTemporario ? () => onLimparTemporario('sanidadeAtual') : undefined}
+          onGanharTemporario={onGanharTemporario ? (valor: number) => onGanharTemporario('sanidadeAtual', valor) : undefined}
           onAdd={(valor: number) => onStatusChange('sanidadeAtual', valor, maximo.sanidade)}
           onSub={(valor: number, ignorarTemporario?: boolean) => onStatusChange('sanidadeAtual', -valor, maximo.sanidade, ignorarTemporario)}
           onMaxChange={onSanidadeMaximaChange}

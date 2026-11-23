@@ -1,0 +1,474 @@
+{
+ "correcoes": [
+  {
+   "achado": "[INCOERÊNCIA] pilar-da-dimensao · acao × descricao",
+   "classe": "campeao-dimensional",
+   "no": "pilar-da-dimensao",
+   "campo": "descricao",
+   "de": "ative esta habilidade sem gastar ação",
+   "para": "use uma Ação Livre para ativar esta habilidade"
+  },
+  {
+   "achado": "[MELHORIA] pilar-da-dimensao · redução",
+   "classe": "campeao-dimensional",
+   "no": "pilar-da-dimensao",
+   "campo": "descricao",
+   "de": "reduz em 10 o dano de cada golpe que sofre",
+   "para": "reduz em 10 o dano de cada golpe que sofre, depois da Resistência (não vale contra dano verdadeiro)"
+  },
+  {
+   "achado": "[MELHORIA] carne-de-diamante · ordem",
+   "classe": "campeao-dimensional",
+   "no": "carne-de-diamante",
+   "campo": "descricao",
+   "de": "antes de aplicar Resistência",
+   "para": "depois de dobrar por vulnerabilidade e antes da Resistência"
+  },
+  {
+   "achado": "[MELHORIA] soco · Resistência",
+   "classe": "campeao-dimensional",
+   "no": "soco",
+   "campo": "descricao",
+   "de": "ignora 8 de Resistência",
+   "para": "ignora 8 de Resistência do alvo ao tipo de dano do ataque"
+  },
+  {
+   "achado": "[MELHORIA] trono-da-dimensao · Resistência",
+   "classe": "campeao-dimensional",
+   "no": "trono-da-dimensao",
+   "campo": "descricao",
+   "de": "ignoram 10 de Resistência",
+   "para": "ignoram 10 de Resistência a dano físico"
+  },
+  {
+   "achado": "[MELHORIA] impacto · momento",
+   "classe": "campeao-dimensional",
+   "no": "impacto",
+   "campo": "momento",
+   "de": "no momento do ataque",
+   "para": "antes do ataque"
+  },
+  {
+   "achado": "[MELHORIA] punho · momento",
+   "classe": "campeao-dimensional",
+   "no": "punho",
+   "campo": "momento",
+   "de": "no momento do ataque",
+   "para": "antes do ataque"
+  },
+  {
+   "achado": "[LACUNA] garras-do-abismo · tipo",
+   "classe": "pirata-amaldicoado",
+   "no": "garras-do-abismo",
+   "campo": "descricao",
+   "de": "causa +1d10 de dano.",
+   "para": "causa +1d10 de dano do mesmo tipo do ataque."
+  },
+  {
+   "achado": "[MELHORIA] corpo-encharcado",
+   "classe": "pirata-amaldicoado",
+   "no": "corpo-encharcado",
+   "campo": "descricao",
+   "de": "reduza em 5 cada dano que sofrer",
+   "para": "reduza em 5 cada dano que sofrer, depois da Resistência (não vale contra dano verdadeiro)"
+  },
+  {
+   "achado": "[MELHORIA] mare-que-corta · Exposto",
+   "classe": "pirata-amaldicoado",
+   "no": "maldicao-dos-sete-mares@5",
+   "campo": "descricao",
+   "de": "O alvo também sofre −2 de Defesa até o seu próximo turno. Usar este efeito novamente apenas renova a duração.",
+   "para": "O alvo também fica Exposto até o seu próximo turno."
+  },
+  {
+   "achado": "[MELHORIA] sangue-gelado · grafia",
+   "classe": "pirata-amaldicoado",
+   "no": "sangue-gelado",
+   "campo": "descricao",
+   "de": "dano de frio e de gelo",
+   "para": "dano de Frio e de Gelo"
+  },
+  {
+   "achado": "[MELHORIA] sangue-gelado · grafia",
+   "classe": "pirata-amaldicoado",
+   "no": "sangue-gelado",
+   "campo": "escalonamento",
+   "de": "frio e gelo não reduzem",
+   "para": "Frio e Gelo não reduzem"
+  },
+  {
+   "achado": "[MELHORIA] sangue-gelado · grafia",
+   "classe": "pirata-amaldicoado",
+   "no": "sangue-gelado",
+   "campo": "escalonamento",
+   "de": "imune a dano de frio e de gelo",
+   "para": "imune a dano de Frio e de Gelo"
+  },
+  {
+   "achado": "[MELHORIA] sangue-de-enguia · grafia",
+   "classe": "pirata-amaldicoado",
+   "no": "sangue-de-enguia",
+   "campo": "descricao",
+   "de": "dano de raio",
+   "para": "dano de Raio"
+  },
+  {
+   "achado": "[MELHORIA] sangue-de-enguia · grafia",
+   "classe": "pirata-amaldicoado",
+   "no": "sangue-de-enguia",
+   "campo": "escalonamento",
+   "de": "1d6 de dano de raio",
+   "para": "1d6 de dano de Raio"
+  },
+  {
+   "achado": "[INCOERÊNCIA] dados-viciados · desastre",
+   "classe": "cartista-arcano",
+   "no": "dados-viciados",
+   "campo": "descricao",
+   "de": "deixa de ser crítico ou desastre",
+   "para": "deixa de ser sucesso crítico ou falha crítica"
+  },
+  {
+   "achado": "[INCOERÊNCIA] arcano-absoluto · ação",
+   "classe": "cartista-arcano",
+   "no": "arcano-absoluto",
+   "campo": "descricao",
+   "de": "ative esta habilidade sem gastar ação",
+   "para": "use uma Ação Livre para ativar esta habilidade"
+  },
+  {
+   "achado": "[LACUNA] cartas-afiadas · ação",
+   "classe": "cartista-arcano",
+   "no": "cartas-afiadas",
+   "campo": "descricao",
+   "de": "ataque de Pontaria, alcance de 9 m, dano de Corte, crítico no 20",
+   "para": "ataque de Pontaria com Ação Padrão, alcance de 9 m, dano de corte, crítico 20/x2"
+  },
+  {
+   "achado": "[MELHORIA] naipes · duração",
+   "classe": "cartista-arcano",
+   "no": "espadas",
+   "campo": "duracao",
+   "de": "Este combate",
+   "para": "Uma cena"
+  },
+  {
+   "achado": "[MELHORIA] naipes · duração",
+   "classe": "cartista-arcano",
+   "no": "copas",
+   "campo": "duracao",
+   "de": "Este combate",
+   "para": "Uma cena"
+  },
+  {
+   "achado": "[MELHORIA] naipes · duração",
+   "classe": "cartista-arcano",
+   "no": "ouros",
+   "campo": "duracao",
+   "de": "Este combate",
+   "para": "Uma cena"
+  },
+  {
+   "achado": "[MELHORIA] naipes · duração",
+   "classe": "cartista-arcano",
+   "no": "paus",
+   "campo": "duracao",
+   "de": "Este combate",
+   "para": "Uma cena"
+  },
+  {
+   "achado": "[MELHORIA] paus · Fogo",
+   "classe": "cartista-arcano",
+   "no": "paus",
+   "campo": "dano",
+   "de": "+1d4 de fogo",
+   "para": "+1d4 de Fogo"
+  },
+  {
+   "achado": "[MELHORIA] paus · Fogo",
+   "classe": "cartista-arcano",
+   "no": "paus",
+   "campo": "descricao",
+   "de": "+1d4 de fogo",
+   "para": "+1d4 de Fogo"
+  },
+  {
+   "achado": "[LACUNA] morte · 10%",
+   "classe": "cartista-arcano",
+   "no": "morte",
+   "campo": "descricao",
+   "de": "abaixo de 10% da Vida,",
+   "para": "abaixo de 10% da Vida máxima,"
+  },
+  {
+   "achado": "[LACUNA] o-sol · acerto",
+   "classe": "cartista-arcano",
+   "no": "o-sol",
+   "campo": "descricao",
+   "de": "Uma carta deixa o alvo Queimando.",
+   "para": "Se a carta acertar, o alvo fica Queimando."
+  },
+  {
+   "achado": "[MELHORIA] o-sol · Fogo",
+   "classe": "cartista-arcano",
+   "no": "o-sol",
+   "campo": "descricao",
+   "de": "+1d4 de fogo",
+   "para": "+1d4 de Fogo"
+  },
+  {
+   "achado": "[INCOERÊNCIA] atalho-coletivo · turno",
+   "classe": "guia-dimensional",
+   "no": "atalho-coletivo",
+   "campo": "descricao",
+   "de": "ganham +6 m de Movimento neste turno sem provocar reações de movimento",
+   "para": "ganham +6 m de Movimento até o fim do próximo turno de cada um, sem provocar reação"
+  },
+  {
+   "achado": "[INCOERÊNCIA] atalho-coletivo · duração",
+   "classe": "guia-dimensional",
+   "no": "atalho-coletivo",
+   "campo": "duracao",
+   "de": "Este turno",
+   "para": "Até o próximo turno de cada um"
+  },
+  {
+   "achado": "[INCOERÊNCIA] ancora-compartilhada",
+   "classe": "guia-dimensional",
+   "no": "ancora-compartilhada",
+   "campo": "descricao",
+   "de": "como destino das suas próprias passagens, como se fosse dele",
+   "para": "como destino das passagens que o Guia abrir para levá-lo"
+  },
+  {
+   "achado": "[MELHORIA] dobra-esmagadora · queda",
+   "classe": "guia-dimensional",
+   "no": "dobra-esmagadora",
+   "campo": "descricao",
+   "de": "cai, sofre 2d6 de dano de impacto",
+   "para": "cai e, em vez do dano de queda, sofre 2d6 de dano de impacto"
+  },
+  {
+   "achado": "[MELHORIA] mapa-vivo · ação",
+   "classe": "guia-dimensional",
+   "no": "mapa-vivo",
+   "campo": "acao",
+   "de": "Ação Livre",
+   "para": "Fora de combate"
+  },
+  {
+   "achado": "[INCOERÊNCIA] pagina-rasgada · desastres",
+   "classe": "escritor-de-contos",
+   "no": "pagina-rasgada",
+   "campo": "descricao",
+   "de": "Críticos e desastres também podem mudar.",
+   "para": "Sucessos críticos e falhas críticas também podem mudar."
+  },
+  {
+   "achado": "[INCOERÊNCIA] prenuncio · defesa",
+   "classe": "escritor-de-contos",
+   "no": "prenuncio",
+   "campo": "descricao",
+   "de": "Escolha ataque, defesa ou perícia",
+   "para": "Escolha ataque, resistência (Fortitude, Reflexos ou Vontade) ou perícia"
+  },
+  {
+   "achado": "[INCOERÊNCIA] ultimo-capitulo · fora de combate",
+   "classe": "escritor-de-contos",
+   "no": "ultimo-capitulo",
+   "campo": "descricao",
+   "de": "Fora de combate, ainda falta escrever o seu conto mais importante. Quando a história pedir, escreva",
+   "para": "Fora de combate, quando a história pedir, ainda falta escrever o seu conto mais importante. Escreva"
+  },
+  {
+   "achado": "[LACUNA] curandeiro",
+   "classe": "escritor-de-contos",
+   "no": "curandeiro",
+   "campo": "descricao",
+   "de": "Estabiliza ou cura um aliado fora de combate.",
+   "para": "Estabiliza um aliado Morrendo ou o trata fora de combate, como em Tratar ferimentos (Ferimentos)."
+  },
+  {
+   "achado": "[MELHORIA] revisao · relacionado",
+   "classe": "escritor-de-contos",
+   "no": "tinta-carmesim@10",
+   "campo": "descricao",
+   "de": "ao falhar num teste relacionado",
+   "para": "ao falhar num teste coberto por um dos seus Motivos"
+  },
+  {
+   "achado": "[ERRO] carona · ação",
+   "classe": "viajante-classe",
+   "no": "carona",
+   "campo": "acao",
+   "de": "Ação Padrão",
+   "para": "Fora de combate"
+  },
+  {
+   "achado": "[ERRO] carona · momento",
+   "classe": "viajante-classe",
+   "no": "carona",
+   "campo": "momento",
+   "de": null,
+   "para": "no fim do dia de viagem"
+  },
+  {
+   "achado": "[ERRO] carona · texto",
+   "classe": "viajante-classe",
+   "no": "carona",
+   "campo": "descricao",
+   "de": "Até três aliados acompanham seu deslocamento de viagem sem sofrer a primeira penalidade de ritmo acelerado (Transporte, nas Regras).",
+   "para": "Até três aliados que viajam com você dispensam o teste de Fortitude do ritmo Forçado (Viagem) no fim do dia."
+  },
+  {
+   "achado": "[INCOERÊNCIA] conversa-de-estrada · ação",
+   "classe": "viajante-classe",
+   "no": "conversa-de-estrada",
+   "campo": "acao",
+   "de": "Ação Livre",
+   "para": "Fora de combate"
+  },
+  {
+   "achado": "[INCOERÊNCIA] conversa-de-estrada · momento",
+   "classe": "viajante-classe",
+   "no": "conversa-de-estrada",
+   "campo": "momento",
+   "de": null,
+   "para": "um minuto"
+  },
+  {
+   "achado": "[INCOERÊNCIA] historia-de-taverna · ação",
+   "classe": "viajante-classe",
+   "no": "historia-de-taverna",
+   "campo": "acao",
+   "de": "Ação Livre",
+   "para": "Fora de combate"
+  },
+  {
+   "achado": "[INCOERÊNCIA] historia-de-taverna · momento",
+   "classe": "viajante-classe",
+   "no": "historia-de-taverna",
+   "campo": "momento",
+   "de": null,
+   "para": "durante a conversa"
+  },
+  {
+   "achado": "[INCOERÊNCIA] travessia-livre · selos",
+   "classe": "viajante-classe",
+   "no": "passaporte-entre-mundos@20",
+   "campo": "descricao",
+   "de": "não ignora selos divinos nem chega a local desconhecido",
+   "para": "não atravessa uma Fronteira selada nem chega a um lugar desconhecido"
+  },
+  {
+   "achado": "[LACUNA] pele-de-estrada · grafia",
+   "classe": "viajante-classe",
+   "no": "passaporte-entre-mundos@15",
+   "campo": "descricao",
+   "de": "Resistência 5 a frio e a calor",
+   "para": "Resistência 5 a dano de Frio e de Calor"
+  },
+  {
+   "achado": "[LACUNA] horizonte-aberto · confinamento",
+   "classe": "viajante-classe",
+   "no": "horizonte-aberto",
+   "campo": "descricao",
+   "de": "vantagem em testes de Sobrevivência para não se perderem e contra efeitos de confinamento",
+   "para": "vantagem em Sobrevivência para não se perderem e em Vontade contra Claustrofobia"
+  },
+  {
+   "achado": "[MELHORIA] farejar-perigo · DT",
+   "classe": "viajante-classe",
+   "no": "farejar-perigo",
+   "campo": "descricao",
+   "de": "um teste de Sobrevivência revela",
+   "para": "um teste de Sobrevivência contra a DT Padrão do nível do lugar revela"
+  },
+  {
+   "achado": "[MELHORIA] mapa-rabiscado",
+   "classe": "viajante-classe",
+   "no": "mapa-rabiscado",
+   "campo": "descricao",
+   "de": "e marque uma rota de retorno.",
+   "para": "e marque uma rota de retorno. Com o mapa, a volta não pede teste (Viagem)."
+  },
+  {
+   "achado": "[MELHORIA] refugio-de-emergencia",
+   "classe": "viajante-classe",
+   "no": "passaporte-entre-mundos@10",
+   "campo": "descricao",
+   "de": "encontre abrigo seguro para um descanso curto",
+   "para": "encontre um abrigo de verdade para um descanso curto (Relaxar)"
+  },
+  {
+   "achado": "[MELHORIA] mochila-impossivel",
+   "classe": "viajante-classe",
+   "no": "mochila-impossivel",
+   "campo": "descricao",
+   "de": "Carregue cinco espaços adicionais de itens comuns; a mochila não altera peso de objetos enormes.",
+   "para": "Sua capacidade de carga aumenta em 5 espaços, para itens comuns. Não vale para objetos enormes."
+  }
+ ],
+ "pulados": [
+  {
+   "achado": "[INCOERÊNCIA] progressao · grau_pericia quantidade 2 (todas as classes)",
+   "motivo": "É de propósito."
+  },
+  {
+   "achado": "[LACUNA] avanco · tipo, metade, provocar reação",
+   "motivo": "Acrescenta metade no sucesso e dispensa de reação, que o texto não tinha."
+  },
+  {
+   "achado": "[LACUNA] pisada/avanco/impacto, ancora-maldita/mare-profana, ouros · limite de tamanho",
+   "motivo": "Acrescenta um limite que o texto não tinha."
+  },
+  {
+   "achado": "[LACUNA] numero-1 · Cansaço",
+   "motivo": "A reescrita muda o alcance do benefício."
+  },
+  {
+   "achado": "[LACUNA] presas-do-fundo · Mod. Força",
+   "motivo": "Acrescenta um número ao dano."
+  },
+  {
+   "achado": "[INCOERÊNCIA] evolucao-abissal · campos × escalonamento",
+   "motivo": "Mexe em campos estruturados de várias opções; a sessão principal decide."
+  },
+  {
+   "achado": "[MELHORIA] capitao-dos-condenados · Exposto",
+   "motivo": "Exposto dura menos que as duas rodadas do poder."
+  },
+  {
+   "achado": "[MELHORIA] furia-da-mare · nome",
+   "motivo": "Exige inventar um nome novo."
+  },
+  {
+   "achado": "[LACUNA] ancora-de-emergencia",
+   "motivo": "Depende de Déficit, Morrendo e 'fica com 1 de Vida'."
+  },
+  {
+   "achado": "[LACUNA] selar-portal · DT 20",
+   "motivo": "Troca o número da DT."
+  },
+  {
+   "achado": "[MELHORIA] janela-remota/corredor-da-matriz",
+   "motivo": "Acrescenta concentração e restrição de quem atravessa."
+  },
+  {
+   "achado": "[MELHORIA] ancora-de-retorno · nome",
+   "motivo": "Exige inventar um título novo."
+  },
+  {
+   "achado": "[MELHORIA] mago/mesa-posta/arcano-absoluto · reduções",
+   "motivo": "Reduções de custo que somam: regra geral que o Livro não tem."
+  },
+  {
+   "achado": "[MELHORIA] morte/o-sol · momento",
+   "motivo": "Mantido como está."
+  },
+  {
+   "achado": "[MELHORIA] revisao/pressagio/primeira-linha · limites",
+   "motivo": "Presságio e Primeira Linha acrescentam limite de uso ou reestruturam o campo."
+  }
+ ]
+}

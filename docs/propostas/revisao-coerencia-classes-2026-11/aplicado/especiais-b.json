@@ -1,0 +1,482 @@
+{
+ "correcoes": [
+  {
+   "achado": "[MELHORIA] zanpakuto · estágio 15 · duração em cena",
+   "classe": "cacador-das-almas",
+   "no": "zanpakuto@15",
+   "campo": "descricao",
+   "de": "sua duração passa a ser até o fim do combate",
+   "para": "sua duração passa a ser até o fim da cena"
+  },
+  {
+   "achado": "[MELHORIA] zanpakuto · estágio 15 · duração em cena",
+   "classe": "cacador-das-almas",
+   "no": "zanpakuto@15",
+   "campo": "duracao",
+   "de": "Até o fim do combate",
+   "para": "Até o fim da cena"
+  },
+  {
+   "achado": "[MELHORIA] ressonancia · até o fim da cena",
+   "classe": "cacador-das-almas",
+   "no": "ressonancia",
+   "campo": "descricao",
+   "de": "até o fim do combate",
+   "para": "até o fim da cena"
+  },
+  {
+   "achado": "[MELHORIA] fardo · até o fim da cena",
+   "classe": "cacador-das-almas",
+   "no": "fardo",
+   "campo": "escalonamento",
+   "de": "ou até o fim do combate",
+   "para": "ou até o fim da cena"
+  },
+  {
+   "achado": "[MELHORIA] cinzas-do-fim · até o fim da cena",
+   "classe": "cacador-das-almas",
+   "no": "cinzas-do-fim",
+   "campo": "escalonamento",
+   "de": "até o fim do combate",
+   "para": "até o fim da cena"
+  },
+  {
+   "achado": "[LACUNA] veneno · Shikai",
+   "classe": "cacador-das-almas",
+   "no": "veneno",
+   "campo": "descricao",
+   "de": "o alvo fica Envenenado.",
+   "para": "o alvo fica Envenenado (1d6 de dano de veneno no fim do turno dele)."
+  },
+  {
+   "achado": "[LACUNA] veneno · Bankai",
+   "classe": "cacador-das-almas",
+   "no": "veneno",
+   "campo": "escalonamento",
+   "de": "só com cura ou no fim do combate",
+   "para": "só com Antídoto, com Cura contra a DT Padrão do nível do Caçador das Almas ou no fim da cena"
+  },
+  {
+   "achado": "[MELHORIA] bankai · neste combate",
+   "classe": "cacador-das-almas",
+   "no": "bankai",
+   "campo": "descricao",
+   "de": "neste combate",
+   "para": "nesta cena"
+  },
+  {
+   "achado": "[INCOERÊNCIA] incendio · Shikai",
+   "classe": "cacador-das-almas",
+   "no": "incendio",
+   "campo": "descricao",
+   "de": "envolve o alvo em chamas espirituais, e ele fica Queimando.",
+   "para": "deixa o alvo Queimando, com chamas vindas da lâmina."
+  },
+  {
+   "achado": "[INCOERÊNCIA] incendio · Bankai",
+   "classe": "cacador-das-almas",
+   "no": "incendio",
+   "campo": "escalonamento",
+   "de": "as chamas causam 1d10 por turno, no lugar de 1d6, e se espalham para uma segunda criatura adjacente ao alvo quando ele é atingido.",
+   "para": "a condição Queimando causa 1d10 de dano de Fogo por turno, no lugar de 1d6. Quando você acerta o alvo com a Zanpakutō, uma segunda criatura adjacente a ele também fica Queimando."
+  },
+  {
+   "achado": "[LACUNA] ala-glacial · Shikai",
+   "classe": "cacador-das-almas",
+   "no": "ala-glacial",
+   "campo": "descricao",
+   "de": "ou até gastar uma ação para quebrar o gelo",
+   "para": "ou até gastar uma Ação Padrão e passar em Atletismo ou Acrobacia contra a DT do Caçador das Almas para quebrar o gelo"
+  },
+  {
+   "achado": "[LACUNA] ala-glacial · Bankai",
+   "classe": "cacador-das-almas",
+   "no": "ala-glacial",
+   "campo": "escalonamento",
+   "de": "você ganha asas de gelo e uma velocidade de voo igual ao seu deslocamento; em falha, o alvo também sofre 2d6 de dano de gelo ao ficar imobilizado.",
+   "para": "você ganha asas de gelo e voa com o seu Movimento; em falha, o alvo também sofre 2d6 de dano de Gelo ao ficar Imobilizado."
+  },
+  {
+   "achado": "[LACUNA] hakuda",
+   "classe": "cacador-das-almas",
+   "no": "hakuda",
+   "campo": "descricao",
+   "de": "1d8 de dano físico ou de Essência",
+   "para": "1d8 de impacto ou de Essência"
+  },
+  {
+   "achado": "[MELHORIA] pele-vazia",
+   "classe": "cacador-das-almas",
+   "no": "pele-vazia",
+   "campo": "descricao",
+   "de": "reduza o dano do ataque à metade",
+   "para": "reduza o dano do ataque à metade, depois da Resistência,"
+  },
+  {
+   "achado": "[MELHORIA] hado-raio-branco · nível 10",
+   "classe": "cacador-das-almas",
+   "no": "hado-raio-branco",
+   "campo": "descricao",
+   "de": "A partir do nível 10, você pode",
+   "para": "A partir do nível 10 de Caçador das Almas, você pode"
+  },
+  {
+   "achado": "[MELHORIA] hado-raio-branco · nível 10 (dano)",
+   "classe": "cacador-das-almas",
+   "no": "hado-raio-branco",
+   "campo": "dano",
+   "de": "a partir do nível 10)",
+   "para": "a partir do nível 10 de Caçador das Almas)"
+  },
+  {
+   "achado": "[MELHORIA] kido-de-cura · nível 10",
+   "classe": "cacador-das-almas",
+   "no": "kido-de-cura",
+   "campo": "descricao",
+   "de": "A partir do nível 10, você pode",
+   "para": "A partir do nível 10 de Caçador das Almas, você pode"
+  },
+  {
+   "achado": "[MELHORIA] corrente-do-destino",
+   "classe": "cacador-das-almas",
+   "no": "corrente-do-destino",
+   "campo": "descricao",
+   "de": "receba vantagem para rastrear",
+   "para": "receba vantagem em Sobrevivência para rastrear"
+  },
+  {
+   "achado": "[MELHORIA] zanpakuto · estágio 1 · acao",
+   "classe": "cacador-das-almas",
+   "no": "zanpakuto@1",
+   "campo": "descricao",
+   "de": "vincule uma arma corpo a corpo à sua alma.",
+   "para": "vincule uma arma corpo a corpo à sua alma (Fora de combate)."
+  },
+  {
+   "achado": "[LACUNA] dt_efeitos (Caçador)",
+   "classe": "cacador-das-almas",
+   "no": "dt_efeitos",
+   "campo": "descricao",
+   "de": "O resultado da sua rolagem é a DT que o alvo precisa alcançar.",
+   "para": "O resultado da sua rolagem é a DT que o alvo precisa alcançar. É uma rolagem por acionamento, e ela vale para todos os alvos atingidos ali."
+  },
+  {
+   "achado": "[INCOERÊNCIA] broto-curador · nível 3",
+   "classe": "invocador",
+   "no": "broto-curador",
+   "campo": "escalonamento",
+   "de": "a vantagem passa a valer também contra ficar Amedrontado por efeito mágico",
+   "para": "a vantagem passa a valer também em testes de Vontade contra ficar Amedrontado por efeito mágico"
+  },
+  {
+   "achado": "[MELHORIA] fera · nível 4",
+   "classe": "invocador",
+   "no": "fera",
+   "campo": "escalonamento",
+   "de": "em cada combate",
+   "para": "em cada cena"
+  },
+  {
+   "achado": "[LACUNA] sopro-restaurador",
+   "classe": "invocador",
+   "no": "sopro-restaurador",
+   "campo": "descricao",
+   "de": "A invocação cura 2d8",
+   "para": "Uma invocação sua em cena cura 2d8"
+  },
+  {
+   "achado": "[MELHORIA] casca-guardia",
+   "classe": "invocador",
+   "no": "casca-guardia",
+   "campo": "descricao",
+   "de": "aliados adjacentes à invocação reduzem em 5 o dano de cada golpe que sofrerem",
+   "para": "aliados adjacentes a uma invocação sua, à sua escolha, reduzem em 5 o dano de cada golpe que sofrerem, depois da Resistência"
+  },
+  {
+   "achado": "[MELHORIA] investida-bestial",
+   "classe": "invocador",
+   "no": "investida-bestial",
+   "campo": "descricao",
+   "de": "A invocação move até 9 m",
+   "para": "Uma invocação sua move até 9 m"
+  },
+  {
+   "achado": "[LACUNA] convergencia-primordial",
+   "classe": "invocador",
+   "no": "convergencia-primordial",
+   "campo": "descricao",
+   "de": "+2 dados a mais do que o normal",
+   "para": "+2 dados a mais do que o normal, do mesmo tipo do que ela já usa"
+  },
+  {
+   "achado": "[MELHORIA] pacto-de-genese · estágio 1 · Defesa",
+   "classe": "invocador",
+   "no": "pacto-de-genese@1",
+   "campo": "descricao",
+   "de": "(Vida, Defesa, Movimento e uma habilidade).",
+   "para": "(Vida, Defesa, Movimento e uma habilidade). A Defesa acompanha o seu nível total, como o Catálogo de Invocações explica."
+  },
+  {
+   "achado": "[MELHORIA] Colosso de Ferro · Resistência física",
+   "classe": "invocador",
+   "no": "Colosso de Ferro I",
+   "campo": "nota",
+   "de": "Resistência 2 a dano físico",
+   "para": "Resistência física 2"
+  },
+  {
+   "achado": "[MELHORIA] Colosso de Ferro · Resistência física",
+   "classe": "invocador",
+   "no": "Colosso de Ferro II",
+   "campo": "nota",
+   "de": "Resistência 4 a dano físico",
+   "para": "Resistência física 4"
+  },
+  {
+   "achado": "[MELHORIA] Colosso de Ferro · Resistência física",
+   "classe": "invocador",
+   "no": "Colosso de Ferro III",
+   "campo": "nota",
+   "de": "Resistência 6 a dano físico",
+   "para": "Resistência física 6"
+  },
+  {
+   "achado": "[MELHORIA] Colosso de Ferro · Resistência física",
+   "classe": "invocador",
+   "no": "Colosso de Ferro IV",
+   "campo": "nota",
+   "de": "Resistência 8 a dano físico",
+   "para": "Resistência física 8"
+  },
+  {
+   "achado": "[MELHORIA] Colosso de Ferro · Resistência física",
+   "classe": "invocador",
+   "no": "Colosso de Ferro V",
+   "campo": "nota",
+   "de": "Resistência 10 a dano físico",
+   "para": "Resistência física 10"
+  },
+  {
+   "achado": "[LACUNA] dt_efeitos (Invocador)",
+   "classe": "invocador",
+   "no": "dt_efeitos",
+   "campo": "descricao",
+   "de": "O resultado da sua rolagem é a DT que o alvo precisa alcançar.",
+   "para": "O resultado da sua rolagem é a DT que o alvo precisa alcançar. É uma rolagem por acionamento, e ela vale para todos os alvos atingidos ali."
+  },
+  {
+   "achado": "[LACUNA] fome-voraz",
+   "classe": "devorador",
+   "no": "fome-voraz",
+   "campo": "descricao",
+   "de": "Ao devorar uma vítima com sucesso, recupere",
+   "para": "Ao terminar de devorar uma vítima, recupere"
+  },
+  {
+   "achado": "[LACUNA] mandibula-reforcada",
+   "classe": "devorador",
+   "no": "mandibula-reforcada",
+   "campo": "descricao",
+   "de": "causa 1d8, no lugar",
+   "para": "causa 1d8 de impacto + Mod. Força, no lugar"
+  },
+  {
+   "achado": "[MELHORIA] metabolismo-acelerado",
+   "classe": "devorador",
+   "no": "metabolismo-acelerado",
+   "campo": "descricao",
+   "de": "Um descanso recupera duas vezes mais Cansaço que o normal.",
+   "para": "Cada descanso completo tira o dobro do Cansaço da tabela."
+  },
+  {
+   "achado": "[MELHORIA] estomago-de-ferro",
+   "classe": "devorador",
+   "no": "estomago-de-ferro",
+   "campo": "descricao",
+   "de": "Você é imune a veneno e doença ingeridos.",
+   "para": "Você é imune às aflições de veneno e doença que chegam por ingestão."
+  },
+  {
+   "achado": "[INCOERÊNCIA] instintos-do-devorador · opções sem acao",
+   "classe": "devorador",
+   "no": "faro-de-sangue",
+   "campo": "acao",
+   "de": null,
+   "para": "Passivo"
+  },
+  {
+   "achado": "[INCOERÊNCIA] instintos-do-devorador · opções sem acao",
+   "classe": "devorador",
+   "no": "mandibula-reforcada",
+   "campo": "acao",
+   "de": null,
+   "para": "Passivo"
+  },
+  {
+   "achado": "[INCOERÊNCIA] instintos-do-devorador · opções sem acao",
+   "classe": "devorador",
+   "no": "Pele Curtida",
+   "campo": "acao",
+   "de": null,
+   "para": "Passivo"
+  },
+  {
+   "achado": "[INCOERÊNCIA] instintos-do-devorador · opções sem acao",
+   "classe": "devorador",
+   "no": "estomago-de-ferro",
+   "campo": "acao",
+   "de": null,
+   "para": "Passivo"
+  },
+  {
+   "achado": "[INCOERÊNCIA] instintos-do-devorador · opções sem acao",
+   "classe": "devorador",
+   "no": "fome-voraz",
+   "campo": "acao",
+   "de": null,
+   "para": "Passivo"
+  },
+  {
+   "achado": "[INCOERÊNCIA] instintos-do-devorador · opções sem acao",
+   "classe": "devorador",
+   "no": "Reflexos de Predador",
+   "campo": "acao",
+   "de": null,
+   "para": "Passivo"
+  },
+  {
+   "achado": "[INCOERÊNCIA] instintos-do-devorador · opções sem acao",
+   "classe": "devorador",
+   "no": "metabolismo-acelerado",
+   "campo": "acao",
+   "de": null,
+   "para": "Passivo"
+  },
+  {
+   "achado": "[INCOERÊNCIA] instintos-do-devorador · opções sem acao",
+   "classe": "devorador",
+   "no": "instinto-de-matilha",
+   "campo": "acao",
+   "de": null,
+   "para": "Passivo"
+  },
+  {
+   "achado": "[INCOERÊNCIA] casca-endurecida · duracao",
+   "classe": "devorador",
+   "no": "casca-endurecida",
+   "campo": "duracao",
+   "de": "Uma rodada",
+   "para": "Um ataque"
+  },
+  {
+   "achado": "[INCOERÊNCIA] casca-endurecida · gatilho",
+   "classe": "devorador",
+   "no": "casca-endurecida",
+   "campo": "descricao",
+   "de": "Receba +3 de Defesa contra um ataque.",
+   "para": "Antes da rolagem de um ataque contra você, receba +3 de Defesa contra esse ataque."
+  },
+  {
+   "achado": "[MELHORIA] regeneracao-de-banquete",
+   "classe": "devorador",
+   "no": "regeneracao-de-banquete",
+   "campo": "descricao",
+   "de": "recupere 2d6 + Mod.Constituição de Vida.",
+   "para": "recupere 2d6 + Mod.Constituição de Vida. Não restaura membro perdido."
+  },
+  {
+   "achado": "[INCOERÊNCIA] ultima-refeicao · acao",
+   "classe": "devorador",
+   "no": "ultima-refeicao",
+   "campo": "acao",
+   "de": "Passivo",
+   "para": "Fora de combate"
+  },
+  {
+   "achado": "[INCOERÊNCIA] ultima-refeicao · momento",
+   "classe": "devorador",
+   "no": "ultima-refeicao",
+   "campo": "momento",
+   "de": null,
+   "para": "antes do descanso completo"
+  },
+  {
+   "achado": "[LACUNA] dt_efeitos (Devorador)",
+   "classe": "devorador",
+   "no": "dt_efeitos",
+   "campo": "descricao",
+   "de": "O resultado da sua rolagem é a DT que o alvo precisa alcançar.",
+   "para": "O resultado da sua rolagem é a DT que o alvo precisa alcançar. É uma rolagem por acionamento, e ela vale para todos os alvos atingidos ali."
+  }
+ ],
+ "pulados": [
+  {
+   "achado": "[INCOERÊNCIA] zanpakuto · estágio 15 · custo_mana 4 em estágio Passivo",
+   "motivo": "campo numérico: o validador não casa o trecho; a sessão principal remove custo_mana do estágio 15 à mão"
+  },
+  {
+   "achado": "grau_pericia quantidade 2 (3 classes)",
+   "motivo": "é de propósito"
+  },
+  {
+   "achado": "[LACUNA] corte-da-lua e opções à distância: perícia do ataque",
+   "motivo": "a decisão Luta ou Pontaria é do Pedro (marcado sim)"
+  },
+  {
+   "achado": "[LACUNA] barreira-escarlate · Shikai",
+   "motivo": "a correção escolhe Luta e Ação Padrão para a rajada; depende da decisão Luta ou Pontaria"
+  },
+  {
+   "achado": "[LACUNA] eco-reverso e Bankai · ignora metade da Resistência",
+   "motivo": "a correção cria regra de que Resistências ou reduções não somam"
+  },
+  {
+   "achado": "[MELHORIA] perfuracao · Bankai",
+   "motivo": "a correção decide que Esquiva conta como bônus de Defesa e cobertura não: benefício novo"
+  },
+  {
+   "achado": "[MELHORIA] konso-funeral-da-alma · Exposto",
+   "motivo": "trocar o −2 contra o próximo ataque por Exposto muda o efeito (vale contra todos os ataques) e a duração"
+  },
+  {
+   "achado": "[MELHORIA] bankai · uso do Shikai",
+   "motivo": "a correção acrescenta um limite de uso novo (gasta o uso do Shikai na cena)"
+  },
+  {
+   "achado": "[LACUNA] formas-vinculadas › guardiao",
+   "motivo": "a correção faz o Guardião gastar a Reação da invocação: limite novo"
+  },
+  {
+   "achado": "[LACUNA] avatar-da-deidade × convergencia-primordial",
+   "motivo": "a correção decide qual vale quando as duas coincidem: regra nova"
+  },
+  {
+   "achado": "[LACUNA] circulo-de-convocacao · Vida temporária",
+   "motivo": "depende da regra geral de Vida temporária e acrescenta limite novo (primeira entrada)"
+  },
+  {
+   "achado": "[LACUNA] olhos-compartilhados",
+   "motivo": "a correção acrescenta alcance (qualquer distância na mesma dimensão): benefício novo"
+  },
+  {
+   "achado": "[LACUNA] ecos-da-ultima-refeicao · a 0 ou menos e dano verdadeiro",
+   "motivo": "depende da regra geral de ficar com 1 de Vida (Déficit, Morrendo, Ferido)"
+  },
+  {
+   "achado": "[LACUNA] presa-a-distancia",
+   "motivo": "a correção escolhe Pontaria e perfuração, que o texto não tinha"
+  },
+  {
+   "achado": "[MELHORIA] sentidos-agucados",
+   "motivo": "a correção restringe o poder: decisão de desenho"
+  },
+  {
+   "achado": "[MELHORIA] casca-guardia e investida-bestial · você e movimento extra",
+   "motivo": "as partes que incluem você e movimento extra seriam benefício novo; só foi aplicado o que esclarece"
+  },
+  {
+   "achado": "[LACUNA] hakuda e mandibula · Mod. Força no Hakuda",
+   "motivo": "Hakuda ficou só com o tipo; somar Mod. Força seria benefício novo"
+  }
+ ]
+}

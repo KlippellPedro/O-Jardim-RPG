@@ -1,0 +1,166 @@
+{
+ "correcoes": [
+  {
+   "achado": "[ERRO] batalhao › cobertura · nível 3",
+   "classe": "guerreiro",
+   "no": "cobertura",
+   "campo": "escalonamento",
+   "de": "Nível 3: ele também recebe Resistência 3 contra dano de área.",
+   "para": "Nível 3: ele também reduz em 3 o dano de cada efeito de área que sofrer, depois da Resistência."
+  },
+  {
+   "achado": "[MELHORIA] comando-de-guerra · Grau em Luta",
+   "classe": "guerreiro",
+   "no": "comando-de-guerra",
+   "campo": "descricao",
+   "de": "soma o seu Grau em Luta ao dano",
+   "para": "soma ao dano o bônus do seu grau em Luta"
+  },
+  {
+   "achado": "[MELHORIA] reacao-de-veterano · momento",
+   "classe": "guerreiro",
+   "no": "reacao-de-veterano",
+   "campo": "momento",
+   "de": null,
+   "para": "depois de gastar a reação"
+  },
+  {
+   "achado": "[LACUNA] corte-cirurgico-ii (Finta) · dt_efeitos",
+   "classe": "espadachim",
+   "no": "dt_efeitos",
+   "campo": "descricao",
+   "de": "role Luta no momento do golpe",
+   "para": "role Luta no momento do golpe ou da finta"
+  },
+  {
+   "achado": "[INCOERÊNCIA] estilo-de-combate › Capoeira",
+   "classe": "lutador",
+   "no": "capoeira",
+   "campo": "descricao",
+   "de": "o ataque causa +1d6 e não provoca reação de quem você deixou para trás",
+   "para": "o ataque causa +1d6 e esse deslocamento não provoca reação de quem você deixou para trás"
+  },
+  {
+   "achado": "[MELHORIA] braco-de-ferro · Grau em Luta",
+   "classe": "lutador",
+   "no": "braco-de-ferro",
+   "campo": "descricao",
+   "de": "o seu Grau em Luta",
+   "para": "o bônus do seu grau em Luta"
+  },
+  {
+   "achado": "[MELHORIA] Marcas de Guerra · combate por cena",
+   "classe": "lutador",
+   "no": "instinto-de-combate@10",
+   "campo": "descricao",
+   "de": "até o fim do combate",
+   "para": "até o fim da cena"
+  },
+  {
+   "achado": "[MELHORIA] punhos-de-ferro · bônus fixo a partir do estágio 2",
+   "classe": "lutador",
+   "no": "punhos-de-ferro",
+   "campo": "descricao",
+   "de": "cada estágio soma um bônus fixo",
+   "para": "cada estágio a partir do segundo soma um bônus fixo"
+  },
+  {
+   "achado": "[LACUNA] municao-especial › Incendiária",
+   "classe": "atirador",
+   "no": "Incendiária",
+   "campo": "dt",
+   "de": "O alvo fica Queimando.",
+   "para": "Se o disparo acertar, o alvo fica Queimando."
+  },
+  {
+   "achado": "[MELHORIA] olho-afiado · desvantagem de pouca luz",
+   "classe": "atirador",
+   "no": "olho-afiado",
+   "campo": "descricao",
+   "de": "ignore penalidade de pouca luz ao mirar",
+   "para": "ignore a desvantagem de pouca luz ao mirar"
+  },
+  {
+   "achado": "[MELHORIA] Alcance Estendido · faixa",
+   "classe": "atirador",
+   "no": "alcance-estendido",
+   "campo": "descricao",
+   "de": "uma categoria de alcance a mais",
+   "para": "uma faixa de distância a mais de alcance"
+  },
+  {
+   "achado": "[MELHORIA] muralha-de-ouro (Postura Firme)",
+   "classe": "guardiao",
+   "no": "Postura Firme",
+   "campo": "descricao",
+   "de": "Receba +5 nos testes para resistir a ser empurrado, puxado, derrubado ou agarrado.",
+   "para": "Receba +5 na defesa passiva de Fortitude ou de Reflexos, a que a manobra usar, para resistir a ser empurrado, puxado, derrubado ou agarrado."
+  },
+  {
+   "achado": "[MELHORIA] protegido › Escudo Dividido",
+   "classe": "guardiao",
+   "no": "protegido@5",
+   "campo": "descricao",
+   "de": "dividir o dano antes das Resistências",
+   "para": "dividir o dano depois de rolado e antes da vulnerabilidade e das Resistências"
+  }
+ ],
+ "pulados": [
+  {
+   "achado": "[LACUNA] Ninguém Passa! (guerreiro)",
+   "motivo": "adicionaria limites (−2, sem crítico, reação gasta) que o texto não tinha"
+  },
+  {
+   "achado": "[LACUNA] penetrar-armadura/espirito-da-espada · ordem",
+   "motivo": "acrescenta regra nova de ordem entre efeitos que ignoram Resistência"
+  },
+  {
+   "achado": "[MELHORIA] combo (espadachim)",
+   "motivo": "Exposto com duração diferente da oficial mudaria o efeito"
+  },
+  {
+   "achado": "[MELHORIA] corte-a-distancia",
+   "motivo": "fixa a perícia (Luta) e a regra de faixa, que o texto não dizia"
+  },
+  {
+   "achado": "[INCOERÊNCIA] Guarda Aberta fora da progressão",
+   "motivo": "a sessão principal cuida"
+  },
+  {
+   "achado": "[MELHORIA] Guarda Aberta · escada entre degraus",
+   "motivo": "acrescenta regra de arredondamento que o texto não tinha"
+  },
+  {
+   "achado": "[MELHORIA] Marcas de Guerra · (não soma com Exposto)",
+   "motivo": "regra de empilhamento nova; só a troca combate por cena foi aplicada"
+  },
+  {
+   "achado": "[MELHORIA] kokusen · sem somar com Martelo",
+   "motivo": "regra nova de não acumular margens"
+  },
+  {
+   "achado": "[LACUNA] mira-fantasma · Concentrando",
+   "motivo": "acrescenta a condição Concentrando e a queda por dano"
+  },
+  {
+   "achado": "[LACUNA] Impacto e Tiro de Pânico · tamanho",
+   "motivo": "limite de tamanho novo"
+  },
+  {
+   "achado": "[MELHORIA] Tiro Limpo",
+   "motivo": "troca os benefícios (inclui o −2 de camuflagem) e remove chuva e vento"
+  },
+  {
+   "achado": "[MELHORIA] Baixo Perfil",
+   "motivo": "restringe o teste a Percepção, o que o texto não dizia"
+  },
+  {
+   "achado": "[LACUNA] Juramento do Punho",
+   "motivo": "acrescenta −2 e sem crítico"
+  },
+  {
+   "achado": "[MELHORIA] Castelo · imóvel",
+   "motivo": "acrescenta permissão de agir não escrita"
+  }
+ ]
+}

@@ -27,7 +27,7 @@ test('carta é magia conhecida: sem compra, descarte ou volta para a mão', () =
   assert.match(cartista.habilidades.find((item: any) => item.id === 'baralho-arcano').estagios[0].descricao, /Cada magia que você conhece é uma carta/);
   const afiadas = cartista.habilidades.find((item: any) => item.id === 'cartas-afiadas').descricao;
   assert.match(afiadas, /Pontaria/);
-  assert.match(afiadas, /Corte/);
+  assert.match(afiadas, /dano de corte/);
   // O estágio do 20 não repete mais o Arcano Absoluto.
   const vinte = cartista.habilidades.find((item: any) => item.id === 'baralho-arcano').estagios.find((estagio: any) => estagio.nivel === 20);
   assert.equal(vinte.acao, 'Passivo');

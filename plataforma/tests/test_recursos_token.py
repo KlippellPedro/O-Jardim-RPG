@@ -14,8 +14,9 @@ class AplicarRecursoTest(unittest.TestCase):
     def test_dano_menor_que_o_extra_so_gasta_o_extra(self):
         self.assertEqual(rt.aplicar("vida", 30, 40, 5, delta=-3), (30, 2))
 
-    def test_cura_que_passa_do_maximo_vira_extra_temporario(self):
-        self.assertEqual(rt.aplicar("vida", 38, 40, 0, delta=10), (40, 8))
+    def test_cura_para_no_maximo_e_a_sobra_se_perde(self):
+        self.assertEqual(rt.aplicar("vida", 38, 40, 0, delta=10), (40, 0))
+        self.assertEqual(rt.aplicar("vida", 40, 40, 6, delta=9), (40, 6))
 
     def test_vida_pode_ficar_negativa_ate_o_limite(self):
         self.assertEqual(rt.aplicar("vida", 3, 40, 0, delta=-10), (-7, 0))

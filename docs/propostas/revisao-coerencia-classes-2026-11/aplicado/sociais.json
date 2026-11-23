@@ -1,0 +1,498 @@
+{
+ "correcoes": [
+  {
+   "achado": "[MELHORIA] medicina · estágio 1 · DT",
+   "classe": "medico",
+   "no": "medicina@1",
+   "campo": "descricao",
+   "de": "um teste de Cura DT 15",
+   "para": "um teste de Cura contra a DT Padrão do nível do paciente"
+  },
+  {
+   "achado": "[LACUNA] medicina/segunda-chance",
+   "classe": "medico",
+   "no": "segunda-chance",
+   "campo": "descricao",
+   "de": "Se esta for a segunda vez que você cura o mesmo aliado nesta cena, some +1d6 à cura. Ativa apenas nessa segunda cura, não nas seguintes.",
+   "para": "Se esta for a segunda cura sua no mesmo aliado nesta cena (contando qualquer habilidade da classe), some +1d6 à cura do Tratamento. Ativa apenas nessa segunda cura, não nas seguintes."
+  },
+  {
+   "achado": "[MELHORIA] socorro est. 3 · neste combate",
+   "classe": "medico",
+   "no": "socorro-de-emergencia@3",
+   "campo": "descricao",
+   "de": "a 2ª ativação neste combate",
+   "para": "a 2ª ativação nesta cena"
+  },
+  {
+   "achado": "[MELHORIA] socorro est. 3 · neste combate (dano)",
+   "classe": "medico",
+   "no": "socorro-de-emergencia@3",
+   "campo": "dano",
+   "de": "2ª ativação do combate",
+   "para": "2ª ativação da cena"
+  },
+  {
+   "achado": "[MELHORIA] socorro est. 20 · neste combate (dano)",
+   "classe": "medico",
+   "no": "socorro-de-emergencia@20",
+   "campo": "dano",
+   "de": "2ª ativação do combate",
+   "para": "2ª ativação da cena"
+  },
+  {
+   "achado": "[INCOERÊNCIA] necessaire · acao",
+   "classe": "medico",
+   "no": "necessaire",
+   "campo": "acao",
+   "de": "Passivo",
+   "para": "Fora de combate"
+  },
+  {
+   "achado": "[INCOERÊNCIA] necessaire · momento",
+   "classe": "medico",
+   "no": "necessaire",
+   "campo": "momento",
+   "de": null,
+   "para": "preparo após o descanso completo; usar o remédio é Ação Padrão"
+  },
+  {
+   "achado": "[INCOERÊNCIA] necessaire · Cansaço",
+   "classe": "medico",
+   "no": "necessaire",
+   "campo": "descricao",
+   "de": "ou um degrau de Cansaço",
+   "para": "ou 1 de Cansaço"
+  },
+  {
+   "achado": "[MELHORIA] medico-de-campo",
+   "classe": "medico",
+   "no": "medico-de-campo",
+   "campo": "descricao",
+   "de": "até um aliado caído",
+   "para": "até um aliado a 0 de Vida ou Caído"
+  },
+  {
+   "achado": "[INCOERÊNCIA] plantao",
+   "classe": "medico",
+   "no": "plantao",
+   "campo": "descricao",
+   "de": "chegar a ele na sessão",
+   "para": "chegar a ele entre dois descansos completos"
+  },
+  {
+   "achado": "[INCOERÊNCIA] adrenalina",
+   "classe": "medico",
+   "no": "adrenalina",
+   "campo": "descricao",
+   "de": "neste turno",
+   "para": "no próximo turno dele"
+  },
+  {
+   "achado": "[INCOERÊNCIA] adrenalina · duracao",
+   "classe": "medico",
+   "no": "adrenalina",
+   "campo": "duracao",
+   "de": "Este turno",
+   "para": "Até o fim do próximo turno do aliado"
+  },
+  {
+   "achado": "[INCOERÊNCIA] de-pe-de-novo · duracao",
+   "classe": "medico",
+   "no": "de-pe-de-novo",
+   "campo": "duracao",
+   "de": "Imediato",
+   "para": "Até o fim do próximo turno do aliado"
+  },
+  {
+   "achado": "[MELHORIA] sou-medico",
+   "classe": "medico",
+   "no": "sou-medico",
+   "campo": "descricao",
+   "de": "vantagem para resistir a doenças",
+   "para": "vantagem nos testes de Fortitude contra doenças"
+  },
+  {
+   "achado": "[MELHORIA] eu-sei-curar · momento",
+   "classe": "medico",
+   "no": "eu-sei-curar",
+   "campo": "momento",
+   "de": null,
+   "para": "depois de rolar a cura"
+  },
+  {
+   "achado": "[MELHORIA] aula-de-anatomia",
+   "classe": "medico",
+   "no": "aula-de-anatomia",
+   "campo": "descricao",
+   "de": "vantagem contra perda de Sanidade causada",
+   "para": "vantagem em testes de Sanidade contra perda causada"
+  },
+  {
+   "achado": "[ERRO] rede-de-estalagens · descricao",
+   "classe": "pop-star",
+   "no": "rede-de-estalagens",
+   "campo": "descricao",
+   "de": "conta como Bom.",
+   "para": "conta como Boa."
+  },
+  {
+   "achado": "[ERRO] rede-de-estalagens · escalonamento",
+   "classe": "pop-star",
+   "no": "rede-de-estalagens",
+   "campo": "escalonamento",
+   "de": "conta como Ótimo",
+   "para": "conta como Maravilhosa"
+  },
+  {
+   "achado": "[INCOERÊNCIA] patrocinio-premium · acao",
+   "classe": "pop-star",
+   "no": "patrocinio-premium",
+   "campo": "acao",
+   "de": "Passivo",
+   "para": "Fora de combate"
+  },
+  {
+   "achado": "[INCOERÊNCIA] patrocinio-premium · momento",
+   "classe": "pop-star",
+   "no": "patrocinio-premium",
+   "campo": "momento",
+   "de": null,
+   "para": "um recado para a marca"
+  },
+  {
+   "achado": "[INCOERÊNCIA] patrocinio-premium · raridade",
+   "classe": "pop-star",
+   "no": "patrocinio-premium",
+   "campo": "descricao",
+   "de": "um consumível comum",
+   "para": "um consumível de raridade Comum"
+  },
+  {
+   "achado": "[MELHORIA] casa-de-moda",
+   "classe": "pop-star",
+   "no": "casa-de-moda",
+   "campo": "escalonamento",
+   "de": "conta como uma armadura simples de +2 sem parecer uma",
+   "para": "conta como a sua armadura principal simples de +2, sem parecer uma, e não soma com outra armadura principal"
+  },
+  {
+   "achado": "[MELHORIA] entrevista",
+   "classe": "pop-star",
+   "no": "entrevista",
+   "campo": "descricao",
+   "de": "alterar reputação",
+   "para": "mexer na sua Fama ou no Prestígio com uma facção"
+  },
+  {
+   "achado": "[MELHORIA] minha-voz-vale-ouro · momento",
+   "classe": "pop-star",
+   "no": "minha-voz-vale-ouro",
+   "campo": "momento",
+   "de": null,
+   "para": "antes de rolar"
+  },
+  {
+   "achado": "[MELHORIA] clipe-polemico",
+   "classe": "pop-star",
+   "no": "clipe-polemico",
+   "campo": "descricao",
+   "de": "consertar a sua imagem",
+   "para": "limpar o seu nome"
+  },
+  {
+   "achado": "[MELHORIA] dt_efeitos · Percepção",
+   "classe": "pop-star",
+   "no": "dt_efeitos",
+   "campo": "descricao",
+   "de": "Vontade, Reflexos ou Percepção",
+   "para": "Vontade ou Reflexos"
+  },
+  {
+   "achado": "[MELHORIA] dt_efeitos · Conflito Social",
+   "classe": "pop-star",
+   "no": "dt_efeitos",
+   "campo": "descricao",
+   "de": "e quem viu comenta.",
+   "para": "e quem viu comenta. Dentro de um Conflito Social valem as contagens daquela cena, e não a DT de Palco."
+  },
+  {
+   "achado": "[ERRO] tarefas_bancada · Fácil",
+   "classe": "comerciante",
+   "no": "Estimar o preço justo de um item comum e apontar falsificação grosseira",
+   "campo": "dt",
+   "de": "Fácil do seu nível",
+   "para": "Rotineira do seu nível"
+  },
+  {
+   "achado": "[ERRO] tarefas_bancada · capítulo",
+   "classe": "comerciante",
+   "no": "tarefas_bancada",
+   "campo": "descricao",
+   "de": "no capítulo Sistema Base",
+   "para": "em Perícias"
+  },
+  {
+   "achado": "[MELHORIA] rede-de-negocios@5 · item comum",
+   "classe": "comerciante",
+   "no": "rede-de-negocios@5",
+   "campo": "descricao",
+   "de": "em item comum",
+   "para": "em item de raridade Comum"
+  },
+  {
+   "achado": "[MELHORIA] tarefas_bancada · banda de preço",
+   "classe": "comerciante",
+   "no": "Fechar compra ou venda acima da banda normal de preço",
+   "campo": "nota",
+   "de": "Teto de 20% de diferença, para cima ou para baixo.",
+   "para": "Teto de 20% sobre o preço do catálogo, para cima ou para baixo."
+  },
+  {
+   "achado": "[LACUNA] rede-de-negocios@10 · locais",
+   "classe": "comerciante",
+   "no": "rede-de-negocios@10",
+   "campo": "descricao",
+   "de": "à venda na região em até uma hora",
+   "para": "à venda na região, nos locais de compra que a campanha tem abertos, em até uma hora"
+  },
+  {
+   "achado": "[LACUNA] contrato-irrecusavel",
+   "classe": "comerciante",
+   "no": "contrato-irrecusavel",
+   "campo": "descricao",
+   "de": "com a facção envolvida,",
+   "para": "com a facção envolvida, se houver uma,"
+  },
+  {
+   "achado": "[INCOERÊNCIA] eu-conheco-alguem · acao",
+   "classe": "comerciante",
+   "no": "eu-conheco-alguem",
+   "campo": "acao",
+   "de": "Ação Completa",
+   "para": "Fora de combate"
+  },
+  {
+   "achado": "[INCOERÊNCIA] eu-conheco-alguem · momento",
+   "classe": "comerciante",
+   "no": "eu-conheco-alguem",
+   "campo": "momento",
+   "de": null,
+   "para": "uma conversa na região"
+  },
+  {
+   "achado": "[INCOERÊNCIA] mercado-paralelo · acao",
+   "classe": "comerciante",
+   "no": "mercado-paralelo",
+   "campo": "acao",
+   "de": "Ação Completa",
+   "para": "Fora de combate"
+  },
+  {
+   "achado": "[INCOERÊNCIA] mercado-paralelo · momento",
+   "classe": "comerciante",
+   "no": "mercado-paralelo",
+   "campo": "momento",
+   "de": null,
+   "para": "uma conversa com os fornecedores"
+  },
+  {
+   "achado": "[INCOERÊNCIA] logistica · acao",
+   "classe": "comerciante",
+   "no": "logistica",
+   "campo": "acao",
+   "de": "Ação Completa",
+   "para": "Fora de combate"
+  },
+  {
+   "achado": "[INCOERÊNCIA] logistica · momento",
+   "classe": "comerciante",
+   "no": "logistica",
+   "campo": "momento",
+   "de": null,
+   "para": "organizar a entrega"
+  },
+  {
+   "achado": "[MELHORIA] reputacao-de-bom-pagador",
+   "classe": "comerciante",
+   "no": "reputacao-de-bom-pagador",
+   "campo": "descricao",
+   "de": "atrasar derruba o bônus até você quitar.",
+   "para": "atrasar derruba o bônus até você quitar. Isto não altera a Reputação Bancária do Cofre."
+  },
+  {
+   "achado": "[LACUNA] demonstracao",
+   "classe": "comerciante",
+   "no": "demonstracao",
+   "campo": "descricao",
+   "de": "soma +1 dado ao dano ou à cura que ele rolar.",
+   "para": "soma +1 dado do mesmo tipo ao dano ou à cura que ele rolar, sem multiplicar no crítico."
+  },
+  {
+   "achado": "[LACUNA] oferta-relampago",
+   "classe": "comerciante",
+   "no": "oferta-relampago",
+   "campo": "descricao",
+   "de": "+2 no próximo teste para usar um item consumível ou ferramenta nesta cena",
+   "para": "+2 no próximo teste que fizerem com um item consumível ou ferramenta nesta cena"
+  },
+  {
+   "achado": "[MELHORIA] pechincha · momento",
+   "classe": "comerciante",
+   "no": "pechincha",
+   "campo": "momento",
+   "de": null,
+   "para": "antes de rolar"
+  },
+  {
+   "achado": "[MELHORIA] amostra-gratis",
+   "classe": "comerciante",
+   "no": "amostra-gratis",
+   "campo": "descricao",
+   "de": "um consumível comum de demonstração",
+   "para": "um consumível de raridade Comum de demonstração"
+  },
+  {
+   "achado": "[MELHORIA] dt_efeitos",
+   "classe": "comerciante",
+   "no": "dt_efeitos",
+   "campo": "descricao",
+   "de": "quem passa no teste só mantém a própria posição.",
+   "para": "quem passa no teste só mantém a própria posição. Numa negociação difícil, use o Conflito Social: esta DT vale só para um teste isolado."
+  },
+  {
+   "achado": "[ERRO] deducao-metodica@5 · Detector de Mentiras",
+   "classe": "detetive",
+   "no": "deducao-metodica@5",
+   "campo": "descricao",
+   "de": "em vez de Percepção",
+   "para": "em vez de Intuição"
+  },
+  {
+   "achado": "[LACUNA] golpe-certeiro-de-logica",
+   "classe": "detetive",
+   "no": "golpe-certeiro-de-logica",
+   "campo": "descricao",
+   "de": "recebe +2 dados de dano.",
+   "para": "recebe +2 dados de dano do mesmo tipo do dado da arma, sem multiplicar no crítico."
+  },
+  {
+   "achado": "[INCOERÊNCIA] caso-encerrado",
+   "classe": "detetive",
+   "no": "caso-encerrado",
+   "campo": "descricao",
+   "de": "e não revela a resposta correta.",
+   "para": "e não revela a resposta correta. A acusação pública continua tendo as consequências que o Mestre decidir."
+  },
+  {
+   "achado": "[LACUNA] interrogatorio",
+   "classe": "detetive",
+   "no": "interrogatorio",
+   "campo": "descricao",
+   "de": "informação verdadeira.",
+   "para": "informação verdadeira, sem passar do Limite dele."
+  },
+  {
+   "achado": "[INCOERÊNCIA] conexoes-na-delegacia · acao",
+   "classe": "detetive",
+   "no": "conexoes-na-delegacia",
+   "campo": "acao",
+   "de": "Passivo",
+   "para": "Fora de combate"
+  },
+  {
+   "achado": "[INCOERÊNCIA] conexoes-na-delegacia · momento",
+   "classe": "detetive",
+   "no": "conexoes-na-delegacia",
+   "campo": "momento",
+   "de": null,
+   "para": "uma conversa com o contato"
+  },
+  {
+   "achado": "[MELHORIA] vigilancia",
+   "classe": "detetive",
+   "no": "vigilancia",
+   "campo": "descricao",
+   "de": "para toda a perseguição, não a cada intervalo.",
+   "para": "para todo o acompanhamento, não a cada intervalo. Numa cena de Perseguição a pé vale a regra dela."
+  },
+  {
+   "achado": "[MELHORIA] perfil-psicologico",
+   "classe": "detetive",
+   "no": "perfil-psicologico",
+   "campo": "descricao",
+   "de": "contra a Vontade do alvo",
+   "para": "contra 10 + o bônus de Vontade do alvo"
+  },
+  {
+   "achado": "[MELHORIA] deducao-metodica@15 · título",
+   "classe": "detetive",
+   "no": "deducao-metodica@15",
+   "campo": "titulo",
+   "de": "Reconstituição",
+   "para": "Relato de Segunda Mão"
+  },
+  {
+   "achado": "[MELHORIA] dt_efeitos · detetive",
+   "classe": "detetive",
+   "no": "dt_efeitos",
+   "campo": "descricao",
+   "de": "Fortitude, Reflexos, Vontade ou Percepção",
+   "para": "Vontade"
+  }
+ ],
+ "pulados": [
+  {
+   "achado": "[INCOERÊNCIA] medicina contra-a-queda",
+   "motivo": "Acrescentar 'sem provocar reações' dá um benefício que o texto não tinha; o Livro diz que levantar provoca. Pedro deve decidir."
+  },
+  {
+   "achado": "[LACUNA] rerrolagem de 1 (Médico, Bis, Cláusula de Saída)",
+   "motivo": "Depende de regra geral de rerrolagem empilhada que o Livro não tem."
+  },
+  {
+   "achado": "[LACUNA] fama@15 contato de peso (Pop Star)",
+   "motivo": "Acrescenta Confiança e limite de contatos, número novo. Pedro deve decidir."
+  },
+  {
+   "achado": "[LACUNA] publi/destilaria nível 2",
+   "motivo": "Define que a falha não pinta o relógio do caso, benefício novo."
+  },
+  {
+   "achado": "[LACUNA] pose-de-diva",
+   "motivo": "Acrescenta regra nova (o ataque se perde sem outro alvo)."
+  },
+  {
+   "achado": "[ERRO] estoque/venenos-e-reagentes nível 4 (Comerciante)",
+   "motivo": "A frase atual contradiz o Livro (estágio inicial mais alto), mas a troca exige escolher um número de DT. Pedro deve decidir logo."
+  },
+  {
+   "achado": "[INCOERÊNCIA] rede-de-negocios@15 A Rede Trabalha por Você",
+   "motivo": "Usar Favor e Dívida muda se há teste; decisão de design."
+  },
+  {
+   "achado": "[LACUNA] seguro × mercado-mundial/estoque/amostra",
+   "motivo": "Acrescenta exclusões e limites de uso. Pedro deve decidir logo, é brecha de dinheiro."
+  },
+  {
+   "achado": "[LACUNA] tarefas_bancada · mercadoria proibida e Procura",
+   "motivo": "Acrescenta consequência de Procura que o texto não tinha."
+  },
+  {
+   "achado": "[LACUNA] eu-conheco-alguem · Confiança do contato",
+   "motivo": "Acrescenta Confiança e limite de contatos, número novo."
+  },
+  {
+   "achado": "[LACUNA] clausula-de-saida",
+   "motivo": "Depende da regra geral de rerrolagem empilhada."
+  },
+  {
+   "achado": "[MELHORIA] sexto-sentido (Detetive)",
+   "motivo": "Muda o efeito do poder (passivo para rolagem com vantagem)."
+  },
+  {
+   "achado": "[MELHORIA] pericia-forense e leitura-de-documentos (DT)",
+   "motivo": "Acrescenta DT que o texto não tinha."
+  }
+ ]
+}

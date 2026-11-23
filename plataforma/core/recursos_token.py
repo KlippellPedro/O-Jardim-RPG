@@ -1,8 +1,8 @@
 """Mexer em Vida, Mana, Estamina e Sanidade direto pela barra do token no mapa.
 
 O cálculo é o mesmo do HUD do Mestre na Sessão (routers/sessions.py, `atualizar_participante`):
-o dano gasta primeiro o extra temporário de Vida, e a cura que passa do máximo vira extra
-temporário. Mana, Estamina e Sanidade só andam entre 0 e o máximo. Aqui fica só a conta;
+o dano gasta primeiro o extra temporário de Vida, e a cura para no máximo (a sobra se
+perde). Mana, Estamina e Sanidade só andam entre 0 e o máximo. Aqui fica só a conta;
 quem grava (participante da Sessão e ficha) é a rota do mapa.
 """
 
@@ -49,9 +49,8 @@ def aplicar(
         temporario -= absorvido
         atual += delta + absorvido
     elif delta > 0:
-        excesso = max(0, atual + delta - maximo)
-        atual += delta - excesso
-        temporario += excesso
+        # A cura para no máximo e a sobra se perde (Livro, Ferimentos › Vida temporária).
+        atual += delta
     return max(VIDA_MINIMA, min(atual, maximo)), temporario
 
 

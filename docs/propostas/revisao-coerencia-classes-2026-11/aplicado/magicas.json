@@ -1,0 +1,250 @@
+{
+ "correcoes": [
+  {
+   "achado": "[LACUNA] canalizacao-nativa · estágio 10",
+   "classe": "canalizador",
+   "no": "canalizacao-nativa@10",
+   "campo": "descricao",
+   "de": "reduza o custo em 1 Mana, mínimo 1.",
+   "para": "recupere 1 de Mana depois da rolagem, e o custo final nunca fica abaixo de 1."
+  },
+  {
+   "achado": "[LACUNA] canalizacao-nativa · estágio 5 momento",
+   "classe": "canalizador",
+   "no": "canalizacao-nativa@5",
+   "campo": "momento",
+   "de": null,
+   "para": "depois de rolar o teste de conjuração"
+  },
+  {
+   "achado": "[LACUNA] canalizacao-nativa · estágio 20 momento",
+   "classe": "canalizador",
+   "no": "canalizacao-nativa@20",
+   "campo": "momento",
+   "de": null,
+   "para": "depois de rolar a conjuração"
+  },
+  {
+   "achado": "[ERRO] forma-do-fluxo · Forma de Área",
+   "classe": "canalizador",
+   "no": "forma-de-area",
+   "campo": "descricao",
+   "de": "recebe +2 na DT de conjuração.",
+   "para": "recebe +2 no total do teste de conjuração, e é esse total que os alvos têm de superar."
+  },
+  {
+   "achado": "[ERRO] voz-da-deidade",
+   "classe": "canalizador",
+   "no": "voz-da-deidade",
+   "campo": "descricao",
+   "de": "ative esta habilidade sem gastar ação.",
+   "para": "ative esta habilidade como Ação Livre."
+  },
+  {
+   "achado": "[ERRO] voz-da-deidade",
+   "classe": "canalizador",
+   "no": "voz-da-deidade",
+   "campo": "descricao",
+   "de": "recebem +3 no teste de conjuração e na DT.",
+   "para": "recebem +3 no teste de conjuração. O total vale também contra os alvos."
+  },
+  {
+   "achado": "[ERRO] voz-da-deidade",
+   "classe": "canalizador",
+   "no": "voz-da-deidade",
+   "campo": "descricao",
+   "de": "A primeira falha de Concentração em cada rodada é considerada um sucesso.",
+   "para": "A primeira falha em teste de Vontade para manter concentração em cada rodada conta como sucesso."
+  },
+  {
+   "achado": "[MELHORIA] fluxo-sem-filtro",
+   "classe": "canalizador",
+   "no": "fluxo-sem-filtro",
+   "campo": "descricao",
+   "de": "se você for nocauteado ou perder a consciência.",
+   "para": "se você ficar Atordoado, Inconsciente ou incapaz de agir."
+  },
+  {
+   "achado": "[MELHORIA] pulso-nativo",
+   "classe": "canalizador",
+   "no": "pulso-nativo",
+   "campo": "descricao",
+   "de": "Você mantém duas magias de Concentração ao mesmo tempo,",
+   "para": "Exceção à regra de uma concentração por vez: você mantém duas magias de Concentração ao mesmo tempo,"
+  },
+  {
+   "achado": "[ERRO] aterramento",
+   "classe": "sintonizador",
+   "no": "aterramento",
+   "campo": "descricao",
+   "de": "seja qual for o tipo.",
+   "para": "contra qualquer tipo, menos dano verdadeiro."
+  },
+  {
+   "achado": "[LACUNA] dupla-frequencia",
+   "classe": "sintonizador",
+   "no": "dupla-frequencia",
+   "campo": "descricao",
+   "de": "use a fusão de qualquer um dos dois.",
+   "para": "use a fusão de qualquer um dos dois. Cada magia leva uma fusão só."
+  },
+  {
+   "achado": "[LACUNA] convergencia-segura",
+   "classe": "sintonizador",
+   "no": "convergencia-segura",
+   "campo": "descricao",
+   "de": "sem desativá-lo.",
+   "para": "sem desativá-lo. Cada magia continua levando uma fusão só."
+  },
+  {
+   "achado": "[MELHORIA] revelacao",
+   "classe": "sintonizador",
+   "no": "revelacao",
+   "campo": "descricao",
+   "de": "Se a magia superar Vontade, o alvo hostil fica Revelado",
+   "para": "Se o alvo hostil falhar em Vontade contra a conjuração, ele fica Revelado"
+  },
+  {
+   "achado": "[ERRO] dt_efeitos fórmula do rito",
+   "classe": "ritualista",
+   "no": "dt_efeitos",
+   "campo": "descricao",
+   "de": "d20 mais Mod. Fluxo mais o seu Grau de Misticismo",
+   "para": "d20 mais Mod. Fluxo mais metade do nível total mais o seu Grau de Misticismo"
+  },
+  {
+   "achado": "[ERRO] dt_efeitos interrupção",
+   "classe": "ritualista",
+   "no": "dt_efeitos",
+   "campo": "descricao",
+   "de": "com a mesma rolagem contra a mesma DT",
+   "para": "com o mesmo bônus contra a mesma DT, com um dado novo"
+  },
+  {
+   "achado": "[ERRO] tarefas_bancada Ajudar no rito",
+   "classe": "ritualista",
+   "no": "Ajudar no rito, com Misticismo",
+   "campo": "dt",
+   "de": "DT 10",
+   "para": "Sem teste"
+  },
+  {
+   "achado": "[ERRO] tarefas_bancada Ajudar no rito",
+   "classe": "ritualista",
+   "no": "Ajudar no rito, com Misticismo",
+   "campo": "tarefa",
+   "de": "Ajudar no rito, com Misticismo",
+   "para": "Ajudar no rito"
+  },
+  {
+   "achado": "[INCOERÊNCIA] tarefas_bancada Ocultação",
+   "classe": "ritualista",
+   "no": "Achar um círculo que alguém escondeu",
+   "campo": "nota",
+   "de": "Ocultação no círculo soma +4 nessa defesa.",
+   "para": "Ocultação no círculo soma nessa defesa o valor do preparo Ocultação."
+  },
+  {
+   "achado": "[INCOERÊNCIA] grande-oficiante",
+   "classe": "ritualista",
+   "no": "grande-oficiante",
+   "campo": "descricao",
+   "de": "Para cumprir requisitos de participantes, você conta como quatro ajudantes.",
+   "para": "Para cumprir o número mínimo de participantes do rito, você conta como quatro pessoas. O bônus de Ajudar continua limitado a +4."
+  },
+  {
+   "achado": "[MELHORIA] leitura-de-pacto",
+   "classe": "ritualista",
+   "no": "leitura-de-pacto",
+   "campo": "acao",
+   "de": "Ação Completa",
+   "para": "Fora de combate"
+  },
+  {
+   "achado": "[INCOERÊNCIA] circulo-preparado Proteção nível 4",
+   "classe": "ritualista",
+   "no": "protecao",
+   "campo": "escalonamento",
+   "de": "quem está dentro recebe Resistência 5 contra dano vindo de fora.",
+   "para": "quem está dentro reduz em 5 o dano de cada golpe vindo de fora, depois da Resistência. Não vale contra dano verdadeiro."
+  },
+  {
+   "achado": "[INCOERÊNCIA] muralha-elemental",
+   "classe": "elementarista",
+   "no": "muralha-elemental",
+   "campo": "descricao",
+   "de": "Ela oferece cobertura superior, bloqueia",
+   "para": "Ela dá cobertura total a quem está atrás, bloqueia"
+  },
+  {
+   "achado": "[MELHORIA] luz-aurora",
+   "classe": "elementarista",
+   "no": "luz-aurora",
+   "campo": "descricao",
+   "de": "não recebe benefício de invisibilidade nesse período",
+   "para": "não recebe os benefícios da condição Invisível nesse período"
+  }
+ ],
+ "pulados": [
+  {
+   "achado": "[LACUNA] canalizacao-nativa · estágio 15 Segunda Chance",
+   "motivo": "rerrolagem: restringir a teste que falhou e Mana não cobrada muda o benefício; depende da regra de rerrolagem empilhada com a maestria de Fluxo"
+  },
+  {
+   "achado": "[LACUNA] alcance-expandido",
+   "motivo": "a correção acrescenta limite (não vale para Pessoal): decisão do Pedro"
+  },
+  {
+   "achado": "[LACUNA] forma-do-fluxo · Forma de Defesa",
+   "motivo": "a correção escolhe o que significa +2 de efeito e Resistência extra: acrescenta número; decisão do Pedro"
+  },
+  {
+   "achado": "[MELHORIA] manifestacao-moldada",
+   "motivo": "a correção acrescenta a lista de formas permitidas: benefício novo"
+  },
+  {
+   "achado": "[MELHORIA] apice-do-fluxo",
+   "motivo": "marcado sim no relatório (redução de dano ignorada ou não)"
+  },
+  {
+   "achado": "[LACUNA] sintonizador · Encerramento Rápido",
+   "motivo": "a correção acrescenta exclusões e quem rola: regra nova"
+  },
+  {
+   "achado": "[LACUNA] sintonizador · Materialização",
+   "motivo": "a correção acrescenta regras para magia sem dano e resistência do deslocamento: regra nova"
+  },
+  {
+   "achado": "[LACUNA] ritualista · Âncora Ritual e Vigília",
+   "motivo": "a correção acrescenta que a Mana não se perde e redefine a janela: regra nova"
+  },
+  {
+   "achado": "[ERRO] ritualista · Grande Oficiante usos/acao",
+   "motivo": "marcado sim: troca a janela por sessão para descanso"
+  },
+  {
+   "achado": "[LACUNA] ritualista · Mão de rito: redução de tempo",
+   "motivo": "marcado sim"
+  },
+  {
+   "achado": "[LACUNA] elementarista · marca-elemental usos e DT",
+   "motivo": "campo novo na Elementarista (usos) e a correção adiciona regra de DT"
+  },
+  {
+   "achado": "[LACUNA] elementarista · habilidades sem acao",
+   "motivo": "campo novo na Elementarista; e 'por rodada' ficou como está porque o Livro (Elementos) também usa rodada no Domínio da Derivação"
+  },
+  {
+   "achado": "[MELHORIA] elementarista · Luz → Pureza",
+   "motivo": "a correção acrescenta condição de duração no Cego: texto novo de regra"
+  },
+  {
+   "achado": "[MELHORIA] elementarista · revestimento-elemental",
+   "motivo": "acrescenta que vale contra derivações e não contra clima: benefício/limite novo"
+  },
+  {
+   "achado": "[LACUNA] elementarista · dt_efeitos",
+   "motivo": "a correção acrescenta quando se rola o total: regra nova"
+  }
+ ]
+}

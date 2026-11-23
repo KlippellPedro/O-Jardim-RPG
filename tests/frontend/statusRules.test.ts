@@ -115,17 +115,15 @@ test('maestria de Constituição amplia Morrendo e despertar aumenta Ferido', ()
   assert.equal(estadoVida(status, 20), 'consciente');
 });
 
-test('cura acima do máximo vira extra temporário sem mexer no valor atual', () => {
+test('cura acima do máximo para no máximo e a sobra se perde (Livro, Vida temporária)', () => {
   const cheio = { vidaAtual: 40, manaAtual: 10 };
   const curado = atualizarStatusVital(cheio, 'vidaAtual', 12, 40, 10);
   assert.equal(curado.vidaAtual, 40);
-  assert.equal(curado.vidaTemporaria, 12);
-  assert.equal(obterTemporario(curado, 'vidaAtual'), 12);
+  assert.equal(obterTemporario(curado, 'vidaAtual'), 0);
 
-  // Cura que só completa a barra não gera extra; o que sobra gera.
   const parcial = atualizarStatusVital({ vidaAtual: 35 }, 'vidaAtual', 10, 40, 10);
   assert.equal(parcial.vidaAtual, 40);
-  assert.equal(parcial.vidaTemporaria, 5);
+  assert.equal(obterTemporario(parcial, 'vidaAtual'), 0);
 });
 
 test('o dano gasta o extra temporário antes da vida normal', () => {

@@ -369,7 +369,7 @@ export const REGRA_VEICULOS: IRegraVeiculos = {
     <h3 class="regras-subtitle">Escala de Vida e dano</h3>
     <ul class="regras-list">
       <li>Veículos, montarias, personagens e criaturas usam a mesma escala de Vida e dano.</li>
-      <li>Role o dano indicado pela arma. Subtraia a Resistência geral e a resistência específica ao tipo do dano. O restante reduz a Vida.</li>
+      <li>Role o dano indicado pela arma. Subtraia a Resistência geral e a Resistência específica ao tipo do dano. O restante reduz a Vida. A Resistência geral do veículo funciona como redução de dano: vale contra qualquer tipo, menos o dano verdadeiro.</li>
       <li>Não multiplique dano por causa do tipo do alvo. Uma arma precisa informar dados, bônus, tipo, alcance e crítico antes de entrar em combate.</li>
       <li>O campo Dano das peças veiculares indica o patamar da arma. Ele não é dano fixo e não substitui a fórmula de dano da arma.</li>
     </ul>

@@ -1,0 +1,30 @@
+{
+  "correcoes": [
+    {"achado": "[ERRO] tarefas_bancada · dt Fácil", "classe": "engenheiro", "no": "Consertar mecanismo travado ou avariado com a peça certa em mãos", "campo": "dt", "de": "Fácil do seu nível", "para": "Rotineira do seu nível"},
+    {"achado": "[ERRO] tarefas_bancada · descricao", "classe": "engenheiro", "no": "tarefas_bancada", "campo": "descricao", "de": "saem da tabela de DT por nível do desafio, no capítulo Sistema Base", "para": "saem da tabela de DT por nível, em Perícias (Rotineira, Padrão e Difícil)"},
+    {"achado": "[ERRO] tarefas_bancada · dt Fácil", "classe": "alquimista", "no": "Dizer o que é uma substância desconhecida pelo cheiro, cor e reação", "campo": "dt", "de": "Fácil do seu nível", "para": "Rotineira do seu nível"},
+    {"achado": "[ERRO] tarefas_bancada · descricao", "classe": "alquimista", "no": "tarefas_bancada", "campo": "descricao", "de": "saem da tabela de DT por nível do desafio, no capítulo Sistema Base", "para": "saem da tabela de DT por nível, em Perícias (Rotineira, Padrão e Difícil)"},
+    {"achado": "[ERRO] tarefas_bancada · dt Fácil", "classe": "cozinheiro", "no": "Reconhecer alimento estragado, adulterado ou impróprio", "campo": "dt", "de": "Fácil do seu nível", "para": "Rotineira do seu nível"},
+    {"achado": "[ERRO] tarefas_bancada · descricao", "classe": "cozinheiro", "no": "tarefas_bancada", "campo": "descricao", "de": "por nível do desafio do Sistema Base", "para": "por nível, em Perícias (Rotineira, Padrão e Difícil)"},
+    {"achado": "[LACUNA] nucleo-estavel · tipo de dano", "classe": "engenheiro", "no": "nucleo-estavel", "campo": "descricao", "de": "explode em 3 m e causa 1d10;", "para": "explode em 3 m e causa 1d10 de dano de impacto;"},
+    {"achado": "[LACUNA] engenho-divino · Bastião", "classe": "engenheiro", "no": "engenho-divino", "campo": "descricao", "de": "eles reduzem em 10 o dano de cada golpe", "para": "eles reduzem em 10 o dano de cada golpe, depois da Resistência, e dano verdadeiro ignora a redução"},
+    {"achado": "[LACUNA] meus-filhos · WALL-E conserto", "classe": "engenheiro", "no": "meus-filhos@10", "campo": "descricao", "de": "Conserto de construto e o Injetor de Reparo recuperam a Vida dele.", "para": "Dez minutos de conserto (tarefa de bancada) e o Injetor de Reparo recuperam a Vida dele."},
+    {"achado": "[MELHORIA] eureca", "classe": "engenheiro", "no": "eureca", "campo": "descricao", "de": "trate-a como uma falha comum e role novamente", "para": "ignore a falha crítica e role de novo, mantendo o novo resultado"},
+    {"achado": "[MELHORIA] holofote-de-campo", "classe": "engenheiro", "no": "holofote-de-campo", "campo": "descricao", "de": "Quem está dentro perde o benefício de escuridão e de camuflagem por penumbra, e ataques", "para": "Quem está dentro perde o benefício de Pouca luz e de Escuridão natural. Escuridão criada por magia ou Fluxo não cede. Ataques"},
+    {"achado": "[INCOERÊNCIA] coagulante-de-emergencia", "classe": "alquimista", "no": "coagulante-de-emergencia", "campo": "descricao", "de": "deixa de avançar em Morrendo por falta de estabilização", "para": "para de testar Morrendo"},
+    {"achado": "[MELHORIA] reagente-revelador", "classe": "alquimista", "no": "reagente-revelador", "campo": "descricao", "de": "criatura invisível fica com o contorno visível", "para": "criatura Invisível de origem mágica fica Revelada"},
+    {"achado": "[MELHORIA] dt_efeitos Percepção", "classe": "alquimista", "no": "dt_efeitos", "campo": "descricao", "de": "Fortitude, Reflexos, Vontade ou Percepção", "para": "Fortitude, Reflexos ou Vontade"},
+    {"achado": "[MELHORIA] homunculo", "classe": "alquimista", "no": "homunculo", "campo": "descricao", "de": "concede +2 em um teste de Ofício por cena", "para": "conta como um ajudante (Ajudar) e concede +2 em um teste de Ofício por cena"},
+    {"achado": "[INCOERÊNCIA] cuscuz-nordestino · duracao", "classe": "cozinheiro", "no": "cuscuz-nordestino", "campo": "duracao", "de": "Até o próximo combate", "para": "Até o fim do próximo combate, ou até o descanso seguinte"},
+    {"achado": "[LACUNA] moqueca · ordem da redução", "classe": "cozinheiro", "no": "moqueca", "campo": "descricao", "de": "reduza em 2 o primeiro dano que o alvo sofrer em cada rodada.", "para": "reduza em 2 o primeiro dano que o alvo sofrer em cada rodada, depois da Resistência. Dano verdadeiro ignora a redução."},
+    {"achado": "[MELHORIA] suco-de-laranja · nível 3", "classe": "cozinheiro", "no": "suco-de-laranja", "campo": "escalonamento", "de": "a cura sobe para 2d6 e também encerra Sangramento.", "para": "a cura sobe para 2d6."}
+  ],
+  "pulados": [
+    {"achado": "[ERRO] bobina-de-choque · metade no sucesso", "motivo": "Dá metade do dano a quem passa nos níveis 1 a 4, um benefício que o texto não tinha. O Pedro deveria decidir logo (convenção de dano com teste)."},
+    {"achado": "[ERRO] veneno-de-contato · metade no sucesso", "motivo": "Acrescenta metade do dano no sucesso e depende da regra geral de veneno que repete ou não no fim do turno."},
+    {"achado": "[ERRO] frasco-congelante e [LACUNA] acido-corrosivo · teste que dá metade", "motivo": "Mudam o dano para metade em quem passa e criam teste novo. Decisão de desenho, junto com Bobina e Veneno."},
+    {"achado": "[LACUNA] grande-obra@15 · Composto Duplo", "motivo": "Acrescenta limites (ação mais lenta, menor alcance, sem Reação)."},
+    {"achado": "[LACUNA] cataplasma, iogurte, Casa Cheia, Núcleo Estável · Vida temporária", "motivo": "Depende de regra geral de Vida temporária que o Livro ainda não tem."},
+    {"achado": "[INCOERÊNCIA] moqueca · acao e duracao", "motivo": "Corrigir duração ou virar Lanche muda o benefício; Pedro deveria decidir logo, pois a refeição de 3 rodadas expira antes da luta."}
+  ]
+}

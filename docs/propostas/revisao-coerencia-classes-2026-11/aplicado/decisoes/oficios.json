@@ -1,0 +1,404 @@
+{
+  "correcoes": [
+    {
+      "achado": "[INCOERÊNCIA] sirene-chamariz e dt_efeitos · Percepção como resistência",
+      "classe": "engenheiro",
+      "no": "sirene-chamariz",
+      "campo": "defesa",
+      "de": "Percepção contra a DT do Engenheiro",
+      "para": "Vontade contra a DT do Engenheiro"
+    },
+    {
+      "achado": "[INCOERÊNCIA] sirene-chamariz · descricao",
+      "classe": "engenheiro",
+      "no": "sirene-chamariz",
+      "campo": "descricao",
+      "de": "testam Percepção contra a sua DT de Engenheiro",
+      "para": "testam Vontade contra a sua DT de Engenheiro"
+    },
+    {
+      "achado": "[INCOERÊNCIA] projetor-holografico · defesa",
+      "classe": "engenheiro",
+      "no": "projetor-holografico",
+      "campo": "defesa",
+      "de": "Percepção contra a DT do Engenheiro",
+      "para": "Vontade contra a DT do Engenheiro"
+    },
+    {
+      "achado": "[INCOERÊNCIA] projetor-holografico · descricao",
+      "classe": "engenheiro",
+      "no": "projetor-holografico",
+      "campo": "descricao",
+      "de": "testa Percepção contra a sua DT de Engenheiro",
+      "para": "testa Vontade contra a sua DT de Engenheiro"
+    },
+    {
+      "achado": "[INCOERÊNCIA] dt_efeitos · Percepção",
+      "classe": "engenheiro",
+      "no": "dt_efeitos",
+      "campo": "descricao",
+      "de": "testar Fortitude, Reflexos, Vontade ou Percepção",
+      "para": "testar Fortitude, Reflexos ou Vontade"
+    },
+    {
+      "achado": "[MELHORIA] dt_efeitos · testes repetidos (regra 10)",
+      "classe": "engenheiro",
+      "no": "dt_efeitos",
+      "campo": "descricao",
+      "de": "vale para todos os alvos atingidos ali.",
+      "para": "vale para todos os alvos atingidos ali e para os testes repetidos daquele efeito."
+    },
+    {
+      "achado": "[INCOERÊNCIA] carga-de-fumaca · camuflagem duplicada",
+      "classe": "engenheiro",
+      "no": "carga-de-fumaca",
+      "campo": "descricao",
+      "de": "Quem está dentro recebe camuflagem, e ataques à distância que atravessam a nuvem sofrem −2.",
+      "para": "Quem está dentro fica camuflado: ataques contra essa criatura têm −2."
+    },
+    {
+      "achado": "[INCOERÊNCIA] injetor-de-reparo · Vida de arma e armadura",
+      "classe": "engenheiro",
+      "no": "injetor-de-reparo",
+      "campo": "descricao",
+      "de": "Restaura 2d6 de Vida em um construto, veículo, arma, armadura ou criação sua ao toque, incluindo WALL-E, torreta e drone.",
+      "para": "Restaura 2d6 de Vida em um construto, veículo ou criação sua ao toque, incluindo WALL-E, torreta e drone. Arma ou armadura tocada é consertada, como num reparo, no lugar de receber Vida."
+    },
+    {
+      "achado": "[INCOERÊNCIA] aranha-de-reparo · Vida de item",
+      "classe": "engenheiro",
+      "no": "aranha-de-reparo",
+      "campo": "descricao",
+      "de": "restaura 1d6 de Vida de um construto, veículo, item ou criação adjacente.",
+      "para": "restaura 1d6 de Vida de um construto, veículo ou criação adjacente. Arma ou armadura adjacente é consertada, como num reparo, no lugar de receber Vida."
+    },
+    {
+      "achado": "[INCOERÊNCIA] engenho-divino · Reparação",
+      "classe": "engenheiro",
+      "no": "engenho-divino",
+      "campo": "descricao",
+      "de": "recupera 3d10 de Vida de até três itens, construtos ou veículos em até 6 metros no fim de cada um de seus turnos",
+      "para": "recupera 3d10 de Vida de até três construtos ou veículos, ou conserta até três armas ou armaduras, em até 6 metros no fim de cada turno do engenho"
+    },
+    {
+      "achado": "[LACUNA] engenho-divino · Artilharia sem rolagem",
+      "classe": "engenheiro",
+      "no": "engenho-divino",
+      "campo": "descricao",
+      "de": "Artilharia causa 4d12 de dano de raio a um alvo em até 24 metros no fim de cada um de seus turnos",
+      "para": "Artilharia causa 4d12 de dano de raio a um alvo em até 24 metros no fim de cada turno do engenho, e o alvo testa Reflexos contra a sua DT de Engenheiro, rolada ao montar, para sofrer metade"
+    },
+    {
+      "achado": "[INCOERÊNCIA] meus-filhos@1 · Ofício × Tecnologia × Ladinagem",
+      "classe": "engenheiro",
+      "no": "meus-filhos@1",
+      "campo": "descricao",
+      "de": "e acertar o tiro com ela continua sendo Pontaria.",
+      "para": "e acertar o tiro com ela continua sendo Pontaria. Nas tarefas de bancada e nas engenhocas, Ofício (Engenharia) vale no lugar de Tecnologia (item A.X.I.S, sistema eletrônico, maquinário avançado) e no lugar de Ladinagem (tranca mecânica ou eletrônica)."
+    },
+    {
+      "achado": "[MELHORIA] meus-filhos@1 · vantagem na rolagem da DT",
+      "classe": "engenheiro",
+      "no": "meus-filhos@1",
+      "campo": "descricao",
+      "de": "A especialidade acompanha o personagem pelo resto da carreira.",
+      "para": "A vantagem não vale na rolagem que define a DT de uma engenhoca. A especialidade acompanha o personagem pelo resto da carreira."
+    },
+    {
+      "achado": "[LACUNA] tarefas_bancada · Remontar engenhoca",
+      "classe": "engenheiro",
+      "no": "Remontar antes do descanso uma engenhoca já gasta",
+      "campo": "nota",
+      "de": "Falha destrói as peças",
+      "para": "Gasta mais 1 lote de Sucata da raridade atual dos projetos. Falha destrói as peças"
+    },
+    {
+      "achado": "[LACUNA] salto-eletromagnetico · provocar reação",
+      "classe": "engenheiro",
+      "no": "salto-eletromagnetico",
+      "campo": "descricao",
+      "de": "ignorando terreno e obstáculo no caminho",
+      "para": "ignorando terreno e obstáculo no caminho, sem provocar reação"
+    },
+    {
+      "achado": "[MELHORIA] overclock · Engenho Divino e Invenção Suprema",
+      "classe": "engenheiro",
+      "no": "overclock",
+      "campo": "descricao",
+      "de": "qualquer engenhoca sua em campo.",
+      "para": "qualquer engenhoca sua em campo. Não vale para o Engenho Divino nem para a Invenção Suprema."
+    },
+    {
+      "achado": "[MELHORIA] dt_efeitos · testes repetidos (regra 10)",
+      "classe": "alquimista",
+      "no": "dt_efeitos",
+      "campo": "descricao",
+      "de": "e ela vale para todos os alvos atingidos por ela.",
+      "para": "e ela vale para todos os alvos atingidos por ela e para os testes repetidos daquela dose."
+    },
+    {
+      "achado": "[INCOERÊNCIA] grande-obra@1 · ação das fórmulas",
+      "classe": "alquimista",
+      "no": "grande-obra@1",
+      "campo": "descricao",
+      "de": "Usar não custa Mana.",
+      "para": "Usar uma dose é Ação Padrão, a não ser que a fórmula escreva outra ação. Usar não custa Mana."
+    },
+    {
+      "achado": "[INCOERÊNCIA] grande-obra@5 · Mão Rápida × ação das fórmulas",
+      "classe": "alquimista",
+      "no": "grande-obra@5",
+      "campo": "descricao",
+      "de": "arremessar continua sendo Ação Padrão.",
+      "para": "arremessar continua sendo Ação Padrão, a não ser que a fórmula escreva outra ação."
+    },
+    {
+      "achado": "[INCOERÊNCIA] nevoa-densa · camuflagem duplicada",
+      "classe": "alquimista",
+      "no": "nevoa-densa",
+      "campo": "descricao",
+      "de": "Quem está dentro recebe camuflagem, e ataques à distância que atravessam a nuvem sofrem −2.",
+      "para": "Quem está dentro fica camuflado: ataques contra essa criatura têm −2."
+    },
+    {
+      "achado": "[INCOERÊNCIA] grande-obra@20 · Dose da Pedra, janela",
+      "classe": "alquimista",
+      "no": "grande-obra@20",
+      "campo": "descricao",
+      "de": "Uma vez por sessão, prepare",
+      "para": "Uma vez por descanso, prepare"
+    },
+    {
+      "achado": "[INCOERÊNCIA] grande-obra@20 · Dose da Pedra, usos",
+      "classe": "alquimista",
+      "no": "grande-obra@20",
+      "campo": "usos",
+      "de": "Uma vez por sessão",
+      "para": "Uma vez por descanso"
+    },
+    {
+      "achado": "[INCOERÊNCIA] antidoto · nome × Antídoto da Loja",
+      "classe": "alquimista",
+      "no": "antidoto",
+      "campo": "descricao",
+      "de": "Você já conhece esta fórmula desde o nível 1.",
+      "para": "Diferente do Antídoto da Loja, esta dose não encerra o veneno: ela reduz 1 estágio. Você já conhece esta fórmula desde o nível 1."
+    },
+    {
+      "achado": "[INCOERÊNCIA] tarefas_bancada · Reproduzir fórmula (nota)",
+      "classe": "alquimista",
+      "no": "Reproduzir uma fórmula alheia a partir do frasco vazio",
+      "campo": "nota",
+      "de": "Sucesso conta como fórmula conhecida até o Mestre dizer o contrário.",
+      "para": "O sucesso dá uma pista ao Mestre. Fórmula nova só entra por uma vaga de Fórmulas ou pela Feira Alquímica."
+    },
+    {
+      "achado": "[INCOERÊNCIA] tarefas_bancada · Reproduzir fórmula (tarefa)",
+      "classe": "alquimista",
+      "no": "Reproduzir uma fórmula alheia a partir do frasco vazio",
+      "campo": "tarefa",
+      "de": "Reproduzir uma fórmula alheia a partir do frasco vazio",
+      "para": "Descobrir o que um frasco vazio continha"
+    },
+    {
+      "achado": "[INCOERÊNCIA] tarefas_bancada · Preparar dose sem bancada (nota)",
+      "classe": "alquimista",
+      "no": "Preparar dose sem bancada, no meio do mato ou em marcha",
+      "campo": "nota",
+      "de": "Sem laboratório improvisado, uma dose por descanso no máximo.",
+      "para": "Uma dose a mais por descanso, no máximo."
+    },
+    {
+      "achado": "[INCOERÊNCIA] tarefas_bancada · Preparar dose sem bancada (tarefa)",
+      "classe": "alquimista",
+      "no": "Preparar dose sem bancada, no meio do mato ou em marcha",
+      "campo": "tarefa",
+      "de": "Preparar dose sem bancada, no meio do mato ou em marcha",
+      "para": "Preparar uma dose a mais, sem bancada, no meio do mato ou em marcha"
+    },
+    {
+      "achado": "[LACUNA] essencia-volatil · dano sem rolagem",
+      "classe": "alquimista",
+      "no": "essencia-volatil",
+      "campo": "descricao",
+      "de": "Cause 3d8 de dano de fogo em uma criatura a até 12 m; quem estiver adjacente a ela sofre 1d8.",
+      "para": "Uma criatura a até 12 m testa Reflexos contra a sua DT de Alquimista e sofre 3d8 de dano de fogo, ou metade se passar. Quem estiver adjacente a ela sofre 1d8 de dano de fogo, sem teste."
+    },
+    {
+      "achado": "[LACUNA] essencia-volatil · defesa",
+      "classe": "alquimista",
+      "no": "essencia-volatil",
+      "campo": "defesa",
+      "de": null,
+      "para": "Reflexos contra a DT do Alquimista"
+    },
+    {
+      "achado": "[LACUNA] oleo-deslizante · queda e fogo",
+      "classe": "alquimista",
+      "no": "oleo-deslizante",
+      "campo": "descricao",
+      "de": "para não cair. O óleo pega fogo se alguém encostar chama nele.",
+      "para": "para não ficar Caído. Se alguém encostar chama no óleo, a área causa 1d6 de dano de fogo a quem estiver nela, que testa Reflexos contra a mesma DT para sofrer metade, e o óleo se consome."
+    },
+    {
+      "achado": "[LACUNA] oleo-deslizante · nível 5",
+      "classe": "alquimista",
+      "no": "oleo-deslizante",
+      "campo": "escalonamento",
+      "de": "quem falhar no teste cai e ainda",
+      "para": "quem falhar no teste fica Caído e ainda"
+    },
+    {
+      "achado": "[LACUNA] tonico-do-folego · gás venenoso",
+      "classe": "alquimista",
+      "no": "tonico-do-folego",
+      "campo": "descricao",
+      "de": "respirar sem prejuízo em ar viciado, fumaça ou gás por uma cena",
+      "para": "respirar sem prejuízo em ar viciado e fumaça por uma cena, e fica como quem prende o fôlego diante de gás venenoso, sem exposição à aflição"
+    },
+    {
+      "achado": "[LACUNA] soro-adaptativo · Clima",
+      "classe": "alquimista",
+      "no": "soro-adaptativo",
+      "campo": "descricao",
+      "de": "escolha calor extremo, frio extremo, grande altitude ou ambiente tóxico. Por uma cena, a criatura ignora penalidades ambientais comuns daquela escolha, mas não ignora dano, aflições nem falta total de ar.",
+      "para": "escolha calor, frio, grande altitude ou ambiente tóxico. Por uma cena, o perigo daquele ambiente baixa um grau para a criatura (no calor e no frio, Extremo vira Severo e Mortal vira Extremo, como o Traje). Não protege de dano de golpe, de aflições nem de falta total de ar."
+    },
+    {
+      "achado": "[LACUNA] mutacao-controlada · tipo de dano",
+      "classe": "alquimista",
+      "no": "mutacao-controlada",
+      "campo": "descricao",
+      "de": "receba uma arma natural de 1d10 e +2 em Fortitude.",
+      "para": "receba uma arma natural de 1d10 de corte, crítico 20/x2, usada com Luta, e +2 em Fortitude."
+    },
+    {
+      "achado": "[LACUNA] mutacao-controlada · campo dano",
+      "classe": "alquimista",
+      "no": "mutacao-controlada",
+      "campo": "dano",
+      "de": "Arma natural 1d10",
+      "para": "Arma natural 1d10 de corte"
+    },
+    {
+      "achado": "[LACUNA] pedra-filosofal · Panaceia e aflições",
+      "classe": "alquimista",
+      "no": "pedra-filosofal",
+      "campo": "descricao",
+      "de": "encerrarem todas as condições que estiverem sofrendo, menos as de longo prazo",
+      "para": "encerrarem todas as condições e aflições que estiverem sofrendo, menos as de longo prazo"
+    },
+    {
+      "achado": "[LACUNA] elixir-de-mana · dado por nível",
+      "classe": "alquimista",
+      "no": "elixir-de-mana",
+      "campo": "descricao",
+      "de": "o segundo frasco desce sem efeito.",
+      "para": "o segundo frasco desce sem efeito. A Mana restaurada não ganha dado por nível nem pela Concentração."
+    },
+    {
+      "achado": "[LACUNA] grande-obra@15 · Composto Duplo",
+      "classe": "alquimista",
+      "no": "grande-obra@15",
+      "campo": "descricao",
+      "de": "com uma ação e uma rolagem de DT para os dois.",
+      "para": "com uma ação e uma rolagem de DT para os dois. Vale a ação mais lenta e o menor alcance das duas, e não dá para juntar uma fórmula de Reação."
+    },
+    {
+      "achado": "[MELHORIA] dt_efeitos · testes repetidos (regra 10)",
+      "classe": "cozinheiro",
+      "no": "dt_efeitos",
+      "campo": "descricao",
+      "de": "O resultado é a DT para todos os alvos daquele uso.",
+      "para": "O resultado é a DT para todos os alvos daquele uso e para os testes repetidos daquele efeito."
+    },
+    {
+      "achado": "[INCOERÊNCIA] mise-en-place@5 · Serviço Rápido × ação das receitas",
+      "classe": "cozinheiro",
+      "no": "mise-en-place@5",
+      "campo": "descricao",
+      "de": "Servir e consumir uma bebida ou um lanche custa uma única Ação de Movimento para você ou para uma criatura adjacente.",
+      "para": "Bebidas e lanches continuam custando uma única Ação de Movimento, e você pode servir um deles a uma criatura adjacente e fazer que ela o consuma na mesma ação."
+    },
+    {
+      "achado": "[LACUNA] refeições × Fome e Descanso",
+      "classe": "cozinheiro",
+      "no": "mise-en-place@1",
+      "campo": "descricao",
+      "de": "Você começa com Chá de Hortelã",
+      "para": "Uma refeição sua conta como a comida do dia de quem a come e como a refeição completa do descanso. Você começa com Chá de Hortelã"
+    },
+    {
+      "achado": "[INCOERÊNCIA] moqueca · acao",
+      "classe": "cozinheiro",
+      "no": "moqueca",
+      "campo": "acao",
+      "de": "Fora de combate",
+      "para": "Ação de Movimento"
+    },
+    {
+      "achado": "[INCOERÊNCIA] moqueca · momento",
+      "classe": "cozinheiro",
+      "no": "moqueca",
+      "campo": "momento",
+      "de": "dez minutos ou durante um descanso",
+      "para": null
+    },
+    {
+      "achado": "[INCOERÊNCIA] moqueca · vira Lanche",
+      "classe": "cozinheiro",
+      "no": "moqueca",
+      "campo": "descricao",
+      "de": "Refeição. Por três rodadas",
+      "para": "Lanche. Por três rodadas"
+    },
+    {
+      "achado": "[LACUNA] refeições · uma por vez e Harmonização",
+      "classe": "cozinheiro",
+      "no": "cardapio",
+      "campo": "descricao",
+      "de": "Ingredientes específicos servem apenas para descrever o prato.",
+      "para": "Ingredientes específicos servem apenas para descrever o prato. Uma criatura mantém o benefício de uma refeição por vez, e o poder Harmonização permite duas."
+    },
+    {
+      "achado": "[LACUNA] prova-antes-de-servir · janela",
+      "classe": "cozinheiro",
+      "no": "prova-antes-de-servir",
+      "campo": "usos",
+      "de": "Uma vez por teste",
+      "para": "Uma vez por rodada"
+    }
+  ],
+  "resolvidos": [
+    {
+      "achado": "[ERRO] bobina-de-choque, veneno-de-contato, frasco-congelante, acido-corrosivo · metade no sucesso (pulados da rodada 1)",
+      "regra": "Convenções da magia valem para classe (regra geral 8); a sessão principal já aplicou"
+    },
+    {
+      "achado": "[LACUNA] cataplasma-de-ferro, iogurte-com-granola, suco-de-laranja nível 4, Casa Cheia, nucleo-estavel · Vida temporária (pulado da rodada 1)",
+      "regra": "Vida temporária (regra geral 1)"
+    },
+    {
+      "achado": "[LACUNA] veneno-de-contato, essencia-volatil, oleo-deslizante · dano de fogo, veneno e ácido que repete ou não",
+      "regra": "Fogo, veneno, ácido e sangramento caem uma vez (regra geral 2)"
+    }
+  ],
+  "mantidos": [
+    {
+      "achado": "[MELHORIA] tonico-de-celeridade, elixir-veloz, sementes-de-marcha · +3 m de Movimento sem virar Apressado",
+      "motivo": "Critério 7: +3 m de Movimento fica como está. Bônus de fontes diferentes somam (regra geral 6)."
+    },
+    {
+      "achado": "[MELHORIA] antidoto-maior · idêntico à fórmula Antídoto",
+      "motivo": "Critério 16: subir para dois estágios aumentaria a força. Fica como está."
+    },
+    {
+      "achado": "[LACUNA] dt_efeitos e Chef · nenhuma receita pede resistência",
+      "motivo": "A rolagem de DT segue valendo para poderes e receitas futuras; a janela do poder Prova Antes de Servir foi corrigida."
+    },
+    {
+      "achado": "Mesa da Celebração por sessão",
+      "motivo": "conferência: não é efeito de combate, e a frase de exceção só explicava a regra"
+    }
+  ]
+}

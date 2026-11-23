@@ -385,6 +385,15 @@ export function obterTemporario(status: IStatusVital | null | undefined, campo: 
   return Math.max(0, Math.trunc(Number(status[campoTemporario(campo)]) || 0));
 }
 
+/** Ganhar extra temporário de um efeito: soma com o que já havia, porque
+ * fontes diferentes somam (Livro, Ferimentos › Vida temporária). */
+export function ganharTemporario(status: IStatusVital, campo: string, valor: number): IStatusVital {
+  if (!aceitaTemporario(campo)) return status;
+  const novo = Math.max(0, Math.trunc(Number(valor) || 0));
+  if (novo <= 0) return status;
+  return { ...status, [campoTemporario(campo)]: obterTemporario(status, campo) + novo };
+}
+
 /** Gasto de custo (magia, poder, habilidade): o temporário paga primeiro. */
 export function gastarComTemporario(
   status: IStatusVital,
@@ -412,7 +421,9 @@ export function atualizarStatusVital(
   const maximoSeguro = Math.max(1, Number(maximo) || 1);
   const valorAtual = Number(statusEntrada[campo] ?? (campo === 'cansacoAtual' ? 0 : maximoSeguro));
 
-  // Extra temporário: o dano gasta ele primeiro e o que passa do máximo vira ele.
+  // Extra temporário: o dano gasta ele primeiro. A cura para no máximo e o que
+  // passa se perde; o extra só vem de `ganharTemporario` (Livro, Ferimentos ›
+  // Vida temporária, 2026-11-20).
   let statusAtual = statusEntrada;
   let alteracao = Number(alteracaoBruta || 0);
   if (aceitaTemporario(campo)) {
@@ -421,10 +432,6 @@ export function atualizarStatusVital(
       const absorvido = Math.min(temporario, -alteracao);
       temporario -= absorvido;
       alteracao += absorvido;
-    } else if (alteracao > 0 && valorAtual + alteracao > maximoSeguro) {
-      const excesso = valorAtual + alteracao - maximoSeguro;
-      temporario += excesso;
-      alteracao -= excesso;
     }
     statusAtual = { ...statusEntrada, [campoTemporario(campo)]: temporario };
   }

@@ -578,6 +578,12 @@ Duas palavras iguais: o **grau Mestre** é um degrau de perícia (+8), e o **Mes
 
 Você tem três fontes de vantagem e uma de desvantagem. Uma vantagem cancela a desvantagem, e as duas que sobram valem uma vantagem só: você rola dois d20 e usa o maior.
 
+### Rolar de novo e somar bônus
+
+- Um efeito que manda rolar de novo vale uma vez para aquele teste ou aquele dado. Se duas fontes podem rolar de novo o mesmo teste, você escolhe uma: um teste, ou um dado, nunca é rolado de novo duas vezes.
+
+- Bônus de fontes diferentes (habilidade, poder, item, magia) somam no mesmo teste, sem teto geral. Quem tem limite próprio continua com ele, como Ajudar (+4) e o ajuste de Prestígio e Fama (±2), e a mesma fonte não soma com ela mesma.
+
 ### DT Padrão, DT Difícil e ajuste de nível
 
 Vários tópicos pedem um teste "contra a DT Padrão do nível", "contra a DT Difícil" ou "contra a DT Rotineira". São dificuldades que crescem junto com o nível do grupo, do lugar ou do inimigo. A Rotineira fica 5 abaixo da Padrão, e a Difícil, 5 acima. Num nível entre duas linhas, vale a linha do nível menor. A DT sobe mais depressa nos níveis em que um grau de perícia novo abre, como o Veterano no 19: ela acompanha quem treinou.
@@ -1988,7 +1994,7 @@ Todo dano do jogo cai numa destas cinco famílias. Resistência, vulnerabilidade
 
 - **Físicos:** corte, perfuração, impacto e balístico.
 
-- **Persistentes:** sangramento, fogo, veneno e ácido; batem de novo no fim do turno até alguém remover.
+- **Persistentes:** sangramento, fogo, veneno e ácido. O golpe cai uma vez, venha de magia, poder, arma ou criatura. O dano só volta no fim do turno quando a fonte deixa a condição (Sangramento, Queimando, Envenenado) ou diz que continua, e aí bate de novo até alguém remover.
 
 - **Mágico:** elemental (os sete elementos e as quatorze derivações) e os outros nove Fluxos naturais. Magia que não diz o tipo causa o dano do próprio Fluxo (dano de Vazio, dano do Fim...).
 
@@ -2059,6 +2065,8 @@ São dois passos, sempre nesta ordem:
 Um ataque de Fogo causa 10 de dano. O alvo é vulnerável a Fogo e tem Resistência 5 a Fogo. Primeiro a vulnerabilidade dobra o dano para 20, e só então a Resistência tira 5: o alvo sofre 15. Subtraindo a Resistência antes de dobrar, o resultado seria 10.
 
 Resistência física geral cobre todos os danos físicos: corte, perfuração, impacto e balístico. Resistência de um tipo específico não faz nada contra os outros tipos.
+
+Resistências ao mesmo tipo vindas de fontes diferentes (raça, classe, item, magia) somam. Reduções de dano de fontes diferentes também somam entre si, e somam com a Resistência.
 
 ## mesa-ao-vivo
 
@@ -2208,6 +2216,10 @@ Quando a Vida chega a 0, o dano continua sendo anotado abaixo de zero, e esse n�
 
 - Estabilizar interrompe os testes, mas só quem volta a 1 PV ou mais acorda. Quem acorda ganha Ferido 1.
 
+- Efeito que deixa você com 1 de Vida ao cair apaga o Déficit, sem Morrendo e sem Ferido, mas não evita a morte na hora.
+
+- Vida temporária é gasta antes da Vida, soma com a de outras fontes e some no fim da fonte ou no descanso.
+
 - Um golpe que tira metade ou mais dos PV máximos, ou uma falha crítica em Morrendo, pede a tabela de trauma (2d6).
 
 - A Mutilação sempre é anunciada antes, e um sucesso no teste evita a perda.
@@ -2257,6 +2269,22 @@ Um teste de Cura usa a mesma DT. Sucesso estabiliza, o que interrompe os testes 
 **Exemplo:**
 
 Davi está no nível 3 (ajuste +1), tem 40 de Vida máxima e leva um golpe que o deixa em −12. O Déficit de Vida é 12, ou 30% da Vida máxima: Gravidade 2. Ele cai inconsciente com Morrendo 1. No fim do turno dele, rola Fortitude contra DT 12 + (2 × 2) + 0 + 1 = 17, porque ainda não tem Ferido. Falhou: Morrendo 2. Uma aliada o estabiliza com um teste de Cura contra a mesma DT 17, e os testes de Morrendo param. Ele só acorda quando alguém curar o bastante para levá-lo de volta a 1 PV, e então ganha Ferido 1.
+
+### Ficar com 1 de Vida
+
+Algumas habilidades seguram quem cai: "quando um aliado cair a 0 de Vida, ele fica com 1 de Vida". Nesses casos, o Déficit de Vida some e a pessoa continua de pé, com 1 de Vida. Ela não fica Morrendo e não ganha Ferido. O efeito não vale contra a morte na hora (Déficit igual à Vida máxima), a não ser que diga isso com todas as letras. Se o golpe tirou metade ou mais dos PV máximos, a tabela de trauma continua valendo.
+
+### Vida temporária
+
+- Vida temporária é uma camada por cima da Vida: o dano tira dela primeiro, e só o que sobra chega à Vida.
+
+- Vida temporária de fontes diferentes soma: cada efeito novo acrescenta o que dá ao que você já tem. Como nos bônus, a mesma fonte não soma com ela mesma: usar de novo o mesmo efeito troca o valor dele pelo novo.
+
+- A cura enche a Vida até o máximo, e o que passar se perde. Vida temporária só vem de um efeito que diga que dá Vida temporária, e ela não conta para acordar quem caiu.
+
+- Ela some no fim da duração da fonte ou no próximo descanso, o que vier antes.
+
+- Mana temporária e Estamina temporária seguem a mesma regra: são gastas antes das normais, somam entre fontes e somem do mesmo jeito.
 
 ### Tratar ferimentos
 
@@ -4014,7 +4042,7 @@ A ficha de um veículo registra categoria, tamanho, Vida, Defesa, Resistência g
 
 - Veículos, montarias, personagens e criaturas usam a mesma escala de Vida e dano.
 
-- Role o dano indicado pela arma. Subtraia a Resistência geral e a resistência específica ao tipo do dano. O restante reduz a Vida.
+- Role o dano indicado pela arma. Subtraia a Resistência geral e a Resistência específica ao tipo do dano. O restante reduz a Vida. A Resistência geral do veículo funciona como redução de dano: vale contra qualquer tipo, menos o dano verdadeiro.
 
 - Não multiplique dano por causa do tipo do alvo. Uma arma precisa informar dados, bônus, tipo, alcance e crítico antes de entrar em combate.
 
@@ -4599,11 +4627,11 @@ A partir do 13º nível (Domínio da Derivação), uma vez por rodada, ao conjur
 
 - Sangue rara | Uma criatura viva que falhar na resistência não recupera Vida até o começo do seu próximo turno. Nunca controla as ações ou o movimento do alvo.
 
-- Fogo | Magma comum | Um espaço de 1,5 m afetado fica em brasa até o começo do seu próximo turno; cada criatura sofre 1d6 de Magma na primeira vez que entrar ou começar o turno ali.
+- Fogo | Magma comum | Um espaço de 1,5 m afetado fica em brasa até o começo do seu próximo turno. Cada criatura, na primeira vez que entrar ou começar o turno ali, testa Reflexos contra a DT de quem conjurou e sofre 1d6 de Magma, ou metade se passar.
 
 - Fogo Astral rara | Quem sofrer dano da magia tem desvantagem no próximo teste de concentração que fizer até o começo do seu próximo turno.
 
-- Ar | Fumaça comum | Cria uma área de fumaça de 3 m num ponto afetado, com cobertura parcial até o começo do seu próximo turno.
+- Ar | Fumaça comum | Cria uma área de fumaça de 3 m num ponto afetado até o começo do seu próximo turno. Quem está dentro fica camuflado: ataques contra ele têm −2.
 
 - Vácuo rara | Quem falhar na resistência perde as reações até o começo do seu próximo turno. Não causa morte instantânea nem ignora defesas.
 
@@ -4941,7 +4969,7 @@ Condição é o que fica grudado no personagem por um tempo: um estado com efeit
 
 - A Sanidade vai de 0 a 100. Perdê-la custa 1d4, 1d6, 1d8 ou 2d6, conforme o tamanho do que você viu, e cada faixa dela tem um estado: de Estável a Quebra.
 
-- Abaixo de certos pontos a Sanidade provoca crises, e há 6 catalogadas. As 28 condições oficiais e as 47 de longo prazo estão nas tabelas deste tópico.
+- Abaixo de certos pontos a Sanidade provoca crises, e há 6 catalogadas. As 29 condições oficiais e as 47 de longo prazo estão nas tabelas deste tópico.
 
 - A ficha aplica sozinha o que dá para calcular. O que depende da cena continua com a mesa.
 
@@ -5082,6 +5110,8 @@ São as condições que ajudam. Vêm de um incentivo, de uma magia de apoio ou d
 - Revigorado | No começo do seu turno, recupere 1d4 de Vida. Não acumula consigo mesmo. | Termina ao fim da duração.
 
 - Invisível | Quem não consegue ver você ataca com desvantagem, e os seus ataques contra essa criatura têm vantagem. Você pode tentar se esconder mesmo sem cobertura. Não acumula consigo mesma. | Termina ao fim da duração da fonte, ao ficar Revelado ou quando a fonte disser que acaba, como ao atacar.
+
+- Incorpóreo | Atravessa criaturas e objetos, mas não pode terminar o movimento dentro deles. Não pode ser agarrado, derrubado nem empurrado. Sofre metade do dano físico que não venha de magia nem de arma mágica. Um efeito que diga que atinge incorpóreos ignora essa metade. Não acumula consigo mesmo. | Termina ao fim da duração da fonte. Uma criatura que é incorpórea por natureza fica assim para sempre.
 
 ### Lesões, sequelas e saúde mental
 
@@ -5819,7 +5849,7 @@ Subir de nível numa classe sempre entrega alguma coisa, e essa coisa tem cinco 
 
 ### A grade de uma classe
 
-As 29 classes seguem a mesma grade, contada pelo nível daquela classe. Se você tem duas classes, cada uma corre a própria grade separadamente.
+As 29 classes seguem a mesma grade, contada pelo nível daquela classe. Se você tem duas classes, cada uma corre a própria grade separadamente. Algumas fogem dela num ponto ou outro, quase todas especiais: a Elementarista tem mais habilidades, treze poderes e três eventos, o Viajante tem treze poderes e o Ninja ganha um evento a mais no nível 17. A Progressão de cada classe mostra a grade dela.
 
 - Recompensa | Nos níveis | Quantas
 
@@ -5865,7 +5895,7 @@ O fecho da classe, no nível 20, uma por classe. Ela chega sozinha como qualquer
 
 ### Grau de perícia
 
-Um degrau de graça em uma perícia à sua escolha, entregue na hora, sem cumprir tempo nem requisito extra. O nível total mínimo do grau, em Perícias, continua valendo. É a exceção às regras do tópico Treinamento, e os dois caminhos convivem: o grau dado pela classe sobe agora, o conquistado por treino cobra os dias da tabela.
+Um degrau de graça em uma perícia à sua escolha, entregue na hora, sem cumprir tempo nem requisito extra. O nível total mínimo do grau, em Perícias, continua valendo. É a exceção às regras do tópico Treinamento, e os dois caminhos convivem: o grau dado pela classe sobe agora, o conquistado por treino cobra os dias da tabela. Nas classes especiais, cada entrega dá dois graus em vez de um, na mesma perícia ou em duas.
 
 ### Evento
 
@@ -6161,7 +6191,7 @@ O Cofre do banco guarda dinheiro e item, e cresce com o quanto você o usa.
 
 Os quatro lugares onde se compra no Jardim, o que cada um vende, por que um item some do catálogo e o que acontece quando a compra não é um objeto.
 
-O catálogo inteiro tem 1.438 itens, e você nunca vê todos de uma vez. Cada item declara o lugar mínimo onde ele existe, e é o lugar em que o grupo está comprando que decide o que aparece na prateleira.
+O catálogo inteiro tem 1.439 itens, e você nunca vê todos de uma vez. Cada item declara o lugar mínimo onde ele existe, e é o lugar em que o grupo está comprando que decide o que aparece na prateleira.
 
 **Em resumo**
 
@@ -6185,7 +6215,7 @@ O catálogo inteiro tem 1.438 itens, e você nunca vê todos de uma vez. Cada it
 
 - Mercado Negro | Contrabando, veneno, armamento militar, implantes, artefatos épicos, material de origem proibida e criaturas perigosas. | 354
 
-- Banco Lunar | Lendário, Mítico, Relíquia da Criação, Frutos do Éden, tecnologia extrema e seres lendários. | 274
+- Banco Lunar | Lendário, Mítico, Relíquia da Criação, Frutos do Éden, tecnologia extrema e seres lendários. | 275
 
 Comprar num local mostra tudo daquele nível para baixo: quem está na Metrópole enxerga também a Feira de Vila. O contrário não vale, e tentar comprar um item acima do local é recusado na hora.
 

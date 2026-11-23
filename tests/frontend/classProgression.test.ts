@@ -131,7 +131,7 @@ test('Pop Star mantém a maior progressão garantida de Fama', () => {
   const descricaoEstrela = estrela.descricao || '';
   assert.match(descricaoEstrela, /8 de Mana temporária/i);
   assert.match(descricaoEstrela, /três rodadas/i);
-  assert.match(descricaoEstrela, /permanece com 1 de Vida/i);
+  assert.match(descricaoEstrela, /fica com 1 de Vida/i);
 });
 
 test('Ação Completa usada pelas habilidades possui custo definido', () => {
@@ -165,7 +165,7 @@ test('separa 18 classes comuns e 11 especiais por Árvore', () => {
 test('classes comuns publicam limites para suas mecânicas mais abertas', () => {
   const guerreiro = obterClasse('guerreiro');
   const batalhao = guerreiro.habilidades?.find(item => item.id === 'batalhao');
-  assert.match(batalhao?.descricao || '', /Levanta! no nível 4 é a única exceção/i);
+  assert.match(batalhao?.descricao || '', /Levanta!, com o comando no nível 4, é a única exceção/i);
   assert.match(
     batalhao?.opcoes?.find(item => item.id === 'ninguem-passa')?.escalonamento || '',
     /segundo ataque não gasta outra Reação/i,
@@ -211,7 +211,7 @@ test('classes comuns publicam limites para suas mecânicas mais abertas', () => 
   const protegidoNivel5 = guardiao.habilidades
     ?.find(item => item.id === 'protegido')
     ?.estagios?.find(item => item.nivel === 5);
-  assert.match(protegidoNivel5?.descricao || '', /dividir o dano antes das Resistências/i);
+  assert.match(protegidoNivel5?.descricao || '', /dividir o dano depois de rolado e antes da vulnerabilidade e das Resistências/i);
   assert.match(
     guardiao.habilidades?.find(item => item.id === 'castelo')?.descricao || '',
     /use sua Reação para se tornar o alvo/i,
@@ -679,7 +679,7 @@ test('ficha técnica do efeito vira uma linha só na ficha do jogador', () => {
   const ficha = { classes: [{ classeId: 'engenheiro', nivel: 10 }] };
   const meusFilhos = habilidadesAutomaticas(ficha).find(item => item.titulo === 'Meus Filhos');
   assert.ok(meusFilhos);
-  assert.match(meusFilhos.descricao, /Ação Livre · Toque · Até o fim do combate · Uma vez por cena/);
+  assert.match(meusFilhos.descricao, /Ação Livre · Toque · Até o fim da cena · Uma vez por cena/);
 
   const engenheiro = obterClasse('engenheiro');
   const torreta = engenheiro.poderes?.find(item => item.id === 'torreta-compacta');
@@ -1431,7 +1431,7 @@ test('a Munição Especial do Atirador cobre a lacuna da munição etérea e mor
 
   const n15 = atirador.habilidades?.find(item => item.id === 'na-mira')?.estagios?.find(item => item.nivel === 15);
   assert.match(n15?.descricao || '', /duas doses/);
-  assert.equal(n15?.usos, 'Duas doses por sessão');
+  assert.equal(n15?.usos, 'Duas doses por descanso');
 });
 
 test('Disparo Calculado chega no nível 18 do Atirador e Um Só Disparo tem ficha completa', () => {
@@ -1515,7 +1515,7 @@ test('Milagre e Mestre da Vida do Médico têm ficha completa', () => {
   const milagre = medico.habilidades?.find(item => item.id === 'milagre');
   assert.ok(milagre);
   assert.deepEqual(milagre.niveis, [18]);
-  assert.equal(milagre.usos, 'Uma vez a cada cinco sessões');
+  assert.equal(milagre.usos, 'Uma vez por sessão');
 
   const mestre = medico.habilidades?.find(item => item.id === 'mestre-da-vida');
   assert.ok(mestre);
@@ -1561,7 +1561,7 @@ test('Socorro de Emergência acelera dentro do mesmo combate: 2ª e 3ª ativaç�
   const medico = obterClasse('medico');
   const socorro = medico.habilidades?.find(item => item.id === 'socorro-de-emergencia');
   const n3 = socorro?.estagios?.find(item => item.nivel === 3);
-  assert.match(n3?.descricao || '', /2ª ativação neste combate soma \+1 dado/);
+  assert.match(n3?.descricao || '', /2ª ativação nesta cena soma \+1 dado/);
   assert.match(n3?.descricao || '', /3ª soma \+2 dados e também encerra uma condição leve/);
   assert.match(n3?.dano || '', /\+1 dado na 2ª ativação/);
 

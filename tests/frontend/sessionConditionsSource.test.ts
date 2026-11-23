@@ -26,7 +26,7 @@ test('a seleção rápida de condições na sessão cobre as 28 condições ofic
   // Confere que o componente realmente itera sobre as duas listas
   // combinadas (não só uma das duas).
   assert.match(codigoEditorSessao, /CONDICOES_RAPIDAS\s*=\s*\[\.\.\.CONDICOES_OFICIAIS,\s*\.\.\.CRISES_SANIDADE\]/);
-  assert.equal(CONDICOES_OFICIAIS.length, 28);
+  assert.equal(CONDICOES_OFICIAIS.length, 29);
   assert.equal(CRISES_SANIDADE.length, 6);
 });
 

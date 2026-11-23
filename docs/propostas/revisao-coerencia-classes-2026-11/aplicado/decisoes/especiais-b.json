@@ -1,0 +1,460 @@
+{
+ "correcoes": [
+  {
+   "achado": "[LACUNA] corte-da-lua · perícia do ataque à distância",
+   "classe": "cacador-das-almas",
+   "no": "corte-da-lua",
+   "campo": "descricao",
+   "de": "faça um ataque com a Zanpakutō contra um alvo a até 12 m",
+   "para": "ataque com a Zanpakutō, usando Luta, um alvo a até 12 m"
+  },
+  {
+   "achado": "[LACUNA] mil-laminas · perícia do ataque à distância",
+   "classe": "cacador-das-almas",
+   "no": "mil-laminas",
+   "campo": "descricao",
+   "de": "você pode fazer ataques da Zanpakutō contra alvos a até 12 m",
+   "para": "você pode atacar com a Zanpakutō, usando Luta, alvos a até 12 m"
+  },
+  {
+   "achado": "[LACUNA] correntes · perícia do ataque à distância",
+   "classe": "cacador-das-almas",
+   "no": "correntes",
+   "campo": "descricao",
+   "de": "a Zanpakutō alcança alvos a até 6 m.",
+   "para": "a Zanpakutō alcança alvos a até 6 m, e você ataca com Luta."
+  },
+  {
+   "achado": "[LACUNA] cinzas · zona",
+   "classe": "cacador-das-almas",
+   "no": "cinzas",
+   "campo": "descricao",
+   "de": "Uma vez por turno, uma criatura hostil que entrar nesse raio ou terminar o turno nele testa",
+   "para": "Uma criatura hostil que entrar nesse raio ou começar o turno nele, uma vez por turno dela, testa"
+  },
+  {
+   "achado": "[LACUNA] cinzas · lâmina",
+   "classe": "cacador-das-almas",
+   "no": "cinzas",
+   "campo": "descricao",
+   "de": "ou metade se passar.",
+   "para": "ou metade se passar. A lâmina volta à sua mão quando o efeito termina."
+  },
+  {
+   "achado": "[INCOERÊNCIA] ressonancia · Surdo e Percepção",
+   "classe": "cacador-das-almas",
+   "no": "ressonancia",
+   "campo": "descricao",
+   "de": "recebe -2 na iniciativa e em testes de Percepção até o fim da cena",
+   "para": "recebe -2 na Iniciativa e em testes de Percepção que não dependam de som até o fim da cena"
+  },
+  {
+   "achado": "[LACUNA] palco-tragico · Bankai · escuridão",
+   "classe": "cacador-das-almas",
+   "no": "palco-tragico",
+   "campo": "escalonamento",
+   "de": "em uma escuridão teatral que dura enquanto ela estiver ativa.",
+   "para": "em uma escuridão teatral, só de cena: ela não conta como Escuridão para visão, ataque ou ocultação, e dura enquanto a Bankai estiver ativa."
+  },
+  {
+   "achado": "[LACUNA] cinzas-do-fim · Shikai · Fogo",
+   "classe": "cacador-das-almas",
+   "no": "cinzas-do-fim",
+   "campo": "descricao",
+   "de": "3d8 de dano de fogo em vez do dano normal e ignora Resistência a fogo do alvo.",
+   "para": "3d8 de dano de Fogo em vez do dano normal e ignora a Resistência a Fogo do alvo, inclusive a de Magma."
+  },
+  {
+   "achado": "[LACUNA] cinzas-do-fim · Bankai · espectro",
+   "classe": "cacador-das-almas",
+   "no": "cinzas-do-fim",
+   "campo": "escalonamento",
+   "de": "atacando por você uma vez por rodada e causando 1d8 de dano físico.",
+   "para": "agindo na iniciativa dele, com Defesa igual à sua e 1 de Vida. Ele ataca uma vez por rodada com o seu bônus de ataque da Zanpakutō e causa 1d8 de dano de Essência. Só um espectro existe por vez, e um novo substitui o anterior."
+  },
+  {
+   "achado": "[LACUNA] corte-espectral · Shikai",
+   "classe": "cacador-das-almas",
+   "no": "corte-espectral",
+   "campo": "descricao",
+   "de": "Shikai: uma vez por turno, ao acertar com a Zanpakutō, você pode dispensar o contato e disparar uma lâmina de energia espiritual em linha reta de até 9 m, atingindo automaticamente a primeira criatura hostil no caminho e causando 1d10 de dano de Essência.",
+   "para": "Shikai: uma vez por turno, no lugar de um ataque, dispare uma lâmina de energia espiritual em linha reta de até 9 m. A primeira criatura hostil no caminho testa Reflexos contra a DT do Caçador das Almas e sofre 1d10 de dano de Essência, ou metade se passar. Cobertura total bloqueia a linha."
+  },
+  {
+   "achado": "[LACUNA] corte-espectral · Bankai",
+   "classe": "cacador-das-almas",
+   "no": "corte-espectral",
+   "campo": "escalonamento",
+   "de": "atingindo uma segunda criatura na mesma linha com metade do dano.",
+   "para": "atingindo uma segunda criatura na mesma linha com metade do dano, e o mesmo teste de Reflexos vale para ela."
+  },
+  {
+   "achado": "[LACUNA] konso · alvos",
+   "classe": "cacador-das-almas",
+   "no": "konso-funeral-da-alma",
+   "campo": "descricao",
+   "de": "qualquer alma voluntária, viva ou não, ou um espírito hostil",
+   "para": "um espírito ou alma desencarnada voluntária, ou um espírito hostil"
+  },
+  {
+   "achado": "[MELHORIA] konso · Exposto",
+   "classe": "cacador-das-almas",
+   "no": "konso-funeral-da-alma",
+   "campo": "descricao",
+   "de": "sofre −2 de Defesa contra o seu próximo ataque, até o fim do seu próximo turno",
+   "para": "fica Exposto até o fim do seu próximo turno, no lugar de acabar no começo do turno dele"
+  },
+  {
+   "achado": "[ERRO] mascara-do-vazio · dano verdadeiro",
+   "classe": "cacador-das-almas",
+   "no": "mascara-do-vazio",
+   "campo": "descricao",
+   "de": "2d8 de dano que ignora Resistência e não pode ser reduzido ou transferido.",
+   "para": "2d8 de dano verdadeiro, que não pode ser transferido."
+  },
+  {
+   "achado": "[ERRO] mascara-do-vazio · campo dano",
+   "classe": "cacador-das-almas",
+   "no": "mascara-do-vazio",
+   "campo": "dano",
+   "de": "2d8 em você ao terminar",
+   "para": "2d8 de dano verdadeiro em você ao terminar"
+  },
+  {
+   "achado": "[MELHORIA] separacao-da-alma · efeitos",
+   "classe": "cacador-das-almas",
+   "no": "separacao-da-alma",
+   "campo": "descricao",
+   "de": "alvo de possessão ou controle espiritual",
+   "para": "alvo de um efeito que tome o controle do corpo ou da mente (possessão, dominação, controle espiritual)"
+  },
+  {
+   "achado": "[MELHORIA] corte-do-vinculo · efeitos",
+   "classe": "cacador-das-almas",
+   "no": "corte-do-vinculo",
+   "campo": "descricao",
+   "de": "sob possessão ou controle espiritual",
+   "para": "sob um efeito que tome o controle do corpo ou da mente"
+  },
+  {
+   "achado": "[MELHORIA] corte-do-vinculo · nova tentativa",
+   "classe": "cacador-das-almas",
+   "no": "corte-do-vinculo",
+   "campo": "descricao",
+   "de": "em falha, o efeito permanece.",
+   "para": "em falha, o efeito permanece e você não pode tentar de novo neste efeito até o fim da cena."
+  },
+  {
+   "achado": "[LACUNA] barreira-escarlate · Shikai",
+   "classe": "cacador-das-almas",
+   "no": "barreira-escarlate",
+   "campo": "descricao",
+   "de": "escolha um entre dois efeitos ao usar a Zanpakutō: dispare uma rajada carmesim a até 9 m que causa 1d8 de dano de Essência, ou use sua Reação para erguer uma barreira que concede",
+   "para": "escolha um entre dois efeitos. Rajada (Ação Padrão): ataque com a Zanpakutō, usando Luta, um alvo a até 9 m; em acerto, ele sofre 1d8 de dano de Essência. Barreira (Reação): erga uma barreira carmesim que concede"
+  },
+  {
+   "achado": "[LACUNA] bankai · ignora metade da Resistência",
+   "classe": "cacador-das-almas",
+   "no": "bankai",
+   "campo": "descricao",
+   "de": "ignoram metade da Resistência do alvo e o primeiro",
+   "para": "ignoram metade da Resistência do alvo (várias fontes disso não se somam: a Resistência cai pela metade uma vez só) e o primeiro"
+  },
+  {
+   "achado": "[MELHORIA] perfuracao · Bankai",
+   "classe": "cacador-das-almas",
+   "no": "perfuracao",
+   "campo": "escalonamento",
+   "de": "inclusive os concedidos por poderes ou magias.",
+   "para": "inclusive os concedidos por poderes ou magias. A reação Esquiva e a cobertura continuam valendo."
+  },
+  {
+   "achado": "[MELHORIA] bankai · uso do Shikai",
+   "classe": "cacador-das-almas",
+   "no": "bankai",
+   "campo": "descricao",
+   "de": "O Shikai é ativado sem custo e",
+   "para": "O Shikai é ativado sem custo, gastando o uso dele nesta cena, e"
+  },
+  {
+   "achado": "[LACUNA] hakuda · Mod. Força",
+   "classe": "cacador-das-almas",
+   "no": "hakuda",
+   "campo": "descricao",
+   "de": "1d8 de impacto ou de Essência, à sua escolha.",
+   "para": "1d8 de impacto ou de Essência, à sua escolha, mais o Mod. Força."
+  },
+  {
+   "achado": "[LACUNA] guardiao · Reação",
+   "classe": "invocador",
+   "no": "guardiao",
+   "campo": "descricao",
+   "de": "cada invocação sua pode se colocar entre um ataque e um aliado adjacente a ela, virando o alvo do ataque no lugar dele.",
+   "para": "cada invocação sua pode usar a própria Reação para se colocar entre um ataque e um aliado adjacente a ela, antes da rolagem, virando o alvo do ataque no lugar dele, como na reação Proteger."
+  },
+  {
+   "achado": "[LACUNA] avatar-da-deidade × convergencia-primordial",
+   "classe": "invocador",
+   "no": "avatar-da-deidade",
+   "campo": "descricao",
+   "de": "A mesma invocação não recebe este poder e a Convergência Primordial ao mesmo tempo.",
+   "para": "Se a Convergência Primordial estiver ativa, esta invocação não recebe os +2 dados dela: vale a Invocação Ascendida."
+  },
+  {
+   "achado": "[LACUNA] olhos-compartilhados · alcance",
+   "classe": "invocador",
+   "no": "olhos-compartilhados",
+   "campo": "descricao",
+   "de": "Veja e ouça por uma invocação sua enquanto se concentrar",
+   "para": "Veja e ouça por uma invocação sua em cena, a qualquer distância na mesma dimensão, enquanto se concentrar"
+  },
+  {
+   "achado": "[MELHORIA] chamado-da-criacao · permissão",
+   "classe": "invocador",
+   "no": "chamado-da-criacao",
+   "campo": "descricao",
+   "de": "Aceitar exige termos claros e pode trocar",
+   "para": "Aceitar exige termos claros e, com a permissão do Mestre, pode trocar"
+  },
+  {
+   "achado": "[LACUNA] essencia-adaptavel · acao",
+   "classe": "invocador",
+   "no": "essencia-adaptavel",
+   "campo": "acao",
+   "de": "Passivo",
+   "para": "Fora de combate"
+  },
+  {
+   "achado": "[LACUNA] essencia-adaptavel · momento",
+   "classe": "invocador",
+   "no": "essencia-adaptavel",
+   "campo": "momento",
+   "de": null,
+   "para": "escolhido no descanso completo"
+  },
+  {
+   "achado": "[LACUNA] essencia-adaptavel · efeito extra",
+   "classe": "invocador",
+   "no": "essencia-adaptavel",
+   "campo": "descricao",
+   "de": "até o próximo descanso completo.",
+   "para": "até o próximo descanso completo. O efeito extra do ataque, como o Imobilizado da Aranha Tecelã, continua valendo."
+  },
+  {
+   "achado": "[LACUNA] elo-protetor",
+   "classe": "invocador",
+   "no": "elo-protetor",
+   "campo": "descricao",
+   "de": "Divida igualmente entre você e a invocação um dano recebido.",
+   "para": "Quando você sofrer dano, uma invocação sua a até 9 m recebe metade dele, depois da sua Resistência. O dano que passa mantém o tipo e usa a Resistência dela."
+  },
+  {
+   "achado": "[MELHORIA] investida-bestial · Movimento",
+   "classe": "invocador",
+   "no": "investida-bestial",
+   "campo": "descricao",
+   "de": "move até 9 m e",
+   "para": "move até 9 m, além do Movimento dela, e"
+  },
+  {
+   "achado": "[LACUNA] Salamandra de Fogo · Fogo",
+   "classe": "invocador",
+   "no": "Salamandra de Fogo I",
+   "campo": "nota",
+   "de": "de fogo",
+   "para": "de Fogo"
+  },
+  {
+   "achado": "[LACUNA] Salamandra de Fogo · Fogo",
+   "classe": "invocador",
+   "no": "Salamandra de Fogo II",
+   "campo": "nota",
+   "de": "de fogo",
+   "para": "de Fogo"
+  },
+  {
+   "achado": "[LACUNA] Salamandra de Fogo · Fogo",
+   "classe": "invocador",
+   "no": "Salamandra de Fogo III",
+   "campo": "nota",
+   "de": "de fogo",
+   "para": "de Fogo"
+  },
+  {
+   "achado": "[LACUNA] Salamandra de Fogo · Fogo",
+   "classe": "invocador",
+   "no": "Salamandra de Fogo IV",
+   "campo": "nota",
+   "de": "de fogo",
+   "para": "de Fogo"
+  },
+  {
+   "achado": "[LACUNA] Salamandra de Fogo · Fogo",
+   "classe": "invocador",
+   "no": "Salamandra de Fogo V",
+   "campo": "nota",
+   "de": "de fogo",
+   "para": "de Fogo"
+  },
+  {
+   "achado": "[INCOERÊNCIA] banquete-de-poder · janela",
+   "classe": "devorador",
+   "no": "banquete-de-poder@1",
+   "campo": "descricao",
+   "de": "pode devorá-lo até o fim da cena atual, gastando um minuto",
+   "para": "pode devorá-lo até uma hora depois da morte, gastando um minuto"
+  },
+  {
+   "achado": "[INCOERÊNCIA] banquete-de-poder · duracao",
+   "classe": "devorador",
+   "no": "banquete-de-poder@1",
+   "campo": "duracao",
+   "de": "Até o fim da cena da morte",
+   "para": "Até o slot ser esvaziado"
+  },
+  {
+   "achado": "[LACUNA] banquete-de-poder · slots cheios",
+   "classe": "devorador",
+   "no": "banquete-de-poder@1",
+   "campo": "descricao",
+   "de": "e grave-a num slot vazio,",
+   "para": "e grave-a num slot vazio (você pode esvaziar um slot quando quiser, fora de combate, para abrir espaço),"
+  },
+  {
+   "achado": "[LACUNA] banquete-de-poder · poder roubado e vetos",
+   "classe": "devorador",
+   "no": "banquete-de-poder@1",
+   "campo": "descricao",
+   "de": "Você mantém um slot ativo por vez.",
+   "para": "O poder gravado usa o seu nível de Devorador onde cita nível da classe, a DT do Devorador onde cita uma DT, e o custo dele em Mana ou Estamina. Não se grava efeito que devolva a vida nem habilidade de criatura Única, Ser Lendário ou Deidade. Você mantém um slot ativo por vez."
+  },
+  {
+   "achado": "[LACUNA] banquete-final · usos",
+   "classe": "devorador",
+   "no": "banquete-final",
+   "campo": "usos",
+   "de": "Uma vez por sessão",
+   "para": "Uma vez por descanso"
+  },
+  {
+   "achado": "[LACUNA] banquete-final · texto",
+   "classe": "devorador",
+   "no": "banquete-final",
+   "campo": "descricao",
+   "de": "Uma vez por sessão, ao devorar",
+   "para": "Uma vez por descanso, ao devorar"
+  },
+  {
+   "achado": "[LACUNA] banquete-final · duração",
+   "classe": "devorador",
+   "no": "banquete-final",
+   "campo": "descricao",
+   "de": "Eles ficam ativos até o fim da cena atual;",
+   "para": "Eles ficam ativos por uma hora;"
+  },
+  {
+   "achado": "[LACUNA] ecos-da-ultima-refeicao · 0 ou menos",
+   "classe": "devorador",
+   "no": "ecos-da-ultima-refeicao",
+   "campo": "descricao",
+   "de": "cairia sua Vida a 0,",
+   "para": "cairia sua Vida a 0 ou menos,"
+  },
+  {
+   "achado": "[LACUNA] ecos-da-ultima-refeicao · limite",
+   "classe": "devorador",
+   "no": "ecos-da-ultima-refeicao",
+   "campo": "descricao",
+   "de": "esvazie o slot mais antigo em seguida.",
+   "para": "esvazie o slot mais antigo em seguida. Isso não vale contra a morte na hora nem contra dano verdadeiro."
+  },
+  {
+   "achado": "[INCOERÊNCIA] paralisia-do-medo · olhar",
+   "classe": "devorador",
+   "no": "paralisia-do-medo",
+   "campo": "descricao",
+   "de": "em falha, fica Imobilizado",
+   "para": "em falha, o olhar o prende no lugar: fica Imobilizado"
+  },
+  {
+   "achado": "[LACUNA] grito-dominante · defesa",
+   "classe": "devorador",
+   "no": "grito-dominante",
+   "campo": "descricao",
+   "de": "Inimigos numa área de 6 m recebem desvantagem no próximo ataque que fizerem.",
+   "para": "Inimigos num raio de 6 m testam Vontade contra a DT do Devorador; em falha, têm desvantagem no próximo ataque que fizerem, até o começo do seu próximo turno."
+  },
+  {
+   "achado": "[LACUNA] grito-dominante · campo defesa",
+   "classe": "devorador",
+   "no": "grito-dominante",
+   "campo": "defesa",
+   "de": null,
+   "para": "Vontade"
+  },
+  {
+   "achado": "[LACUNA] presa-a-distancia",
+   "classe": "devorador",
+   "no": "presa-a-distancia",
+   "campo": "descricao",
+   "de": "contra um alvo a 9 m, causando 1d8 + Mod.Força de dano.",
+   "para": "e ataque com Pontaria um alvo a até 9 m; em acerto, causa 1d8 + Mod.Força de dano de perfuração."
+  },
+  {
+   "achado": "[MELHORIA] sentidos-agucados",
+   "classe": "devorador",
+   "no": "sentidos-agucados",
+   "campo": "descricao",
+   "de": "mesmo no escuro.",
+   "para": "sem depender de luz. Escuridão criada por magia ou Fluxo só cede para quem a fonte disser."
+  }
+ ],
+ "resolvidos": [
+  {
+   "achado": "[LACUNA] Vida temporária (Núcleo Firme, Círculo, Sacrifício, Ascendida)",
+   "regra": "Vida temporária (regra geral 1)"
+  },
+  {
+   "achado": "[LACUNA] circulo-de-convocacao · Vida temporária ao entrar",
+   "regra": "Vida temporária (regra geral 1): a mesma fonte usada de novo troca o valor, sem somar"
+  },
+  {
+   "achado": "[LACUNA] Salamandra e Aranha · dano de Fogo e veneno repete ou não",
+   "regra": "Fogo, veneno, ácido e sangramento caem uma vez (regra geral 2)"
+  },
+  {
+   "achado": "[LACUNA] essencia-adaptavel · Fogo e Ácido repetem",
+   "regra": "Fogo, veneno, ácido e sangramento caem uma vez (regra geral 2)"
+  },
+  {
+   "achado": "[LACUNA] cinzas-do-fim · Fogo repete no fim do turno",
+   "regra": "Fogo, veneno, ácido e sangramento caem uma vez (regra geral 2)"
+  },
+  {
+   "achado": "[LACUNA] Duende Prestativo · Mão Extra × Ajudar",
+   "regra": "Bônus de fontes diferentes somam, Ajudar mantém +4 (regra geral 6)"
+  },
+  {
+   "achado": "[LACUNA] ecos-da-ultima-refeicao · ficar com 1 de Vida",
+   "regra": "Ficar com 1 de Vida (regra geral 3)"
+  },
+  {
+   "achado": "[LACUNA] eco-reverso e Bankai · ignora metade da Resistência",
+   "regra": "Resistências e reduções somam (regra geral 4); a parte de ignorar entrou no texto do Bankai"
+  }
+ ],
+ "mantidos": [
+  {
+   "achado": "[INCOERÊNCIA] zanpakuto · estágio 15 · custo_mana 4 em estágio Passivo",
+   "motivo": "o custo_mana do Shikai Dominado fica como está: é o custo novo do Shikai"
+  },
+  {
+   "achado": "[MELHORIA] casca-guardia · você e os aliados",
+   "motivo": "o texto fica 'aliados adjacentes a uma invocação sua'; incluir o próprio Invocador seria benefício novo"
+  },
+  {
+   "achado": "grau_pericia quantidade 2",
+   "motivo": "é de propósito"
+  }
+ ]
+}

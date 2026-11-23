@@ -149,7 +149,7 @@ class ExtraTemporarioSessaoTests(unittest.TestCase):
         status = self._status_da_ficha(personagem_id)
         self.assertEqual((status["vidaAtual"], status["vidaTemporaria"]), (31, 0))
 
-    def test_cura_do_mestre_acima_do_maximo_vira_extra(self):
+    def test_cura_do_mestre_para_no_maximo_e_a_sobra_se_perde(self):
         campanha_id, personagem_id, ator = self._mesa("extra-cura@example.com")
         sessao_id, participante = self._abrir(campanha_id, ator)
         atualizar_participante(
@@ -161,8 +161,8 @@ class ExtraTemporarioSessaoTests(unittest.TestCase):
         )
 
         linha = self._participante(participante["id"])
-        self.assertEqual((linha["vida_atual"], linha["vida_temporaria"]), (40, 7))
-        self.assertEqual(self._status_da_ficha(personagem_id)["vidaTemporaria"], 7)
+        self.assertEqual((linha["vida_atual"], linha["vida_temporaria"]), (40, 0))
+        self.assertEqual(self._status_da_ficha(personagem_id).get("vidaTemporaria", 0), 0)
 
     def test_mestre_pode_definir_o_extra_direto(self):
         campanha_id, personagem_id, ator = self._mesa("extra-definir@example.com")

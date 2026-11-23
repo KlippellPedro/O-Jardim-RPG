@@ -368,6 +368,21 @@
       "remocao": "Termina ao fim da duração da fonte, ao ficar Revelado ou quando a fonte disser que acaba, como ao atacar."
     },
     {
+      "tipo": "condicao",
+      "id": "incorporeo",
+      "titulo": "Incorpóreo",
+      "categoria": "combate",
+      "positiva": true,
+      "duracao": "Conforme a fonte.",
+      "efeitos": [
+        "Atravessa criaturas e objetos, mas não pode terminar o movimento dentro deles.",
+        "Não pode ser agarrado, derrubado nem empurrado.",
+        "Sofre metade do dano físico que não venha de magia nem de arma mágica. Um efeito que diga que atinge incorpóreos ignora essa metade.",
+        "Não acumula consigo mesmo."
+      ],
+      "remocao": "Termina ao fim da duração da fonte. Uma criatura que é incorpórea por natureza fica assim para sempre."
+    },
+    {
       "tipo": "crise",
       "id": "crise-panico",
       "titulo": "Pânico",

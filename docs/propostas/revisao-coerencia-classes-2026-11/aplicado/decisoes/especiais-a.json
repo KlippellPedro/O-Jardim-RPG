@@ -1,0 +1,592 @@
+{
+ "correcoes": [
+  {
+   "achado": "[INCOERÊNCIA] rasgar · dano verdadeiro no nível 2 (critério 3)",
+   "classe": "campeao-dimensional",
+   "no": "rasgar",
+   "campo": "descricao",
+   "de": "Teleporte-se até 15 m e cause 2d10 de dano verdadeiro a uma criatura adjacente ao destino.",
+   "para": "Teleporte-se até 15 m para um ponto que você veja e cause 2d10 de dano de Espaço a uma criatura adjacente ao destino. Ela testa Reflexos contra a DT do Campeão Dimensional e sofre metade em sucesso."
+  },
+  {
+   "achado": "[INCOERÊNCIA] rasgar · dano",
+   "classe": "campeao-dimensional",
+   "no": "rasgar",
+   "campo": "dano",
+   "de": "2d10 verdadeiro",
+   "para": "2d10 de Espaço"
+  },
+  {
+   "achado": "[INCOERÊNCIA] rasgar · defesa",
+   "classe": "campeao-dimensional",
+   "no": "rasgar",
+   "campo": "defesa",
+   "de": null,
+   "para": "Reflexos"
+  },
+  {
+   "achado": "[LACUNA] ultimo-round · teste e ação",
+   "classe": "campeao-dimensional",
+   "no": "numero-1@20",
+   "campo": "descricao",
+   "de": "permaneça com 1 de Vida e cause 4d12 de dano verdadeiro a inimigos em 6 m; depois, receba 2 Cansaços.",
+   "para": "permaneça com 1 de Vida. Em seguida, inimigos a até 6 m testam Reflexos contra a DT do Campeão Dimensional e sofrem 4d12 de dano verdadeiro, ou metade em sucesso. Depois, receba 2 de Cansaço."
+  },
+  {
+   "achado": "[LACUNA] ultimo-round · acao",
+   "classe": "campeao-dimensional",
+   "no": "numero-1@20",
+   "campo": "acao",
+   "de": "Passivo",
+   "para": "Reação"
+  },
+  {
+   "achado": "[LACUNA] ultimo-round · defesa",
+   "classe": "campeao-dimensional",
+   "no": "numero-1@20",
+   "campo": "defesa",
+   "de": null,
+   "para": "Reflexos"
+  },
+  {
+   "achado": "[LACUNA] alem-do-comum · maestria",
+   "classe": "campeao-dimensional",
+   "no": "alem-do-comum",
+   "campo": "descricao",
+   "de": null,
+   "para": "Os bônus desta habilidade são permanentes e contam como mérito próprio para a maestria de atributo."
+  },
+  {
+   "achado": "[LACUNA] pisada · tamanho (critério 6)",
+   "classe": "campeao-dimensional",
+   "no": "pisada",
+   "campo": "descricao",
+   "de": "ficam Caídos; em sucesso, sofrem metade e ficam de pé.",
+   "para": "ficam Caídos; em sucesso, sofrem metade e ficam de pé. Criatura duas categorias de tamanho maior que você não fica Caída."
+  },
+  {
+   "achado": "[LACUNA] impacto · empurrão e tamanho (critério 6)",
+   "classe": "campeao-dimensional",
+   "no": "impacto",
+   "campo": "descricao",
+   "de": "e empurre o alvo até 6 m.",
+   "para": "e empurre o alvo até 6 m; o alvo testa Fortitude contra a DT do Campeão Dimensional para ficar no lugar. Criatura duas categorias de tamanho maior que você não é empurrada."
+  },
+  {
+   "achado": "[LACUNA] impacto · defesa",
+   "classe": "campeao-dimensional",
+   "no": "impacto",
+   "campo": "defesa",
+   "de": null,
+   "para": "Fortitude"
+  },
+  {
+   "achado": "[LACUNA] avanco · tamanho (critério 6)",
+   "classe": "campeao-dimensional",
+   "no": "avanco",
+   "campo": "descricao",
+   "de": "e não são empurradas.",
+   "para": "e não são empurradas. Criatura duas categorias de tamanho maior que você não é empurrada."
+  },
+  {
+   "achado": "[LACUNA] numero-1 · Cansaço",
+   "classe": "campeao-dimensional",
+   "no": "numero-1@1",
+   "campo": "descricao",
+   "de": "vantagem em testes contra Cansaço e contra quedas",
+   "para": "vantagem em Fortitude contra o Cansaço de clima, de esforço e de aflições, e em Acrobacia para cair de pé"
+  },
+  {
+   "achado": "[MELHORIA] dt_efeitos (critério 10)",
+   "classe": "campeao-dimensional",
+   "no": "dt_efeitos",
+   "campo": "descricao",
+   "de": "e ele fica trocado.",
+   "para": "e ele fica trocado. O resultado vale para todos os alvos do mesmo efeito e para os testes repetidos dele."
+  },
+  {
+   "achado": "[INCOERÊNCIA] navio-fantasma × Veículos (critérios 13 e 15)",
+   "classe": "pirata-amaldicoado",
+   "no": "navio-fantasma",
+   "campo": "descricao",
+   "de": "Ele navega sem tripulação, atravessa névoa comum e barreiras mágicas que não declarem bloquear seres incorpóreos ou viagem espectral, sem sofrer dano, e desaparece no fim da cena.",
+   "para": "É um veículo de tripulação mínima 1, conduzido por você ou por um aliado com Pilotagem, e leva até 6 ocupantes. Atravessa névoa comum e barreiras mágicas que não declarem bloquear seres incorpóreos ou viagem espectral, nunca sofre dano e desaparece no fim da cena."
+  },
+  {
+   "achado": "[INCOERÊNCIA] pele-de-tubarao · Sangramento",
+   "classe": "pirata-amaldicoado",
+   "no": "pele-de-tubarao",
+   "campo": "escalonamento",
+   "de": "Nível 2: você tem vantagem em Fortitude para resistir a Sangramento.",
+   "para": "Nível 2: o Sangramento em você acaba sozinho no fim do segundo turno seguinte."
+  },
+  {
+   "achado": "[LACUNA] senhor-das-profundezas · área fixa",
+   "classe": "pirata-amaldicoado",
+   "no": "senhor-das-profundezas",
+   "campo": "descricao",
+   "de": "de 12 m de raio ao seu redor.",
+   "para": "de 12 m de raio no ponto onde você está, que fica ali."
+  },
+  {
+   "achado": "[LACUNA] senhor-das-profundezas · tamanho",
+   "classe": "pirata-amaldicoado",
+   "no": "senhor-das-profundezas",
+   "campo": "descricao",
+   "de": "e fica Caído;",
+   "para": "e fica Caído (criatura duas categorias de tamanho maior que você não fica Caída);"
+  },
+  {
+   "achado": "[MELHORIA] tripulacao-dos-condenados · dano (critério 4)",
+   "classe": "pirata-amaldicoado",
+   "no": "tripulacao-dos-condenados",
+   "campo": "descricao",
+   "de": "a uma criatura adjacente escolhida por você.",
+   "para": "a uma criatura adjacente escolhida por você, que testa Reflexos contra a DT da Maldição para sofrer metade."
+  },
+  {
+   "achado": "[MELHORIA] capitao-dos-condenados · Exposto (critério 7)",
+   "classe": "pirata-amaldicoado",
+   "no": "capitao-dos-condenados",
+   "campo": "descricao",
+   "de": "sofrem −2 de Defesa.",
+   "para": "ficam Expostos até o fim da duração, no lugar de acabar no começo do turno deles."
+  },
+  {
+   "achado": "[MELHORIA] furia-da-mare · título (critério 7)",
+   "classe": "pirata-amaldicoado",
+   "no": "maldicao-dos-sete-mares@10",
+   "campo": "titulo",
+   "de": "Fúria da Maré",
+   "para": "Frenesi da Maré"
+  },
+  {
+   "achado": "[MELHORIA] furia-da-mare · texto",
+   "classe": "pirata-amaldicoado",
+   "no": "maldicao-dos-sete-mares@10",
+   "campo": "descricao",
+   "de": "entrar em fúria por três rodadas. No primeiro turno da fúria,",
+   "para": "entrar em frenesi por três rodadas. No primeiro turno do frenesi,"
+  },
+  {
+   "achado": "[LACUNA] ancora-maldita · tamanho",
+   "classe": "pirata-amaldicoado",
+   "no": "maldicao-dos-sete-mares@20",
+   "campo": "descricao",
+   "de": "em sucesso, só é puxado.",
+   "para": "em sucesso, só é puxado. Criatura duas categorias de tamanho maior que você não é puxada."
+  },
+  {
+   "achado": "[LACUNA] mare-profana · tamanho",
+   "classe": "pirata-amaldicoado",
+   "no": "mare-profana",
+   "campo": "descricao",
+   "de": "e fica no lugar.",
+   "para": "e fica no lugar. Criatura duas categorias de tamanho maior que você não é empurrada."
+  },
+  {
+   "achado": "[MELHORIA] dt_efeitos · poderes (critério 10)",
+   "classe": "pirata-amaldicoado",
+   "no": "dt_efeitos",
+   "campo": "descricao",
+   "de": "Quando uma habilidade sua pedir um teste",
+   "para": "Quando uma habilidade ou poder seu pedir um teste"
+  },
+  {
+   "achado": "[MELHORIA] dt_efeitos · testes repetidos",
+   "classe": "pirata-amaldicoado",
+   "no": "dt_efeitos",
+   "campo": "descricao",
+   "de": "atingidos pelo mesmo uso.",
+   "para": "atingidos pelo mesmo uso e dos testes repetidos daquele efeito."
+  },
+  {
+   "achado": "[LACUNA] arcano-absoluto · cartas por turno",
+   "classe": "cartista-arcano",
+   "no": "arcano-absoluto",
+   "campo": "descricao",
+   "de": "que podem ser a mesma, e a primeira carta jogada no turno custa 0 de Mana.",
+   "para": "que podem ser a mesma, gastando a Ação Padrão e a Ação de Movimento do turno (uma em cada), e a primeira carta jogada no turno custa 0 de Mana. Carta de Ação Completa conta como as duas."
+  },
+  {
+   "achado": "[LACUNA] arcano-absoluto · margem",
+   "classe": "cartista-arcano",
+   "no": "arcano-absoluto",
+   "campo": "descricao",
+   "de": "com 19 ou 20 natural.",
+   "para": "com 19 ou 20 natural. A carta arremessada fica 19-20/x2."
+  },
+  {
+   "achado": "[LACUNA] carta-na-manga · momento",
+   "classe": "cartista-arcano",
+   "no": "baralho-arcano@5",
+   "campo": "momento",
+   "de": null,
+   "para": "antes da rolagem, mesmo fora do seu turno"
+  },
+  {
+   "achado": "[LACUNA] roda-da-fortuna · momento",
+   "classe": "cartista-arcano",
+   "no": "roda-da-fortuna",
+   "campo": "momento",
+   "de": null,
+   "para": "depois da rolagem"
+  },
+  {
+   "achado": "[MELHORIA] mao-inicial · conjuração (critério 9)",
+   "classe": "cartista-arcano",
+   "no": "baralho-arcano@1",
+   "campo": "descricao",
+   "de": "Receba +2 em Misticismo, Percepção e Enganação",
+   "para": "Receba +2 em Misticismo (inclusive no teste de conjuração), Percepção e Enganação"
+  },
+  {
+   "achado": "[MELHORIA] mago · reduções somam (regra 6)",
+   "classe": "cartista-arcano",
+   "no": "mago",
+   "campo": "descricao",
+   "de": "Carta que já custa 0 continua custando 0.",
+   "para": "Carta que já custa 0 continua custando 0. Reduções de custo de fontes diferentes somam, e o mínimo continua 1, exceto o 0 do Arcano Absoluto."
+  },
+  {
+   "achado": "[LACUNA] ouros · tamanho",
+   "classe": "cartista-arcano",
+   "no": "ouros",
+   "campo": "descricao",
+   "de": "empurram o alvo em 1,5 m.",
+   "para": "empurram o alvo em 1,5 m. Criatura duas categorias de tamanho maior que você não é empurrada."
+  },
+  {
+   "achado": "[MELHORIA] dados-viciados · vantagem",
+   "classe": "cartista-arcano",
+   "no": "dados-viciados",
+   "campo": "descricao",
+   "de": "sucesso crítico ou falha crítica.",
+   "para": "sucesso crítico ou falha crítica. Com vantagem ou desvantagem, escolha qual dos dois dados trocar."
+  },
+  {
+   "achado": "[MELHORIA] dt_efeitos (critério 10)",
+   "classe": "cartista-arcano",
+   "no": "dt_efeitos",
+   "campo": "descricao",
+   "de": "que já vale sozinha para toda magia que você lança.",
+   "para": "que já vale sozinha para toda magia que você lança. O resultado vale para todos os alvos do mesmo efeito e para os testes repetidos dele."
+  },
+  {
+   "achado": "[LACUNA] passagem-em-grupo · alcance",
+   "classe": "guia-dimensional",
+   "no": "cartografia-da-matriz@15",
+   "campo": "descricao",
+   "de": "Leve até dois aliados ao usar passagens próprias, e a passagem passa a custar 1 de Mana por aliado levado.",
+   "para": "Ao usar Passagem Curta ou Passo Vetorial, leve consigo até dois aliados voluntários a até 1,5 m, pagando 1 de Mana por aliado. Quem atravessa com você não sofre exposição ao Mal do Interstício por essa travessia."
+  },
+  {
+   "achado": "[LACUNA] ancora-de-emergencia · regra 3",
+   "classe": "guia-dimensional",
+   "no": "ancora-de-emergencia",
+   "campo": "descricao",
+   "de": "quando você cai a 0 de Vida, seja transportado na hora para essa âncora, se ela ainda existir.",
+   "para": "quando você cair a 0 de Vida sem morrer na hora, seja transportado para essa âncora, se ela ainda existir, estiver na mesma dimensão e não houver Fronteira selada no caminho. Você chega no estado em que caiu."
+  },
+  {
+   "achado": "[LACUNA] caminho-impossivel · Transporte e termos",
+   "classe": "guia-dimensional",
+   "no": "caminho-impossivel",
+   "campo": "descricao",
+   "de": "até um local conhecido na mesma dimensão ou até uma âncora dimensional ativa em outra dimensão.",
+   "para": "até um lugar conhecido na mesma dimensão ou até uma âncora sua ativa em outra dimensão. Isso dispensa o Portal Dimensional e a taxa de acesso."
+  },
+  {
+   "achado": "[LACUNA] caminho-impossivel · Fronteira selada",
+   "classe": "guia-dimensional",
+   "no": "caminho-impossivel",
+   "campo": "descricao",
+   "de": "Selos e efeitos que bloqueiem viagem dimensional impedem a abertura.",
+   "para": "Uma Fronteira selada impede a abertura. Quem atravessa não sofre exposição ao Mal do Interstício por essa travessia."
+  },
+  {
+   "achado": "[LACUNA] ancora-oculta · perícia",
+   "classe": "guia-dimensional",
+   "no": "ancora-oculta",
+   "campo": "descricao",
+   "de": "se o observador testar Percepção contra a DT do Guia Dimensional.",
+   "para": "se o observador testar Ressonância ou Misticismo contra a DT do Guia Dimensional."
+  },
+  {
+   "achado": "[MELHORIA] norte-sempre · Viagem",
+   "classe": "guia-dimensional",
+   "no": "cartografia-da-matriz@1",
+   "campo": "descricao",
+   "de": "ambientes naturais ou masmorras que já mapeou.",
+   "para": "ambientes naturais ou masmorras que já mapeou. No papel de Guia da Viagem, o dia rende como se você tivesse passado no teste em terreno Fácil ou Ermo."
+  },
+  {
+   "achado": "[LACUNA] selar-portal · DT (critério 10)",
+   "classe": "guia-dimensional",
+   "no": "selar-portal",
+   "campo": "descricao",
+   "de": "(DT 20, se ele for natural)",
+   "para": "(num portal natural, a DT Difícil do nível do lugar)"
+  },
+  {
+   "achado": "[MELHORIA] janela-remota · concentração",
+   "classe": "guia-dimensional",
+   "no": "janela-remota",
+   "campo": "descricao",
+   "de": "veja e ouça através de uma âncora na mesma dimensão.",
+   "para": "veja e ouça através de uma âncora na mesma dimensão, mantendo concentração."
+  },
+  {
+   "achado": "[MELHORIA] corredor-da-matriz · quem atravessa",
+   "classe": "guia-dimensional",
+   "no": "corredor-da-matriz",
+   "campo": "descricao",
+   "de": "atravessá-los custa 3 m de Movimento.",
+   "para": "atravessá-los custa 3 m de Movimento. Só você e aliados voluntários atravessam."
+  },
+  {
+   "achado": "[LACUNA] queda-lateral · tamanho",
+   "classe": "guia-dimensional",
+   "no": "queda-lateral",
+   "campo": "descricao",
+   "de": "(sem queda, fogo ou abismo).",
+   "para": "(sem queda, fogo ou abismo). Criatura duas categorias de tamanho maior que você não é movida."
+  },
+  {
+   "achado": "[LACUNA] dobra-esmagadora · tamanho",
+   "classe": "guia-dimensional",
+   "no": "dobra-esmagadora",
+   "campo": "descricao",
+   "de": "e fica Caída; em sucesso",
+   "para": "e fica Caída (criatura duas categorias de tamanho maior que você não fica Caída); em sucesso"
+  },
+  {
+   "achado": "[MELHORIA] dt_efeitos (critério 10)",
+   "classe": "guia-dimensional",
+   "no": "dt_efeitos",
+   "campo": "descricao",
+   "de": "é a DT que o alvo precisa alcançar.",
+   "para": "é a DT que o alvo precisa alcançar. O resultado vale para todos os alvos do mesmo efeito e para os testes repetidos dele."
+  },
+  {
+   "achado": "[INCOERÊNCIA] guarda-costas (critério 13)",
+   "classe": "escritor-de-contos",
+   "no": "guarda-costas",
+   "campo": "descricao",
+   "de": "Aparece para ajudar numa cena de combate. Usa a ficha de um humanoide do Bestiário com VD igual à metade do seu nível de Escritor (o Mestre escolhe qual), age logo depois de você e some no fim da cena ou ao chegar a 0 de Vida.",
+   "para": "Aparece como ajudante temporário numa cena de combate. Usa a ficha de um humanoide do Bestiário de VD igual à metade do seu nível de Escritor, para baixo, mínimo 1 (o Mestre escolhe qual). Age na iniciativa dele e some no fim da cena ou ao chegar a 0 de Vida."
+  },
+  {
+   "achado": "[LACUNA] personagens-recorrentes · Contatos (critério 12)",
+   "classe": "escritor-de-contos",
+   "no": "personagens-recorrentes",
+   "campo": "descricao",
+   "de": "Registre um contato real por estágio. Uma vez por sessão,",
+   "para": "Registre um contato real por estágio, como contato Conhecido. Esses contatos não contam no limite de contatos, e os favores seguem Contatos e Laços. Uma vez por sessão,"
+  },
+  {
+   "achado": "[LACUNA] informante · ramo",
+   "classe": "escritor-de-contos",
+   "no": "informante",
+   "campo": "descricao",
+   "de": "Oferece uma informação real sobre o que você perguntar, se puder saber.",
+   "para": "Contato do ramo Informação. Oferece uma informação real sobre o que você perguntar, se puder saber."
+  },
+  {
+   "achado": "[LACUNA] contrabandista · ramo e preço",
+   "classe": "escritor-de-contos",
+   "no": "contrabandista",
+   "campo": "descricao",
+   "de": "Consegue um item ou uma passagem difícil de achar, dentro do razoável.",
+   "para": "Contato do ramo Mercadoria ou Passagem. Consegue um item ou uma passagem difícil de achar, dentro do razoável, pelo preço da Loja ou do Transporte. Não substitui o contato exigido para Sair da Árvore."
+  },
+  {
+   "achado": "[LACUNA] curandeiro · ramo",
+   "classe": "escritor-de-contos",
+   "no": "curandeiro",
+   "campo": "descricao",
+   "de": "Estabiliza um aliado Morrendo",
+   "para": "Contato do ramo Ofício. Estabiliza um aliado Morrendo"
+  },
+  {
+   "achado": "[LACUNA] metafora-cortante · rolagem e Sanidade (critério 4)",
+   "classe": "escritor-de-contos",
+   "no": "metafora-cortante",
+   "campo": "descricao",
+   "de": "Ataque a Vontade de um alvo a 12 m; cause 1d6 de dano mental, que tira Sanidade, e −2 no próximo teste dele em caso de acerto.",
+   "para": "O alvo a 12 m testa Vontade contra a DT do Escritor de Contos. Em falha, perde 1d6 de Sanidade (dano mental; se não tem barra de Sanidade, perde 1d6 de Mana) e sofre −2 no próximo teste. Em sucesso, perde metade e não sofre o −2."
+  },
+  {
+   "achado": "[MELHORIA] montagem · ação e limites",
+   "classe": "escritor-de-contos",
+   "no": "montagem",
+   "campo": "acao",
+   "de": "Ação Livre",
+   "para": "Fora de combate"
+  },
+  {
+   "achado": "[MELHORIA] montagem · limites",
+   "classe": "escritor-de-contos",
+   "no": "montagem",
+   "campo": "descricao",
+   "de": "mas todos gastam 2 Mana.",
+   "para": "mas todos gastam 2 Mana. Não vale para Relaxar, treino nem fabricação. Em Exploração, conta como uma ação do turno."
+  },
+  {
+   "achado": "[MELHORIA] pressagio · Motivo se gasta",
+   "classe": "escritor-de-contos",
+   "no": "tinta-carmesim@15",
+   "campo": "descricao",
+   "de": "uma consequência provável de uma escolha imediata.",
+   "para": "uma consequência provável de uma escolha imediata. O Motivo se gasta até o próximo descanso."
+  },
+  {
+   "achado": "[MELHORIA] dt_efeitos (critério 10)",
+   "classe": "escritor-de-contos",
+   "no": "dt_efeitos",
+   "campo": "descricao",
+   "de": "é a DT que o alvo precisa alcançar.",
+   "para": "é a DT que o alvo precisa alcançar. O resultado vale para todos os alvos do mesmo efeito e para os testes repetidos dele."
+  },
+  {
+   "achado": "[INCOERÊNCIA] dormir-em-qualquer-lugar · qualidade",
+   "classe": "viajante-classe",
+   "no": "dormir-em-qualquer-lugar",
+   "campo": "descricao",
+   "de": "Um descanso em abrigo improvisado conta como adequado, salvo ambiente letal.",
+   "para": "Um descanso em abrigo improvisado conta como qualidade Boa, se você tem comida e água, mesmo no clima Severo. Não vale no clima Extremo nem no Mortal."
+  },
+  {
+   "achado": "[LACUNA] sem-fronteiras · imunidade",
+   "classe": "viajante-classe",
+   "no": "sem-fronteiras",
+   "campo": "descricao",
+   "de": "ficam imunes a dano e condições causados apenas pelo ambiente.",
+   "para": "ficam imunes a dano de ambiente (Frio e Calor), a dano de queda e a Cansaço de clima. Armadilhas, criaturas e dano mágico seguem valendo."
+  },
+  {
+   "achado": "[LACUNA] sem-fronteiras · alcance",
+   "classe": "viajante-classe",
+   "no": "sem-fronteiras",
+   "campo": "descricao",
+   "de": "afete você e até cinco aliados por uma cena",
+   "para": "afete você e até cinco aliados a até 12 m por uma cena"
+  },
+  {
+   "achado": "[LACUNA] companheiros-de-jornada · Colapso",
+   "classe": "viajante-classe",
+   "no": "companheiros-de-jornada",
+   "campo": "descricao",
+   "de": "ignoram Cansaço e penalidades de viagem por uma cena;",
+   "para": "ignoram as penalidades do Cansaço, menos o Colapso, e o teste de Fortitude do ritmo Forçado, por uma cena;"
+  },
+  {
+   "achado": "[LACUNA] rota-conhecida · clima, contato e Interstício",
+   "classe": "viajante-classe",
+   "no": "passaporte-entre-mundos@5",
+   "campo": "descricao",
+   "de": "Ignore a primeira penalidade ambiental mundana de cada cena e mantenha um contato em duas regiões.",
+   "para": "Ignore o primeiro teste de clima de cada cena e mantenha um contato Conhecido em duas regiões, que não conta no limite de contatos. Você não sofre exposição ao Mal do Interstício ao atravessar entre Galhos."
+  },
+  {
+   "achado": "[LACUNA] pele-de-estrada · tóxicos",
+   "classe": "viajante-classe",
+   "no": "passaporte-entre-mundos@15",
+   "campo": "descricao",
+   "de": "vantagem contra ambientes tóxicos",
+   "para": "vantagem em Fortitude contra aflições de gás, fumaça e poeira"
+  },
+  {
+   "achado": "[MELHORIA] ja-sai-de-pior · duplica Esquiva",
+   "classe": "viajante-classe",
+   "no": "ja-sai-de-pior",
+   "campo": "descricao",
+   "de": "depois do ataque, desloque-se 1,5 m sem provocar reações.",
+   "para": "depois do ataque, acertando ou não, desloque-se 1,5 m sem provocar reação. Usa a mesma reação da Esquiva."
+  },
+  {
+   "achado": "[MELHORIA] dt_efeitos (critério 10)",
+   "classe": "viajante-classe",
+   "no": "dt_efeitos",
+   "campo": "descricao",
+   "de": "é a DT que o alvo precisa alcançar.",
+   "para": "é a DT que o alvo precisa alcançar. O resultado vale para todos os alvos do mesmo efeito e para os testes repetidos dele."
+  }
+ ],
+ "resolvidos": [
+  {
+   "achado": "[LACUNA] soco, impacto, punho · empilhamento",
+   "regra": "Bônus (regra geral 6): fontes diferentes somam, sem teto geral"
+  },
+  {
+   "achado": "[LACUNA] casco-de-abismo, corpo-que-o-mar-nao-leva, corpo-encharcado · Resistência e redução somadas",
+   "regra": "Resistências e reduções (regra geral 4)"
+  },
+  {
+   "achado": "[MELHORIA] dt_efeitos/sussurros-do-fundo · bônus de Intimidação na DT",
+   "regra": "Bônus (regra geral 6)"
+  },
+  {
+   "achado": "[LACUNA] paragrafo-de-protecao · Vida temporária",
+   "regra": "Vida temporária (regra geral 1)"
+  },
+  {
+   "achado": "[LACUNA] cliffhanger / ancora-de-emergencia · 1 de Vida",
+   "regra": "Ficar com 1 de Vida (regra geral 3)"
+  },
+  {
+   "achado": "[LACUNA] avanco · tipo e metade",
+   "regra": "Já aplicado pela sessão principal; só entrou o limite de tamanho (critério 6)"
+  },
+  {
+   "achado": "[MELHORIA] roda-da-fortuna · rerrolagem",
+   "regra": "Rolar de novo (regra geral 5)"
+  }
+ ],
+ "mantidos": [
+  {
+   "achado": "[LACUNA] presas-do-fundo · Mod. Força",
+   "motivo": "Arma natural com dano próprio; somar Força subiria o dano (critério 16)."
+  },
+  {
+   "achado": "[INCOERÊNCIA] evolucao-abissal · campos × escalonamento",
+   "motivo": "Os campos mostram o nível 1 e o texto traz os níveis seguintes; não muda a regra."
+  },
+  {
+   "achado": "[MELHORIA] ancora-de-retorno · nome",
+   "motivo": "Mudar o título não resolve nenhuma regra."
+  },
+  {
+   "achado": "[MELHORIA] morte/o-sol · momento",
+   "motivo": "Os momentos descrevem o gatilho de cada poder."
+  },
+  {
+   "achado": "[MELHORIA] primeira-linha · ação",
+   "motivo": "O texto já diz que o Motivo é escrito após o descanso."
+  },
+  {
+   "achado": "[MELHORIA] epilogo · cura em dado fixo",
+   "motivo": "Mudar para porcentagem sobe a cura (critério 16)."
+  },
+  {
+   "achado": "[LACUNA] caminho-impossivel · janela por sessão",
+   "motivo": "É viagem e transporte, janela de história (critério 2)."
+  },
+  {
+   "achado": "[MELHORIA] bussola-do-vazio · redundância",
+   "motivo": "Mantida; Norte Sempre ganhou a ligação com Viagem."
+  },
+  {
+   "achado": "[LACUNA] avanco · provocar reação",
+   "motivo": "O Livro já define quem provoca; não se acrescenta isenção."
+  },
+  {
+   "achado": "[MELHORIA] viajante · Mana em poderes mundanos",
+   "motivo": "Critério 16: custo de recurso fica como está."
+  },
+  {
+   "achado": "[LACUNA] vilao-da-semana, cliffhanger · alcance",
+   "motivo": "Sem alcance escrito, vale ver o alvo; não se acrescenta número."
+  }
+ ]
+}

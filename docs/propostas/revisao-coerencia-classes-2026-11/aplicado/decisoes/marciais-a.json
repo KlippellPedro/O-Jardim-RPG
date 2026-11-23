@@ -1,0 +1,596 @@
+{
+  "correcoes": [
+    {
+      "achado": "[ERRO] escudo-do-arsenal",
+      "classe": "guerreiro",
+      "no": "escudo-do-arsenal",
+      "campo": "descricao",
+      "de": "receba +2 em Fortitude contra empurrão e queda.",
+      "para": "receba +2 em Fortitude contra Empurrar e +2 em Reflexos contra Derrubar."
+    },
+    {
+      "achado": "[ERRO] escudo-do-arsenal (bancada)",
+      "classe": "guerreiro",
+      "no": "Escudos",
+      "campo": "nota",
+      "de": "+2 em Fortitude contra empurrão e queda",
+      "para": "+2 em Fortitude contra Empurrar e em Reflexos contra Derrubar"
+    },
+    {
+      "achado": "[INCOERÊNCIA] mira (duração)",
+      "classe": "guerreiro",
+      "no": "mira",
+      "campo": "duracao",
+      "de": "Até o próximo ataque dele",
+      "para": "Até o próximo ataque ou teste dele"
+    },
+    {
+      "achado": "[INCOERÊNCIA] mira (nível 3)",
+      "classe": "guerreiro",
+      "no": "mira",
+      "campo": "escalonamento",
+      "de": "Nível 3: dura até o fim do turno dele.",
+      "para": "Nível 3: o bônus vale até o fim do turno dele, em todos os ataques e testes."
+    },
+    {
+      "achado": "[INCOERÊNCIA] arsenal-especial raridade",
+      "classe": "guerreiro",
+      "no": "arsenal-especial",
+      "campo": "descricao",
+      "de": "de raridade Rara ou inferior, e ponha",
+      "para": "de raridade Rara ou inferior (peça Épica ou acima só com autorização do Mestre), e ponha"
+    },
+    {
+      "achado": "[LACUNA] levanta (Vida temporária e Caído)",
+      "classe": "guerreiro",
+      "no": "levanta",
+      "campo": "descricao",
+      "de": "O aliado sai de Caído sem gastar ação e recebe 5 de Vida temporária.",
+      "para": "O aliado sai de Caído sem gastar ação e sem provocar reação, e recebe 5 de Vida temporária até o fim da cena."
+    },
+    {
+      "achado": "[LACUNA] levanta (nível 4 na habilidade)",
+      "classe": "guerreiro",
+      "no": "batalhao",
+      "campo": "descricao",
+      "de": "Levanta! no nível 4 é a única exceção",
+      "para": "Levanta!, com o comando no nível 4, é a única exceção"
+    },
+    {
+      "achado": "[LACUNA] bandeira-fincada",
+      "classe": "guerreiro",
+      "no": "bandeira-fincada",
+      "campo": "descricao",
+      "de": "e você dá de graça uma ordem do Batalhão, sem gastar ação.",
+      "para": "e você dá de graça uma ordem do Batalhão, além da ordem da rodada, sem gastar ação."
+    },
+    {
+      "achado": "[LACUNA] Errou Perto de Mim",
+      "classe": "guerreiro",
+      "no": "implacavel@5",
+      "campo": "descricao",
+      "de": "atacá-la. Esse ataque não sofre o corte de −2 do Contra-Ataque comum.",
+      "para": "atacá-la, sem o −2 do Contra-Ataque, e o ataque pode gerar crítico."
+    },
+    {
+      "achado": "[LACUNA] Ninguém Passa! (ordem)",
+      "classe": "guerreiro",
+      "no": "ninguem-passa",
+      "campo": "descricao",
+      "de": "o aliado ataca de reação a primeira criatura que tentar sair de perto dele ou passar pelo espaço ao lado.",
+      "para": "o aliado faz um Ataque de Oportunidade, com a reação dele, contra a primeira criatura que tentar sair do alcance dele ou passar pelo espaço ao lado."
+    },
+    {
+      "achado": "[LACUNA] Ninguém Passa! (nível 3)",
+      "classe": "guerreiro",
+      "no": "ninguem-passa",
+      "campo": "escalonamento",
+      "de": "Nível 3: acertar também para o movimento de quem tentou passar.",
+      "para": "Nível 3: se acertar, o movimento de quem tentou passar também para."
+    },
+    {
+      "achado": "[LACUNA] armas-de-qualidade (usos)",
+      "classe": "guerreiro",
+      "no": "armas-de-qualidade",
+      "campo": "usos",
+      "de": "Uma vez por sessão",
+      "para": "Uma vez por descanso"
+    },
+    {
+      "achado": "[LACUNA] armas-de-qualidade (texto)",
+      "classe": "guerreiro",
+      "no": "armas-de-qualidade",
+      "campo": "descricao",
+      "de": "Uma vez por sessão, uma falha crítica com arma do seu Arsenal Especial vira falha comum.",
+      "para": "Uma vez por descanso, quando tirar 1 natural num ataque com arma do seu Arsenal Especial, role o d20 de novo e use o novo resultado."
+    },
+    {
+      "achado": "[MELHORIA] couro-grosso (grafia dos tipos)",
+      "classe": "guerreiro",
+      "no": "implacavel@10",
+      "campo": "descricao",
+      "de": "Resistência 5 a fogo, a gelo e a frio.",
+      "para": "Resistência 5 a Fogo, a Gelo e a Frio."
+    },
+    {
+      "achado": "[MELHORIA] sai-da-frente (duração)",
+      "classe": "guerreiro",
+      "no": "implacavel@20",
+      "campo": "descricao",
+      "de": "em falha ele fica Amedrontado por uma rodada, e você",
+      "para": "em falha ele fica Amedrontado até o fim do próximo turno dele, sem o teste de saída, e você"
+    },
+    {
+      "achado": "[MELHORIA] dt_efeitos Guerreiro (medo)",
+      "classe": "guerreiro",
+      "no": "dt_efeitos",
+      "campo": "descricao",
+      "de": "para não recuar da sua frente",
+      "para": "para não ficar com medo de você"
+    },
+    {
+      "achado": "[MELHORIA] dt_efeitos Guerreiro (rolagem por acionamento)",
+      "classe": "guerreiro",
+      "no": "dt_efeitos",
+      "campo": "descricao",
+      "de": "role Intimidação na hora, e o resultado é a DT que a pessoa precisa alcançar.",
+      "para": "role Intimidação na hora, uma vez por acionamento, e o resultado é a DT que a pessoa precisa alcançar, para todos os alvos e para os testes repetidos daquele efeito."
+    },
+    {
+      "achado": "[ERRO] Finta (duração do Exposto)",
+      "classe": "espadachim",
+      "no": "corte-cirurgico-ii",
+      "campo": "descricao",
+      "de": "fica Exposto até o fim do seu próximo turno.",
+      "para": "fica Exposto até o fim do seu próximo turno, no lugar de acabar no começo do turno dele."
+    },
+    {
+      "achado": "[INCOERÊNCIA] Desarme (manobra)",
+      "classe": "espadachim",
+      "no": "golpe-em-w",
+      "campo": "descricao",
+      "de": "Faça um ataque com espada contra uma criatura que empunhe arma ou objeto. Se acertar, em vez de causar dano,",
+      "para": "Faça a manobra Desarmar com a espada contra uma criatura que empunhe arma ou objeto. Se acertar,"
+    },
+    {
+      "achado": "[INCOERÊNCIA] Fio Implacável (acao)",
+      "classe": "espadachim",
+      "no": "arte-da-espada@15",
+      "campo": "acao",
+      "de": null,
+      "para": "Passivo"
+    },
+    {
+      "achado": "[INCOERÊNCIA] Fio Implacável (criatura relevante)",
+      "classe": "espadachim",
+      "no": "arte-da-espada@15",
+      "campo": "descricao",
+      "de": "uma criatura relevante a 0 de Vida",
+      "para": "uma criatura inimiga a 0 de Vida"
+    },
+    {
+      "achado": "[LACUNA] Corte Firme",
+      "classe": "espadachim",
+      "no": "arte-da-espada@5",
+      "campo": "descricao",
+      "de": "reduzir em seu nível o dano de um ataque que sofreria, até o mínimo 0.",
+      "para": "reduzir em seu nível de Espadachim o dano de um ataque que sofreria, junto com a Resistência, até o mínimo 0. Não vale contra dano verdadeiro."
+    },
+    {
+      "achado": "[LACUNA] Riposte",
+      "classe": "espadachim",
+      "no": "protecao-da-espada-ii",
+      "campo": "descricao",
+      "de": "para fazer um ataque com espada contra ele.",
+      "para": "para fazer um ataque com espada contra ele, sem o −2 do Contra-Ataque, e o ataque pode gerar crítico."
+    },
+    {
+      "achado": "[MELHORIA] Vínculo",
+      "classe": "espadachim",
+      "no": "arte-da-espada@1",
+      "campo": "descricao",
+      "de": "com ela, receba +1 em ataques.",
+      "para": "com ela, receba +1 em ataques. Vincular outra espada leva um descanso completo."
+    },
+    {
+      "achado": "[LACUNA] Espírito da Espada (ordem de ignorar Resistência)",
+      "classe": "espadachim",
+      "no": "espirito-da-espada",
+      "campo": "descricao",
+      "de": "você pode repetir um ataque que errou.",
+      "para": "você pode repetir um ataque que errou. Se outro efeito também ignorar Resistência, tire primeiro o valor fixo e ignore metade do que sobrar."
+    },
+    {
+      "achado": "[MELHORIA] Combo (Exposto)",
+      "classe": "espadachim",
+      "no": "combo",
+      "campo": "descricao",
+      "de": "o alvo então sofre −2 Defesa até o fim da rodada seguinte.",
+      "para": "o alvo então fica Exposto até o fim da rodada seguinte, no lugar de acabar no começo do turno dele."
+    },
+    {
+      "achado": "[MELHORIA] Corte à Distância (perícia)",
+      "classe": "espadachim",
+      "no": "corte-a-distancia",
+      "campo": "descricao",
+      "de": "Faça um ataque com espada contra um alvo a até 9 m;",
+      "para": "Faça um ataque de Luta com a espada contra um alvo a até 9 m;"
+    },
+    {
+      "achado": "[INCOERÊNCIA] dt_efeitos vantagem em manobras",
+      "classe": "lutador",
+      "no": "dt_efeitos",
+      "campo": "descricao",
+      "de": "Você tem vantagem nessas rolagens desde o nível 1.",
+      "para": "Você tem vantagem em agarrar, derrubar e empurrar desde o nível 1."
+    },
+    {
+      "achado": "[LACUNA] Chute Baixo",
+      "classe": "lutador",
+      "no": "chute-baixo",
+      "campo": "descricao",
+      "de": "você pode derrubá-lo sem gastar ação.",
+      "para": "você pode fazer a manobra Derrubar contra ele sem gastar ação."
+    },
+    {
+      "achado": "[LACUNA] Aquele Golpe",
+      "classe": "lutador",
+      "no": "instinto-de-combate@20",
+      "campo": "descricao",
+      "de": "rolar os dados de dano duas vezes e ignorar",
+      "para": "rolar os dados do crítico duas vezes, usar o maior resultado e ignorar"
+    },
+    {
+      "achado": "[LACUNA] Uma Vida por Outra",
+      "classe": "lutador",
+      "no": "uma-vida-por-outra",
+      "campo": "descricao",
+      "de": "gaste até 9 de Vida, que sai direto e ignora Resistência.",
+      "para": "gaste até 9 de Vida, sem poder ficar abaixo de 1. Essa perda sai direto da Vida, e nenhuma Resistência ou redução a alcança."
+    },
+    {
+      "achado": "[LACUNA] Errou, Foi",
+      "classe": "lutador",
+      "no": "errou-foi",
+      "campo": "descricao",
+      "de": "Seus Contra-Ataques podem sair críticos, e também podem sair em falha crítica.",
+      "para": "Seus Contra-Ataques podem gerar crítico."
+    },
+    {
+      "achado": "[MELHORIA] Fúria (título)",
+      "classe": "lutador",
+      "no": "instinto-de-combate@15",
+      "campo": "titulo",
+      "de": "Fúria",
+      "para": "Raiva Guardada"
+    },
+    {
+      "achado": "[MELHORIA] Fúria (texto)",
+      "classe": "lutador",
+      "no": "instinto-de-combate@15",
+      "campo": "descricao",
+      "de": "segure até o seu nível de Lutador dele: reduza o dano nessa quantidade e guarde o número. O seu próximo golpe desarmado nesta cena solta o que você guardou como dano a mais.",
+      "para": "reduza o dano em até o seu nível de Lutador e guarde esse número. O seu próximo golpe desarmado nesta cena causa o número guardado como dano de impacto a mais."
+    },
+    {
+      "achado": "[MELHORIA] Guarda Aberta (escada)",
+      "classe": "lutador",
+      "no": "guarda-aberta",
+      "campo": "descricao",
+      "de": "+24 do 25 em diante.",
+      "para": "+24 do 25 em diante. Num nível entre dois degraus, vale o degrau do nível menor."
+    },
+    {
+      "achado": "[MELHORIA] Marcas de Guerra (Exposto)",
+      "classe": "lutador",
+      "no": "instinto-de-combate@10",
+      "campo": "descricao",
+      "de": "Com 3, ele fica com −2 de Defesa.",
+      "para": "Com 3, ele fica Exposto enquanto tiver 3 marcas ou mais, no lugar de a condição acabar no começo do turno dele."
+    },
+    {
+      "achado": "[MELHORIA] Marcas de Guerra (duração)",
+      "classe": "lutador",
+      "no": "instinto-de-combate@10",
+      "campo": "duracao",
+      "de": "Até o fim do combate",
+      "para": "Até o fim da cena"
+    },
+    {
+      "achado": "[MELHORIA] Kokusen (margem)",
+      "classe": "lutador",
+      "no": "kokusen",
+      "campo": "descricao",
+      "de": "19 ou 20. O primeiro",
+      "para": "19 ou 20, sem somar com a margem do Martelo. O primeiro"
+    },
+    {
+      "achado": "[MELHORIA] Punho Sísmico (tamanho)",
+      "classe": "lutador",
+      "no": "punho-sismico",
+      "campo": "descricao",
+      "de": "empurra o alvo 1,5 m.",
+      "para": "empurra o alvo 1,5 m. Criatura duas categorias de tamanho maior que a sua não é empurrada."
+    },
+    {
+      "achado": "[ERRO] Munição Especial (habilidade, início)",
+      "classe": "atirador",
+      "no": "na-mira@15",
+      "campo": "descricao",
+      "de": "No início de cada sessão, escolha",
+      "para": "Ao fim de cada descanso completo, escolha"
+    },
+    {
+      "achado": "[ERRO] Munição Especial (habilidade, sobra)",
+      "classe": "atirador",
+      "no": "na-mira@15",
+      "campo": "descricao",
+      "de": "o que sobrar no fim da sessão não acumula para a próxima.",
+      "para": "o que sobrar não acumula para o descanso seguinte."
+    },
+    {
+      "achado": "[ERRO] Munição Especial (usos)",
+      "classe": "atirador",
+      "no": "na-mira@15",
+      "campo": "usos",
+      "de": "Duas doses por sessão",
+      "para": "Duas doses por descanso"
+    },
+    {
+      "achado": "[ERRO] Munição Especial (bancada, início)",
+      "classe": "atirador",
+      "no": "tarefas_bancada",
+      "campo": "descricao",
+      "de": "Duas doses por sessão, escolhidas ao início dela,",
+      "para": "Duas doses por descanso, escolhidas ao fim do descanso completo,"
+    },
+    {
+      "achado": "[ERRO] Munição Especial (bancada, sobra)",
+      "classe": "atirador",
+      "no": "tarefas_bancada",
+      "campo": "descricao",
+      "de": "o que sobrar no fim da sessão não acumula para a próxima.",
+      "para": "o que sobrar não acumula para o descanso seguinte."
+    },
+    {
+      "achado": "[INCOERÊNCIA] Etérea (cobertura)",
+      "classe": "atirador",
+      "no": "Etérea",
+      "campo": "dt",
+      "de": "Ignora cobertura física;",
+      "para": "Ignora cobertura parcial e superior, mas não atravessa cobertura total;"
+    },
+    {
+      "achado": "[INCOERÊNCIA] Um Só Disparo (cobertura)",
+      "classe": "atirador",
+      "no": "um-so-disparo",
+      "campo": "descricao",
+      "de": "ignora cobertura e Resistência",
+      "para": "ignora cobertura parcial e superior e a Resistência"
+    },
+    {
+      "achado": "[INCOERÊNCIA] Dois Olhares",
+      "classe": "atirador",
+      "no": "dois-olhares",
+      "campo": "descricao",
+      "de": "Marque dois alvos visíveis; até o fim da cena, alternar entre eles não encerra efeitos de Mira.",
+      "para": "Marque dois alvos visíveis. Até o fim da cena, a Marca de Na Mira vale nos dois ao mesmo tempo."
+    },
+    {
+      "achado": "[LACUNA] Fumaça",
+      "classe": "atirador",
+      "no": "Fumaça",
+      "campo": "dt",
+      "de": "no impacto, em vez de causar dano.",
+      "para": "no impacto até o fim da rodada seguinte, em vez de causar dano. Quem está dentro conta como camuflado."
+    },
+    {
+      "achado": "[LACUNA] Explosiva",
+      "classe": "atirador",
+      "no": "Explosiva",
+      "campo": "dt",
+      "de": "+1 dado de dano a criaturas a até 3 m do impacto.",
+      "para": "Cada criatura a até 3 m do impacto, o alvo incluso, testa Reflexos contra a DT do Atirador: em falha sofre 1 dado de dano da arma e, em sucesso, metade, do mesmo tipo do disparo."
+    },
+    {
+      "achado": "[LACUNA] Rajada",
+      "classe": "atirador",
+      "no": "na-mira@10",
+      "campo": "descricao",
+      "de": "faça até três ataques com −1 dado de dano cada; se todos atingirem o mesmo alvo, ele testa Fortitude contra a DT do Atirador ou perde",
+      "para": "faça até três ataques, cada um com um dado de dano a menos (mínimo 1 dado); se todos atingirem o mesmo alvo, ele testa Fortitude contra a DT do Atirador, que é o resultado do primeiro ataque da Rajada, ou perde"
+    },
+    {
+      "achado": "[LACUNA] Último Cartucho",
+      "classe": "atirador",
+      "no": "ultimo-cartucho",
+      "campo": "descricao",
+      "de": "Uma vez por cena, você revela uma munição comum compatível que havia reservado.",
+      "para": "Uma vez por cena, quando ficar sem munição, recupere 1 unidade de munição comum da sua arma sem gastar ação."
+    },
+    {
+      "achado": "[LACUNA] Mira Fantasma",
+      "classe": "atirador",
+      "no": "mira-fantasma",
+      "campo": "descricao",
+      "de": "Concentre-se por uma rodada; o próximo disparo",
+      "para": "Gaste a Ação Padrão mirando, sem se mover, e fique Concentrando até o começo do seu próximo turno; o próximo disparo"
+    },
+    {
+      "achado": "[LACUNA] Impacto (tamanho)",
+      "classe": "atirador",
+      "no": "impacto",
+      "campo": "descricao",
+      "de": "Se acertar, empurre o alvo 3 m na direção do disparo.",
+      "para": "Se acertar, o alvo testa Fortitude contra a DT do Atirador e, em falha, é empurrado 3 m na direção do disparo. Criatura duas categorias de tamanho maior que a sua não é empurrada."
+    },
+    {
+      "achado": "[LACUNA] Tiro de Pânico (tamanho)",
+      "classe": "atirador",
+      "no": "tiro-de-panico",
+      "campo": "descricao",
+      "de": "cause metade do dano de um disparo e empurre 3 m se acertar.",
+      "para": "cause metade do dano de um disparo. Se acertar, o alvo testa Fortitude contra a DT do Atirador e, em falha, é empurrado 3 m. Criatura duas categorias de tamanho maior que a sua não é empurrada."
+    },
+    {
+      "achado": "[MELHORIA] Tiro Limpo",
+      "classe": "atirador",
+      "no": "tiro-limpo",
+      "campo": "descricao",
+      "de": "Ignore uma penalidade ambiental, como pouca luz, chuva ou vento forte, neste ataque.",
+      "para": "Ignore a desvantagem de pouca luz ou o −2 de camuflagem neste ataque."
+    },
+    {
+      "achado": "[MELHORIA] Baixo Perfil",
+      "classe": "atirador",
+      "no": "baixo-perfil",
+      "campo": "descricao",
+      "de": "quem tentar te achar sofre desvantagem.",
+      "para": "quem tentar te achar com Percepção tem desvantagem."
+    },
+    {
+      "achado": "[INCOERÊNCIA] protegido (Escudo Dividido)",
+      "classe": "guardiao",
+      "no": "protegido@5",
+      "campo": "descricao",
+      "de": "Proteja até dois aliados;",
+      "para": "Proteja o seu protegido e mais um aliado à sua escolha;"
+    },
+    {
+      "achado": "[INCOERÊNCIA] protegido (Juramento)",
+      "classe": "guardiao",
+      "no": "protegido@1",
+      "campo": "descricao",
+      "de": "Escolha também o primeiro Juramento de Guarda da lista.",
+      "para": "Escolha também o primeiro Juramento de Guarda da lista. Os Juramentos de Guarda e a Vigília valem só para esse aliado, o protegido."
+    },
+    {
+      "achado": "[LACUNA] Provocação (provocado)",
+      "classe": "guardiao",
+      "no": "provocar@3",
+      "campo": "descricao",
+      "de": "Quem falhar fica provocado e sofre −2 para atacar outros alvos.",
+      "para": "Quem falhar sofre −2 para atacar outros alvos."
+    },
+    {
+      "achado": "[LACUNA] Ninguém Passa (provocado)",
+      "classe": "guardiao",
+      "no": "provocar@20",
+      "campo": "descricao",
+      "de": "Quem estiver provocado sofre −5",
+      "para": "Quem estiver sob a Provocação sofre −5"
+    },
+    {
+      "achado": "[LACUNA] dt_efeitos Guardião",
+      "classe": "guardiao",
+      "no": "dt_efeitos",
+      "campo": "descricao",
+      "de": "role Intimidação na hora. O resultado da sua rolagem é a DT que a pessoa precisa alcançar.",
+      "para": "role Intimidação na hora, uma vez por acionamento. O resultado da sua rolagem é a DT que a pessoa precisa alcançar, para todos os alvos e para os testes repetidos daquele efeito."
+    },
+    {
+      "achado": "[LACUNA] Escudo Humano",
+      "classe": "guardiao",
+      "no": "escudo-humano",
+      "campo": "descricao",
+      "de": "Use reação para se tornar o alvo de um ataque contra criatura a até 9 m.",
+      "para": "Use a reação quando uma criatura a até 9 m for alvo de um ataque de alvo único: o ataque passa a mirar você, contra a sua Defesa. Não muda o alvo de efeito em área."
+    },
+    {
+      "achado": "[LACUNA] Sentinela",
+      "classe": "guardiao",
+      "no": "muralha-de-diamante",
+      "campo": "descricao",
+      "de": "faça um ataque contra ele. Se acertar,",
+      "para": "faça um ataque contra ele, como num Ataque de Oportunidade (−2, sem crítico). Se acertar,"
+    },
+    {
+      "achado": "[LACUNA] Bandeirão",
+      "classe": "guardiao",
+      "no": "bandeirao",
+      "campo": "descricao",
+      "de": "recebem 10 Vida temporária por uma cena.",
+      "para": "recebem 10 de Vida temporária até o fim da cena."
+    },
+    {
+      "achado": "[LACUNA] Corridão",
+      "classe": "guardiao",
+      "no": "corridao",
+      "campo": "descricao",
+      "de": "Use reação para mover até o dobro do Movimento até um aliado recém-caído; ele ganha uma rodada a mais antes do próximo teste de Morrendo.",
+      "para": "Use a reação para se mover até o dobro do Movimento, sem provocar reação, até um aliado que acabou de cair; ele pula o próximo teste de Morrendo."
+    },
+    {
+      "achado": "[LACUNA] Juramento do Punho",
+      "classe": "guardiao",
+      "no": "juramento-do-punho",
+      "campo": "descricao",
+      "de": "para atacar quem o atingiu.",
+      "para": "para atacar quem o atingiu, com −2 e sem crítico, como num Contra-Ataque."
+    },
+    {
+      "achado": "[MELHORIA] Castelo",
+      "classe": "guardiao",
+      "no": "castelo",
+      "campo": "descricao",
+      "de": "e permaneça imóvel por três rodadas.",
+      "para": "e fique parado por três rodadas, podendo atacar e usar ações, mas sem se deslocar."
+    }
+  ],
+  "resolvidos": [
+    {
+      "achado": "[LACUNA] Bandeira Fincada (1 de Vida)",
+      "regra": "Ficar com 1 de Vida (regra geral 3): Déficit some, sem Morrendo e sem Ferido, e não vale contra a morte na hora"
+    },
+    {
+      "achado": "[LACUNA] Levanta! nível 4 (acorda com 1 de Vida)",
+      "regra": "Ficar com 1 de Vida (regra geral 3)"
+    },
+    {
+      "achado": "[LACUNA] Levanta! e Bandeirão (Vida temporária)",
+      "regra": "Vida temporária (regra geral 1); só foi preciso escrever a duração"
+    },
+    {
+      "achado": "[LACUNA] Último Laço (1 de Vida)",
+      "regra": "Ficar com 1 de Vida (regra geral 3): não vale se o Déficit já chegou à Vida máxima"
+    },
+    {
+      "achado": "[INCOERÊNCIA] Guarda Aberta fora da progressão",
+      "regra": "Já está no nível 1 da progressão do arquivo atual"
+    },
+    {
+      "achado": "[LACUNA] Coração Unificado (permanece com 1 de Vida)",
+      "regra": "Ficar com 1 de Vida (regra geral 3)"
+    },
+    {
+      "achado": "[LACUNA] Marcas de Guerra e Peito Aberto empilhando com Exposto",
+      "regra": "Bônus e penalidades de fontes diferentes somam (regra geral 6)"
+    }
+  ],
+  "mantidos": [
+    {
+      "achado": "[MELHORIA] Correndo (Apressado)",
+      "motivo": "Critério 7: +3 m de Movimento fica como está, sem virar Apressado"
+    },
+    {
+      "achado": "[MELHORIA] Peito Aberto × Exposto",
+      "motivo": "Critério 7: penalidade que o próprio usuário aceita como custo fica como número"
+    },
+    {
+      "achado": "[INCOERÊNCIA] Contragolpe (limitação redundante)",
+      "motivo": "Critério 16: trocar a limitação mudaria a força do estilo; o texto continua verdadeiro (usar o Contra-Ataque gasta a reação)"
+    },
+    {
+      "achado": "[MELHORIA] Couro Grosso (acrescentar Calor)",
+      "motivo": "Critério 16: acrescentar Calor aumentaria a força da habilidade; só a grafia foi ajustada"
+    },
+    {
+      "achado": "[MELHORIA] provocar (título da habilidade)",
+      "motivo": "O título é o elo entre a habilidade e a progressão; trocar sem mexer na progressão quebraria o vínculo. A colisão com 'provocar reação' é leve"
+    },
+    {
+      "achado": "[MELHORIA] Dois Olhares redundante com Duas Marcas",
+      "motivo": "Critério 16: o poder fica como está (entrega a Marca dupla antes do nível 20), só com texto coerente"
+    }
+  ]
+}
