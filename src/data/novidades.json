@@ -1,6 +1,24 @@
 {
   "itens": [
     {
+      "id": "2026-11-23-classes-ultimos-furos",
+      "data": "2026-11-23",
+      "tipo": "correcao",
+      "area": "Regras",
+      "titulo": "Classes: os últimos furos de regra fechados",
+      "detalhes": [
+        "Poderes de combate que voltavam por sessão agora voltam por descanso, como a Munição Especial do Atirador, as Armas de Qualidade do Guerreiro, o Grande Oficiante do Ritualista, a Dose da Pedra do Alquimista e o Banquete Final do Devorador.",
+        "Todo dano de classe tem tipo e rolagem. O que acertava sozinho ganhou teste com metade do dano para quem passa, como o Corte Espectral, a Essência Volátil e a Artilharia do Engenho Divino.",
+        "O Rasgar do Campeão Dimensional passou a causar dano de Espaço, com teste de Reflexos. Dano verdadeiro ficou para as habilidades de topo.",
+        "Ataques de reação seguem o Contra-Ataque (−2 e sem crítico), a não ser que o poder diga outra coisa. Errou Perto de Mim e Riposte não têm o −2 e podem gerar crítico.",
+        "Empurrar, puxar e derrubar respeitam a regra de tamanho do Livro: criatura duas categorias maior que você não sai do lugar.",
+        "Bônus de Defesa contra magia também valem nos testes de resistência contra magia, como no Contrafluxo, na Ressonância Compartilhada e no Firewall de Fluxo.",
+        "Contatos que a classe dá entram como Conhecido ou Amigo e não contam no seu limite de contatos. Itens que a classe dá de graça não podem ser vendidos nem segurados.",
+        "Médico: o Milagre vale como a Regeneração do Livro, uma vez por sessão, e a cura fora de combate nunca fica abaixo do tratamento comum. Detetive: a pista essencial sai sem rolar, como para todo mundo.",
+        "Devorador: dá para esvaziar um slot fora de combate e devorar até uma hora depois da morte. Não se grava efeito que traz alguém de volta da morte nem poder de Deidade."
+      ]
+    },
+    {
       "id": "2026-11-20-reliquia-dharma",
       "data": "2026-11-20",
       "tipo": "novo",
@@ -10,6 +28,69 @@
         "A Loja ganhou uma Relíquia da Criação: o Dharma, uma roda de oito raios que flutua acima da cabeça de quem a usa.",
         "Cada vez que o mesmo tipo de dano ou a mesma condição atinge você, a roda gira um raio e você aguenta um pouco mais. No oitavo raio a volta fecha e você fica imune àquilo até o fim da cena.",
         "Como toda Relíquia, pede a autorização do Mestre."
+      ]
+    },
+    {
+      "id": "2026-11-20-regras-gerais-do-livro",
+      "data": "2026-11-20",
+      "tipo": "melhoria",
+      "area": "Regras",
+      "titulo": "Regras que faltavam no Livro: Vida temporária, dano que repete e mais",
+      "detalhes": [
+        "Vida temporária tem regra: é gasta antes da Vida, a de fontes diferentes soma e ela some no fim da fonte ou no descanso. Mana e Estamina temporárias seguem a mesma regra.",
+        "A cura para no máximo, e a sobra se perde: ela não vira mais Vida temporária, nem na ficha, nem na Sessão, nem no mapa. Para anotar Vida temporária de um efeito, use o botão +temp ao lado do nome da barra na ficha: o valor soma com o que você já tem.",
+        "Fogo, veneno, ácido e sangramento de golpe, poder ou criatura caem uma vez, como na magia. Só voltam no fim do turno quando o efeito deixa você Queimando, Envenenado ou com Sangramento.",
+        "Habilidade que segura quem cai com 1 de Vida apaga o Déficit, sem Morrendo e sem Ferido, mas não evita a morte na hora.",
+        "Um teste ou um dado só é rolado de novo uma vez, mesmo que duas habilidades permitam. Bônus de fontes diferentes somam no mesmo teste, e Resistências ao mesmo tipo também somam.",
+        "Nova condição Incorpóreo: atravessa criaturas e objetos e sofre metade do dano físico que não venha de magia.",
+        "A Fumaça da Elementarista e dos Elementos deixa camuflado quem está dentro, e a zona de Magma pede Reflexos, com metade do dano para quem passa.",
+        "O Livro explica que as classes especiais dão dois graus de perícia por entrega e que algumas classes fogem da grade comum."
+      ]
+    },
+    {
+      "id": "2026-11-19-classes-de-acordo-com-o-livro",
+      "data": "2026-11-19",
+      "tipo": "correcao",
+      "area": "Regras",
+      "titulo": "Habilidades e poderes das classes de acordo com o Livro",
+      "detalhes": [
+        "As 29 classes foram conferidas contra o Livro de Regras de hoje, e cerca de 250 textos de habilidades e poderes foram acertados.",
+        "As DTs acompanham o nível: as bancadas falam em DT Rotineira, as manobras do Piloto usam a DT Padrão da cena, o teste do rito do Ritualista soma a metade do nível e o Interceptador usa a tabela de DT para criaturas.",
+        "Quem passa no teste contra a Bobina de Choque, o Frasco Congelante, o Veneno de Contato, o Ácido Corrosivo e o Avanço sofre metade do dano.",
+        "Resistência contra dano de área virou redução do dano de cada efeito de área, e as reduções de dano dizem que entram depois da Resistência e não valem contra dano verdadeiro.",
+        "Condições, tipos de dano e descansos aparecem com o nome do Livro (Exposto, Queimando, Fogo, Gelo, descanso Boa e Maravilhosa), e os efeitos que duravam o combate agora duram a cena.",
+        "O que se faz longe da luta aparece como Fora de combate, e a Latência do Interceptador passou a funcionar junto com o Pacote Descartado.",
+        "Ajudar no rito do Ritualista não pede mais teste, e o Detetive percebe mentira com Investigação no lugar de Intuição.",
+        "O Lutador vê a Guarda Aberta na Progressão já no nível 1."
+      ]
+    },
+    {
+      "id": "2026-11-19-unicos-do-jardim",
+      "data": "2026-11-19",
+      "tipo": "novo",
+      "area": "Ficha",
+      "titulo": "Únicos do Jardim revisados e 20 Únicos novos",
+      "detalhes": [
+        "Todos os Únicos foram reescritos para dizer com clareza o que fazem, com a ação e o limite de uso do Livro (por cena, por descanso ou por sessão).",
+        "Quem pede teste usa a DT Padrão do seu nível, e o dano e a cura crescem com o seu nível. Fome Que Não Se Farta, Corte no Chão e Cicatriz que Nunca Fecha continuam fortes no nível 60.",
+        "Vários ganharam um jeito novo de funcionar: Golpe Sem Nome acerta quando você erra por pouco, Círculo dos Que Ficam troca você de lugar com um aliado em perigo, Corte que Lembra encadeia críticos e Devolução faz tudo o que você arremessa voltar para a mão.",
+        "Os Únicos que só davam número na ficha agora têm um detalhe só deles, como cair de 9 m sem dano, não ser Surpreendido dormindo ou perguntar ao Mestre se alguém mentiu.",
+        "Três trocaram de nome para não repetir legado ou poder de classe: Máscara de Gente, Ombros Soltos e Nervo de Raiz. Quem já tinha plantado continua com eles.",
+        "Chegaram 20 Únicos novos, de conversar com bicho e conhecer alguém em toda cidade até parar o tempo, voltar da morte como semente e mudar o clima da região.",
+        "Na aba Jardim, o Mestre pode dar ou tirar Sementes, para recompensas e para pagar a Aposta com o Jardim."
+      ]
+    },
+    {
+      "id": "2026-11-19-jardim-sementes",
+      "data": "2026-11-19",
+      "tipo": "correcao",
+      "area": "Ficha",
+      "titulo": "Jardim da ficha com Sementes justas",
+      "detalhes": [
+        "Podar um poder da sua própria classe agora gasta a vaga dele na Progressão. Antes a vaga voltava, e escolher e podar de novo rendia Sementes sem fim. Se precisar da vaga de volta, fale com o Mestre: ele tem o botão Devolver vaga na Progressão.",
+        "Com mais de uma classe, a habilidade da sua classe vale pelo nível dela na hora de podar. Antes ela era paga pelo nível total, com estágios que a ficha nem mostrava.",
+        "Quem plantou a habilidade de uma classe e depois entrou nela via a mesma habilidade duas vezes. Agora fica só a do Jardim, que guarda todos os estágios que você pagou.",
+        "Poderes de outras classes respeitam o nível pedido: um poder de Nível 10 só aparece no catálogo quando você chega ao nível 10. Os outros requisitos aparecem escritos no cartão."
       ]
     },
     {
@@ -971,72 +1052,6 @@
       "detalhes": [
         "O Criador da plataforma agora aparece em Jogadores e permissões mesmo sem ser membro da campanha, e escolhe o próprio nome e a própria cor na mesa.",
         "Quem está conectado no mapa e ainda não é membro também aparece na lista do Mestre."
-      ]
-    },
-    {
-      "id": "2026-11-04-mapa-no-celular-e-visao-rapida",
-      "data": "2026-11-04",
-      "tipo": "melhoria",
-      "area": "Sessão",
-      "titulo": "Mapa: melhor no celular e a visão por paredes ficou rápida",
-      "detalhes": [
-        "No celular o mapa abre com o painel fechado, o topo cabe na tela e a barra de ferramentas rola. O botão do painel (iniciativa, fichas e rolagens) fica logo depois da seta de voltar.",
-        "Quando o Mestre liga a visão por paredes, o que você enxerga atualiza em um instante, mesmo em mapas grandes.",
-        "O Mestre pode guardar até 30 trilhas de áudio por mesa."
-      ]
-    },
-    {
-      "id": "2026-11-03-auras-pausa-relogios-e-falas",
-      "data": "2026-11-03",
-      "tipo": "novo",
-      "area": "Sessão",
-      "titulo": "Mapa: auras, pausa da mesa, relógios e falas dos personagens do Mestre",
-      "detalhes": [
-        "Seu token pode ter uma aura que anda com ele: proteção de paladino, alcance de uma magia, área de controle. Escolha o tamanho e a cor no menu do token.",
-        "O Mestre pode pausar a mesa enquanto arruma a próxima cena. Você vê uma tela de espera com o recado dele.",
-        "Relógios de progresso e um cronômetro aparecem no canto do mapa quando o Mestre usa: um ritual que avança, um alarme que soa, o tempo até o teto cair.",
-        "Quando um personagem do Mestre fala, a fala aparece no mapa com o retrato dele.",
-        "Ao arrastar o seu token, o mapa mostra quantas casas ele já andou."
-      ]
-    },
-    {
-      "id": "2026-11-03-recursos-compartilhados-do-vtt",
-      "data": "2026-11-03",
-      "tipo": "novo",
-      "area": "Sessão",
-      "titulo": "Mapa: documentos, trilha, busca e mapas modelo",
-      "detalhes": [
-        "O Mestre pode mostrar um documento salvo no Painel para todos os jogadores ou para um personagem escolhido.",
-        "O Mestre envia uma trilha de áudio para a cena; a reprodução acompanha quem está na sessão. Se o navegador bloquear o som, use Ativar áudio da mesa.",
-        "Busque pelo nome de personagens, criaturas e objetos visíveis, veja a distância até cada resultado e centralize o mapa neles.",
-        "No construtor, procure mapas pelo nome e crie uma cópia para usar como modelo. Também dá para alinhar peças e duplicar um grupo.",
-        "Durante o combate, o mapa mostra a distância percorrida pelo personagem da vez neste turno."
-      ]
-    },
-    {
-      "id": "2026-11-03-visao-pelas-paredes-e-memoria-de-exploracao",
-      "data": "2026-11-03",
-      "tipo": "novo",
-      "area": "Sessão",
-      "titulo": "Mapa: visão pelas paredes e memória de exploração",
-      "detalhes": [
-        "O Mestre pode ativar a visão por paredes na ferramenta Névoa. Paredes e portas fechadas bloqueiam o que seu personagem enxerga.",
-        "A névoa manual continua limitando o mapa. Áreas que você já explorou ficam visíveis em tom escuro quando seu personagem se afasta.",
-        "Tochas e lanternas nos tokens limitam o alcance. Luzes fixas ajudam quando já estão à vista.",
-        "Cada jogador tem sua própria exploração, e os tokens fora da sua visão não aparecem na mesa."
-      ]
-    },
-    {
-      "id": "2026-11-03-portas-paredes-e-portais-entre-cenas",
-      "data": "2026-11-03",
-      "tipo": "novo",
-      "area": "Sessão",
-      "titulo": "Mapa: portas que abrem, paredes que seguram e portais para outra cena",
-      "detalhes": [
-        "Nos mapas montados pelo Mestre, as paredes seguram o seu token: para passar, use uma porta.",
-        "Com o personagem ao lado de uma porta, clique nela para abrir ou fechar. Porta trancada só o Mestre abre.",
-        "Algumas paredes escondem portas secretas. Quando o Mestre revela uma, ela aparece no mapa como porta comum.",
-        "Um portal pode levar o seu personagem para outro lugar da aventura, numa outra cena. O Mestre fica sabendo na hora."
       ]
     }
   ]
