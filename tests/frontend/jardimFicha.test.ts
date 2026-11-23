@@ -5,6 +5,8 @@ import {
   catalogoJardimDisponivel,
   comprarPoderNoJardim,
   nivelEstimadoPoder,
+  nivelExigidoPoder,
+  pendenciasProgressao,
   podeSelecionarPoder,
   poderesComprasJardim,
   poderesJardimSelecionados,
@@ -12,7 +14,9 @@ import {
   selecoesPoderValidas,
   sementesPorComprarPoder,
   sementesPorVenderPoder,
+  vagasPodadasDaClasse,
   vagasPoderDaClasse,
+  vagasPoderNaFicha,
   venderPoderDeClasseNoJardim,
   venderPoderDoJardim,
 } from '../../src/services/progressaoFichaService';
@@ -85,32 +89,60 @@ test('poderesJardimSelecionados resolve contra o catálogo completo e ignora cla
   assert.equal(poderesJardimSelecionados(fichaComNinjaProprio).length, 0);
 });
 
-test('vender um poder da própria classe libera a vaga de volta para escolher outro', () => {
+test('podar um poder da própria classe gasta a vaga: não dá para escolher outro no lugar', () => {
   const guerreiro = obterClasse('guerreiro');
-  const [primeiroPoder, segundoPoder] = guerreiro.poderes || [];
-  assert.ok(primeiroPoder && segundoPoder, 'Guerreiro precisa de ao menos 2 poderes cadastrados para este teste');
+  const livres = (guerreiro.poderes || []).filter((poder) => !(poder.pre_requisitos || []).length);
+  const [primeiroPoder, segundoPoder] = livres;
+  assert.ok(primeiroPoder && segundoPoder, 'Guerreiro precisa de ao menos 2 poderes sem requisito para este teste');
 
+  // Guerreiro 6 tem 2 vagas, as duas preenchidas.
   const ficha: any = {
-    classes: [{ classeId: 'guerreiro', nivel: 20 }],
-    poderesClasseSelecionados: [{ classeId: 'guerreiro', poderId: primeiroPoder.id }],
+    classes: [{ classeId: 'guerreiro', nivel: 6 }],
+    poderesClasseSelecionados: [
+      { classeId: 'guerreiro', poderId: primeiroPoder.id },
+      { classeId: 'guerreiro', poderId: segundoPoder.id },
+    ],
   };
-  const vagas = vagasPoderDaClasse(guerreiro, 20);
-  const antes = selecoesPoderValidas(ficha);
-  // Enche todas as vagas restantes com o mesmo primeiro poder para simular "sem vaga livre".
-  while (selecoesPoderValidas(ficha).length < vagas) {
-    ficha.poderesClasseSelecionados.push({ classeId: 'guerreiro', poderId: primeiroPoder.id });
+  assert.equal(vagasPoderDaClasse(guerreiro, 6), 2);
+
+  const venda = venderPoderDeClasseNoJardim(ficha, 0);
+  assert.ok(venda);
+  assert.deepEqual(venda!.poderesClasseSelecionados, [{ classeId: 'guerreiro', poderId: segundoPoder.id }]);
+  assert.deepEqual(venda!.poderesPodados, [{ classeId: 'guerreiro', poderId: primeiroPoder.id }]);
+
+  const depois = { ...ficha, poderesClasseSelecionados: venda!.poderesClasseSelecionados, jardim: { poderesPodados: venda!.poderesPodados } };
+  assert.equal(vagasPodadasDaClasse(depois, 'guerreiro'), 1);
+  assert.equal(vagasPoderNaFicha(depois, guerreiro, 6), 1);
+  const permissao = podeSelecionarPoder(primeiroPoder, guerreiro, 6, selecoesPoderValidas(depois), depois);
+  assert.equal(permissao.permitido, false);
+  assert.match(permissao.motivo || '', /podada no Jardim/);
+  // A Progressão não acusa vaga aberta para escolher.
+  assert.equal(pendenciasProgressao(depois).some((item) => item.id === 'poder:guerreiro'), false);
+
+  // Ao subir de nível, a vaga nova abre normalmente (a podada segue gasta).
+  const nivel9 = { ...depois, classes: [{ classeId: 'guerreiro', nivel: 9 }] };
+  assert.equal(vagasPoderNaFicha(nivel9, guerreiro, 9), vagasPoderDaClasse(guerreiro, 9) - 1);
+  assert.equal(podeSelecionarPoder(primeiroPoder, guerreiro, 9, selecoesPoderValidas(nivel9), nivel9).permitido, true);
+});
+
+test('escolher e podar de novo não gera Sementes sem fim', () => {
+  const guerreiro = obterClasse('guerreiro');
+  const poder = (guerreiro.poderes || []).find((item) => !(item.pre_requisitos || []).length)!;
+  let ficha: any = { classes: [{ classeId: 'guerreiro', nivel: 6 }], poderesClasseSelecionados: [], jardim: { sementes: 0 } };
+  for (let volta = 0; volta < 10; volta += 1) {
+    const selecoes = selecoesPoderValidas(ficha);
+    if (!podeSelecionarPoder(poder, guerreiro, 6, selecoes, ficha).permitido) break;
+    ficha = { ...ficha, poderesClasseSelecionados: [...selecoes, { classeId: 'guerreiro', poderId: poder.id }] };
+    const alvo = poderesVendaveisJardim(ficha).find((item) => item.origemTipo === 'classe')!;
+    const venda = venderPoderDeClasseNoJardim(ficha, alvo.indice)!;
+    ficha = {
+      ...ficha,
+      poderesClasseSelecionados: venda.poderesClasseSelecionados,
+      jardim: { ...ficha.jardim, poderesPodados: venda.poderesPodados, sementes: ficha.jardim.sementes + alvo.sementesRecebidas },
+    };
   }
-  assert.equal(selecoesPoderValidas(ficha).length, vagas, 'pré-condição: todas as vagas devem estar preenchidas');
-
-  const vendaveis = poderesVendaveisJardim(ficha);
-  const indiceParaVender = 0;
-  const novaLista = venderPoderDeClasseNoJardim(ficha, indiceParaVender);
-  assert.ok(novaLista);
-  assert.equal(novaLista!.length, antes.length + (vagas - antes.length) - 1);
-
-  const fichaDepois = { ...ficha, poderesClasseSelecionados: novaLista };
-  const permissao = podeSelecionarPoder(segundoPoder, guerreiro, 20, selecoesPoderValidas(fichaDepois), fichaDepois);
-  assert.equal(permissao.permitido, true, permissao.motivo);
+  // Duas vagas no nível 6: no máximo duas podas pagam.
+  assert.equal(ficha.jardim.sementes, 2 * sementesPorVenderPoder(poder, guerreiro));
 });
 
 test('vender um poder plantado no Jardim remove só aquela ocorrência e credita Sementes', () => {
@@ -135,4 +167,30 @@ test('vender um poder plantado no Jardim remove só aquela ocorrência e credita
 test('poderesComprasJardim ignora entradas malformadas sem derrubar a ficha', () => {
   const ficha = { jardim: { comprados: [{ classeId: 'ninja' }, null, { poderId: 'x' }, { classeId: 'guerreiro', poderId: 'y' }] } };
   assert.deepEqual(poderesComprasJardim(ficha), [{ classeId: 'guerreiro', poderId: 'y' }]);
+});
+
+test('catálogo de poderes respeita o nível pedido, como o de habilidades', () => {
+  const comNivel = classes.flatMap((classe) => (classe.poderes || [])
+    .filter((poder) => nivelExigidoPoder(poder) > 1)
+    .map((poder) => ({ classe, poder })));
+  assert.ok(comNivel.length > 0, 'o catálogo precisa ter poderes com nível pedido');
+  const alvo = comNivel.find(({ classe }) => classe.id !== 'guerreiro')!;
+  const exigido = nivelExigidoPoder(alvo.poder);
+
+  const antes = catalogoJardimDisponivel({ classes: [{ classeId: 'guerreiro', nivel: exigido - 1 }] });
+  assert.equal(antes.some((item) => item.poder.id === alvo.poder.id && item.classeId === alvo.classe.id), false);
+  const depois = catalogoJardimDisponivel({ classes: [{ classeId: 'guerreiro', nivel: exigido }] });
+  assert.equal(depois.some((item) => item.poder.id === alvo.poder.id && item.classeId === alvo.classe.id), true);
+
+  // Poder sem nível pedido aparece desde o nível 1.
+  const nivel1 = catalogoJardimDisponivel({ classes: [{ classeId: 'guerreiro', nivel: 1 }] });
+  assert.ok(nivel1.every((item) => nivelExigidoPoder(item.poder) <= 1));
+  assert.ok(nivel1.length > 0);
+
+  // Um poder já plantado continua listado (como plantado) mesmo se o nível baixar.
+  const plantado = catalogoJardimDisponivel({
+    classes: [{ classeId: 'guerreiro', nivel: 1 }],
+    jardim: { comprados: [{ classeId: alvo.classe.id, poderId: alvo.poder.id }] },
+  });
+  assert.equal(plantado.find((item) => item.poder.id === alvo.poder.id && item.classeId === alvo.classe.id)?.jaAdquirido, true);
 });

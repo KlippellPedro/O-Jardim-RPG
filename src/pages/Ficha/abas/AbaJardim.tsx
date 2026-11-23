@@ -24,6 +24,7 @@ import {
   type IUnicoVendavelJardim,
 } from '../../../services/progressaoFichaService';
 import type { IUnicoJardim } from '../../../types/catalogo';
+import { useAuthStore } from '../../../store/useAuthStore';
 import { ModalConfirmacao } from '../components/ModalConfirmacao';
 
 type TTipoFiltro = 'todos' | 'poder' | 'habilidade' | 'unico';
@@ -84,6 +85,11 @@ export const AbaJardim = ({ character, onUpdate }: { character: any; onUpdate: a
 
   const f = character.ficha || {};
   const sementes = Math.max(0, Math.trunc(Number(f.jardim?.sementes) || 0));
+  // Só o Mestre dá ou tira Sementes fora da poda: recompensa, Aposta com o Jardim.
+  const usuario = useAuthStore((state) => state.usuario);
+  const campanha = useAuthStore((state) => state.campanhaAtiva);
+  const isMestre = usuario?.papel_plataforma === 'admin' || usuario?.papel_plataforma === 'criador' || campanha?.papel === 'mestre' || campanha?.papel === 'assistente';
+  const [ajusteMestre, setAjusteMestre] = useState('');
 
   const poderesVendaveis = useMemo(() => poderesVendaveisJardim(f), [f]);
   const poderesCatalogo = useMemo(() => catalogoJardimDisponivel(f), [f]);
@@ -188,15 +194,34 @@ export const AbaJardim = ({ character, onUpdate }: { character: any; onUpdate: a
     setTimeout(() => setMensagem((atual) => (atual?.texto === texto ? null : atual)), 3500);
   };
 
+  const ajustarSementes = () => {
+    const delta = Math.trunc(Number(ajusteMestre));
+    if (!delta) return;
+    const novo = Math.max(0, sementes + delta);
+    onUpdate(['ficha', 'jardim', 'sementes'], novo);
+    setAjusteMestre('');
+    avisar(delta > 0 ? `+${delta} Sementes na ficha.` : `${Math.abs(delta)} Sementes tiradas da ficha.`);
+  };
+
   const executarVenderPoder = (alvo: IPoderVendavelJardim) => {
-    const novaLista = alvo.origemTipo === 'classe'
-      ? venderPoderDeClasseNoJardim(f, alvo.indice)
-      : venderPoderDoJardim(f, alvo.indice);
-    if (!novaLista) {
-      avisar('Não foi possível podar esse poder agora.', true);
-      return;
+    if (alvo.origemTipo === 'classe') {
+      const venda = venderPoderDeClasseNoJardim(f, alvo.indice);
+      if (!venda) {
+        avisar('Não foi possível podar esse poder agora.', true);
+        return;
+      }
+      // As duas listas vão no mesmo salvamento: o servidor só aceita a saída de
+      // um poder de classe quando a vaga aparece podada junto.
+      onUpdate(['ficha', 'jardim', 'poderesPodados'], venda.poderesPodados);
+      onUpdate(['ficha', 'poderesClasseSelecionados'], venda.poderesClasseSelecionados);
+    } else {
+      const novaLista = venderPoderDoJardim(f, alvo.indice);
+      if (!novaLista) {
+        avisar('Não foi possível podar esse poder agora.', true);
+        return;
+      }
+      onUpdate(['ficha', 'jardim', 'comprados'], novaLista);
     }
-    onUpdate(alvo.origemTipo === 'classe' ? ['ficha', 'poderesClasseSelecionados'] : ['ficha', 'jardim', 'comprados'], novaLista);
     onUpdate(['ficha', 'jardim', 'sementes'], sementes + alvo.sementesRecebidas);
     avisar(`${alvo.titulo} foi podado. +${alvo.sementesRecebidas} Sementes.`);
   };
@@ -278,7 +303,9 @@ export const AbaJardim = ({ character, onUpdate }: { character: any; onUpdate: a
       const alvo = item.dado;
       pedirConfirmacao({
         titulo: 'Podar poder',
-        mensagem: `Podar "${alvo.titulo}" em troca de ${alvo.sementesRecebidas} Sementes? O poder some da ficha.`,
+        mensagem: alvo.origemTipo === 'classe'
+          ? `Podar "${alvo.titulo}" em troca de ${alvo.sementesRecebidas} Sementes? O poder some da ficha e a vaga dele na Progressão fica gasta: você não escolhe outro poder no lugar.`
+          : `Podar "${alvo.titulo}" em troca de ${alvo.sementesRecebidas} Sementes? O poder some da ficha.`,
         acao: () => executarVenderPoder(alvo),
       });
     } else if (item.tipo === 'habilidade') {
@@ -339,6 +366,7 @@ export const AbaJardim = ({ character, onUpdate }: { character: any; onUpdate: a
     const titulo = tituloDe(item);
     const especial = item.tipo !== 'unico' && (dado as IPoderCatalogoJardim | IHabilidadeCatalogoJardim).categoriaClasse === 'esquecida';
     const unico = item.tipo === 'unico' ? (dado as TUnicoCatalogo).unico : null;
+    const requisitos = item.tipo === 'poder' ? ((dado as IPoderCatalogoJardim).poder.pre_requisitos || []) : [];
     const detalhe = item.tipo === 'unico'
       ? `${TIPO_UNICO_LABEL[unico!.tipo] || unico!.tipo}${resumoFichaTecnica(unico!) ? ` · ${resumoFichaTecnica(unico!)}` : ''}`
       : item.tipo === 'habilidade'
@@ -371,6 +399,7 @@ export const AbaJardim = ({ character, onUpdate }: { character: any; onUpdate: a
             <span className="mt-0.5 block text-[8px] font-bold uppercase tracking-widest text-[#c7a44c]/70">sementes</span>
           </span>
         </div>
+        {requisitos.length > 0 && <p className="mt-2 text-[11px] text-amber-300">Requisito: {requisitos.join('; ')}</p>}
         <p className={`mt-3 whitespace-pre-line text-sm leading-relaxed text-gray-400 ${longa && !aberto ? 'line-clamp-3' : ''}`}>{descricao}</p>
         {longa && (
           <button
@@ -443,6 +472,26 @@ export const AbaJardim = ({ character, onUpdate }: { character: any; onUpdate: a
             <span className="text-3xl font-bold text-lime-400">{sementes}</span>
             <span className="text-sm font-bold uppercase leading-tight tracking-widest text-gray-500">Sementes</span>
           </div>
+          {isMestre && (
+            <form
+              onSubmit={(e) => { e.preventDefault(); ajustarSementes(); }}
+              className="flex items-center gap-2 rounded-xl border border-white/5 bg-[#15141b] px-3 py-2"
+              title="Some ou tire Sementes: recompensa da mesa ou acerto da Aposta com o Jardim. Use um número negativo para tirar."
+            >
+              <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Mestre</span>
+              <input
+                type="number"
+                value={ajusteMestre}
+                onChange={(e) => setAjusteMestre(e.target.value)}
+                placeholder="+50 ou -20"
+                aria-label="Sementes para somar ou tirar"
+                className="w-28 rounded-lg border border-white/10 bg-[#0b0a10] px-2 py-1.5 text-sm text-white outline-none focus:border-lime-400/40"
+              />
+              <button type="submit" disabled={!Math.trunc(Number(ajusteMestre))} className="rounded-lg border border-lime-400/30 bg-lime-500/10 px-3 py-1.5 text-xs font-bold text-lime-200 hover:bg-lime-500/20 disabled:opacity-40">
+                Ajustar
+              </button>
+            </form>
+          )}
           <div className="flex gap-2 text-xs font-bold">
             <button type="button" onClick={() => irPara('jardim-catalogo')} className="rounded-lg border border-lime-400/25 bg-lime-500/10 px-3 py-2 text-lime-200 hover:bg-lime-500/20">
               Plantar ({catalogo.length})
@@ -526,7 +575,9 @@ export const AbaJardim = ({ character, onUpdate }: { character: any; onUpdate: a
         <summary className="cursor-pointer select-none font-bold text-gray-300">Como funciona o Jardim</summary>
         <div className="mt-3 space-y-2 leading-relaxed">
           <p>Uma habilidade em escada (como Implacável) sai ou entra inteira: podar tira todos os estágios já alcançados, e plantar entrega de uma vez os estágios que o seu nível total já permite. Você só encontra no catálogo o que já cabe no seu nível.</p>
-          <p>Únicos não vêm de nenhuma classe: são coisas que só existem no Jardim. O preço é fixo, sem depender do seu nível, e vai de truques simples a poderes lendários no tamanho de uma expansão de domínio. Quanto mais raro, mais Sementes custa.</p>
+          <p>Com mais de uma classe, a habilidade da sua classe vale pelo nível dela na hora de podar. Poderes de outras classes seguem o seu nível total: um poder que pede Nível 10 aparece quando você chega ao nível 10. Os outros requisitos ficam escritos no cartão, para você e o Mestre conferirem.</p>
+          <p>Únicos não vêm de nenhuma classe: são coisas que só existem no Jardim. O preço é fixo, sem depender do seu nível, e vai de truques simples a poderes lendários no tamanho de uma expansão de domínio. Quanto mais raro, mais Sementes custa. O que causa dano ou cura cresce com o seu nível, e a DT de um Único é a DT Padrão do seu nível.</p>
+          <p>O Mestre também pode dar Sementes, como recompensa ou para pagar a Aposta com o Jardim.</p>
         </div>
       </details>
 
@@ -571,7 +622,7 @@ export const AbaJardim = ({ character, onUpdate }: { character: any; onUpdate: a
         <div className="mb-4 flex flex-wrap items-end justify-between gap-2">
           <div>
             <h3 className="text-xs font-bold uppercase tracking-widest text-[#c7a44c]">Podar</h3>
-            <p className="mt-1 text-xs text-gray-500">Vender um poder da própria classe libera a vaga de volta na Progressão; vender a habilidade principal tira a escada inteira; vender um Único tira ele da ficha.</p>
+            <p className="mt-1 text-xs text-gray-500">Podar um poder da própria classe gasta a vaga dele na Progressão; podar a habilidade principal tira a escada inteira; podar um Único tira ele da ficha.</p>
           </div>
           <span className="text-xs text-gray-500">{vendaveisVisiveis.length} de {vendaveis.length} itens</span>
         </div>

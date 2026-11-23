@@ -31,12 +31,14 @@ import {
   legadosSelecionados,
   podeEscolherOpcaoHabilidade,
   podeSelecionarPoder,
+  poderesPodadosJardim,
   poderesSelecionados,
   resumoFichaTecnica,
   selecoesHabilidadeValidas,
   selecoesPoderValidas,
   vagasLegado,
-  vagasPoderDaClasse,
+  vagasPodadasDaClasse,
+  vagasPoderNaFicha,
   type ILegadoCatalogo,
 } from '../../../services/progressaoFichaService';
 import { ConquistasGaleria } from '../components/ConquistasGaleria';
@@ -152,6 +154,13 @@ export const AbaProgressao = ({ character, onUpdate }: { character: any; onUpdat
     const indice = selecoesPoder.findIndex((item) => item.classeId === classeId && item.poderId === poderId);
     onUpdate(['ficha', 'poderesClasseSelecionados'], selecoesPoder.filter((_, atual) => atual !== indice));
   };
+  // Só o Mestre devolve uma vaga podada no Jardim (as Sementes da poda ficam com o jogador).
+  const devolverVagaPodada = (classeId: string) => {
+    const podados = poderesPodadosJardim(ficha);
+    const indice = podados.map((item) => item.classeId).lastIndexOf(classeId);
+    if (indice < 0) return;
+    onUpdate(['ficha', 'jardim', 'poderesPodados'], podados.filter((_, atual) => atual !== indice));
+  };
   const escolherOpcaoHabilidade = (chave: string, opcaoId: string) => {
     const atuais = selecoesHabilidadeValidas(ficha);
     onUpdate(['ficha', 'escolhasHabilidade'], { ...atuais, [chave]: [...(atuais[chave] || []), opcaoId] });
@@ -215,7 +224,7 @@ export const AbaProgressao = ({ character, onUpdate }: { character: any; onUpdat
   const habilidadesVisiveis = habilidades.filter((item) => correspondeBusca(termoBusca, item.titulo, item.descricao, item.origem));
   const eventosVisiveis = eventos.filter((item) => correspondeBusca(termoBusca, item.titulo, item.descricao, item.origem));
   const poderesVisiveis = poderes.filter((item) => correspondeBusca(termoBusca, item.titulo, item.descricao, item.origem));
-  const vagasPoderes = classes.reduce((total, { classe, nivel }) => total + vagasPoderDaClasse(classe, nivel), 0);
+  const vagasPoderes = classes.reduce((total, { classe, nivel }) => total + vagasPoderNaFicha(ficha, classe, nivel), 0);
   const vagasPoderesAbertas = Math.max(0, vagasPoderes - selecoesPoder.length);
   const vagasEscolhasAbertas = escolhasHabilidade.reduce(
     (total, escolha) => total + Math.max(0, escolha.vagas - escolha.selecionadas.length),
@@ -563,7 +572,8 @@ export const AbaProgressao = ({ character, onUpdate }: { character: any; onUpdat
         <div className="space-y-4">
           {classes.map(({ classe, nivel }) => {
             const selecionados = selecoesPoder.filter((item) => item.classeId === classe.id);
-            const vagas = vagasPoderDaClasse(classe, nivel);
+            const vagas = vagasPoderNaFicha(ficha, classe, nivel);
+            const podadas = vagasPodadasDaClasse(ficha, classe.id);
             const poderesClasse = (classe.poderes || []).filter((poder) => {
               const quantidade = selecionados.filter((item) => item.poderId === poder.id).length;
               const avaliacao = podeSelecionarPoder(poder, classe, nivel, selecoesPoder, ficha);
@@ -576,7 +586,17 @@ export const AbaProgressao = ({ character, onUpdate }: { character: any; onUpdat
               <div key={classe.id} className="rounded-xl border border-white/10 bg-black/20 p-4">
                 <div className="mb-3 flex items-center justify-between gap-3">
                   <strong className="text-white">{classe.titulo}</strong>
-                  <span className="text-xs font-bold text-[#c7a44c]">{selecionados.length}/{vagas} vagas</span>
+                  <span className="flex flex-wrap items-center justify-end gap-2 text-xs font-bold text-[#c7a44c]">
+                    {selecionados.length}/{vagas} vagas
+                    {podadas > 0 && (
+                      <span className="text-[11px] font-bold text-lime-300/80">
+                        {podadas === 1 ? '1 podada no Jardim' : `${podadas} podadas no Jardim`}
+                      </span>
+                    )}
+                    {podadas > 0 && isMestre && (
+                      <button type="button" onClick={() => devolverVagaPodada(classe.id)} title="Devolve uma vaga podada no Jardim para o jogador escolher um poder de novo." className="rounded-lg border border-lime-400/30 px-2 py-0.5 text-[11px] font-bold text-lime-200 hover:bg-lime-500/10">Devolver vaga</button>
+                    )}
+                  </span>
                 </div>
                 <div className="grid gap-2 md:grid-cols-2">
                   {poderesClasse.map((poder) => {

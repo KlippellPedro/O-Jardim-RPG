@@ -1511,3 +1511,48 @@ class TestRodadaTresDasRacas:
             return _validar_escolhas_progressao({"escolhaRacial": escolha}, {}, [], 60, automato)
         assert erro(8) is None
         assert "capacidade racial" in erro(9)
+
+
+class TestPoderPodadoNoJardim:
+    """Podar um poder da propria classe gasta a vaga (decisao de 2026-11-19)."""
+
+    @staticmethod
+    def _guerreiro_6_com_dois_poderes() -> dict:
+        ficha = _ficha_criacao()
+        ficha["classes"][0]["nivel"] = 6
+        ficha["nivel"] = 6
+        ficha["xp"] = 15000
+        ficha["poderesClasseSelecionados"] = [
+            {"classeId": "guerreiro", "poderId": "correndo"},
+            {"classeId": "guerreiro", "poderId": "serio-isso"},
+        ]
+        return ficha
+
+    def test_podar_com_a_vaga_registrada_nao_alerta_o_mestre(self):
+        anterior = self._guerreiro_6_com_dois_poderes()
+        atual = deepcopy(anterior)
+        atual["poderesClasseSelecionados"] = [{"classeId": "guerreiro", "poderId": "serio-isso"}]
+        atual["jardim"] = {"poderesPodados": [{"classeId": "guerreiro", "poderId": "correndo"}], "sementes": 18}
+        assert validar_regras_ficha(atual, {}, ficha_anterior=anterior) is None
+
+    def test_tirar_poder_sem_podar_continua_so_com_o_mestre(self):
+        anterior = self._guerreiro_6_com_dois_poderes()
+        atual = deepcopy(anterior)
+        atual["poderesClasseSelecionados"] = [{"classeId": "guerreiro", "poderId": "serio-isso"}]
+        assert "removidos pelo mestre" in validar_regras_ficha(atual, {}, ficha_anterior=anterior)
+
+    def test_vaga_podada_nao_volta_para_escolher_outro_poder(self):
+        anterior = self._guerreiro_6_com_dois_poderes()
+        anterior["poderesClasseSelecionados"] = [{"classeId": "guerreiro", "poderId": "serio-isso"}]
+        anterior["jardim"] = {"poderesPodados": [{"classeId": "guerreiro", "poderId": "correndo"}]}
+        atual = deepcopy(anterior)
+        atual["poderesClasseSelecionados"].append({"classeId": "guerreiro", "poderId": "grito-de-batalha"})
+        assert "podadas no Jardim" in validar_regras_ficha(atual, {}, ficha_anterior=anterior)
+
+    def test_jogador_nao_apaga_a_vaga_podada(self):
+        anterior = self._guerreiro_6_com_dois_poderes()
+        anterior["poderesClasseSelecionados"] = [{"classeId": "guerreiro", "poderId": "serio-isso"}]
+        anterior["jardim"] = {"poderesPodados": [{"classeId": "guerreiro", "poderId": "correndo"}]}
+        atual = deepcopy(anterior)
+        atual["jardim"] = {"poderesPodados": []}
+        assert "devolvidas pelo mestre" in validar_regras_ficha(atual, {}, ficha_anterior=anterior)

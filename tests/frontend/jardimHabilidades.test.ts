@@ -184,3 +184,41 @@ test('habilidadesVendidasJardim e habilidadesCompradasJardim ignoram entradas ma
   const ficha2 = { jardim: { habilidadesCompradas: [{ habilidadeId: 'y' }, { classeId: 'ninja', habilidadeId: 'z' }] } };
   assert.deepEqual(habilidadesCompradasJardim(ficha2), [{ classeId: 'ninja', habilidadeId: 'z' }]);
 });
+
+test('multiclasse: podar a habilidade da própria classe paga pelo nível daquela classe, não pelo total', () => {
+  const guerreiro = obterClasse('guerreiro');
+  const implacavel = obterHabilidade(guerreiro, 'implacavel');
+  const ficha = { classes: [{ classeId: 'guerreiro', nivel: 1 }, { classeId: 'ninja', nivel: 19 }] };
+  const venda = habilidadesVendaveisJardim(ficha).find((item) => item.classeId === 'guerreiro' && item.habilidadeId === 'implacavel');
+  assert.ok(venda);
+  // A ficha mostra Implacável no estágio 1 (Guerreiro 1), então a poda vale o estágio 1.
+  assert.equal(venda!.estagiosAlcancados, 1);
+  assert.equal(venda!.sementesRecebidas, sementesPorVenderHabilidade(implacavel, 1, guerreiro));
+  const naFicha = habilidadesAutomaticas(ficha).find((item) => item.id === 'classe:guerreiro:implacavel');
+  assert.ok(naFicha && !naFicha.descricao.includes('Nível 5'), 'a ficha não pode mostrar estágio que a classe não deu');
+});
+
+test('plantou a habilidade de uma classe e depois entrou nela: aparece uma vez só, a do Jardim', () => {
+  const ninja = obterClasse('ninja');
+  const hierarquia = obterHabilidade(ninja, 'hierarquia');
+  const ficha = {
+    classes: [{ classeId: 'guerreiro', nivel: 15 }, { classeId: 'ninja', nivel: 1 }],
+    jardim: { habilidadesCompradas: [{ classeId: 'ninja', habilidadeId: hierarquia.id }] },
+  };
+  const daClasse = habilidadesAutomaticas(ficha).filter((item) => item.id === `classe:ninja:${hierarquia.id}`);
+  const doJardim = habilidadesJardimSelecionadas(ficha).filter((item) => item.id === `jardim-habilidade:ninja:${hierarquia.id}`);
+  assert.equal(daClasse.length, 0, 'a cópia da classe sai para não somar duas vezes');
+  assert.equal(doJardim.length, 1);
+  // A do Jardim segue o nível total (16), então guarda os estágios que o jogador pagou.
+  assert.ok(doJardim[0].descricao.includes('Nível 15'));
+
+  // Podar a cópia da classe devolve a do Jardim como a única na ficha.
+  const vendidas = venderHabilidadeDeClasseNoJardim(ficha, { classeId: 'ninja', habilidadeId: hierarquia.id });
+  const depois = { ...ficha, jardim: { ...ficha.jardim, habilidadesVendidas: vendidas } };
+  assert.equal(habilidadesJardimSelecionadas(depois).length, 1);
+  assert.equal(habilidadesAutomaticas(depois).filter((item) => item.id === `classe:ninja:${hierarquia.id}`).length, 0);
+
+  // Podar a do Jardim (sem ter podado a da classe) devolve a da classe.
+  const semJardim = { ...ficha, jardim: { habilidadesCompradas: venderHabilidadeDoJardim(ficha, { classeId: 'ninja', habilidadeId: hierarquia.id }) } };
+  assert.equal(habilidadesAutomaticas(semJardim).filter((item) => item.id === `classe:ninja:${hierarquia.id}`).length, 1);
+});

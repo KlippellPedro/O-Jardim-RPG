@@ -99,6 +99,10 @@ test('a Loja e o Bestiário seguem o tom: sem antítese, travessão ou "eco"', (
   assert.deepEqual(foraDoTom('familias-propostas-v1.json', lerJson('data/bestiario/familias-propostas-v1.json')), []);
 });
 
+test('os Únicos do Jardim seguem o tom: sem antítese, travessão ou "eco"', () => {
+  assert.deepEqual(foraDoTom('unicos.json', lerJson('data/jardim/unicos.json')), []);
+});
+
 test('a lore do Mundo segue o tom: sem antítese, travessão ou "eco"', () => {
   const arquivos = jsonsDaPasta('data/mundo');
   assert.ok(arquivos.length >= 19, 'a pasta da lore encolheu');

@@ -7,10 +7,11 @@
     "custoSementes": 60,
     "custo_mana": 0,
     "acao": "Ação Livre",
+    "momento": "depois de tirar 1 natural",
     "alcance": "Pessoal",
     "duracao": "Instantânea",
     "usos": "Uma vez por sessão",
-    "descricao": "Alguma coisa no Jardim ouve seus pedidos pequenos. Depois de rolar um 1 natural em qualquer teste, você pode trocar esse resultado por um 10 natural, como se o dado tivesse caído de outro jeito."
+    "descricao": "Um fio dourado puxa o dado de volta antes de ele parar. Quando você tira 1 natural em qualquer teste, pode rolar o d20 de novo e ficar com o novo resultado. Se cair 1 outra vez, o teste falha normalmente, mas o uso volta para você."
   },
   {
     "id": "golpe-sem-nome",
@@ -20,12 +21,13 @@
     "custoSementes": 70,
     "custo_mana": 0,
     "custo_estamina": 2,
-    "acao": "Ação Padrão",
+    "acao": "Ação Livre",
+    "momento": "depois de errar um ataque",
     "alcance": "Arma equipada",
-    "duracao": "Instantânea",
-    "dano": "+2 no total do dano",
-    "usos": "Uma vez por combate",
-    "descricao": "Não tem forma, não tem escola, não precisa de explicação: é só o golpe mais limpo que você já deu. Um ataque corpo a corpo ou à distância sem nenhum efeito extra, só a certeza de acertar com um pouco mais de força."
+    "duracao": "Este ataque",
+    "dano": "Dano normal da arma, sem crítico",
+    "usos": "Uma vez por cena",
+    "descricao": "O corpo corrige o golpe no meio do caminho. Quando um ataque seu erra a Defesa do alvo por 5 ou menos, ele acerta mesmo assim e causa o dano normal da arma, sem crítico. Um 1 natural continua errando."
   },
   {
     "id": "mao-que-segura",
@@ -38,7 +40,7 @@
     "alcance": "9 m",
     "duracao": "Instantânea",
     "usos": "Uma vez por cena",
-    "descricao": "Você estica a mão mesmo sem estar perto o bastante pra alcançar. Estabilize uma criatura inconsciente à beira da morte à distância, sem precisar de teste nem de adjacência."
+    "descricao": "Uma mão de raízes sai do chão e segura quem caiu. Escolha uma criatura Morrendo a até 9 m: ela fica estabilizada sem teste e é puxada até 6 m na sua direção, sem provocar reação."
   },
   {
     "id": "faro-do-caminho",
@@ -51,7 +53,7 @@
     "alcance": "Pessoal",
     "duracao": "Permanente",
     "usos": "Sempre ativo",
-    "descricao": "Você nunca fica de verdade sem saída. Em qualquer lugar em que estiver, mesmo em masmorras torcidas ou espaços que não deveriam ter lógica nenhuma, você sabe apontar a direção da saída mais próxima."
+    "descricao": "Você sempre sabe apontar para a saída mais próxima, mesmo em labirinto, masmorra torta ou lugar que muda de forma. Quando você é o Guia do grupo numa viagem, seu teste tem vantagem."
   },
   {
     "id": "respiro-roubado",
@@ -62,10 +64,11 @@
     "custo_mana": 0,
     "custo_estamina": 1,
     "acao": "Reação",
+    "momento": "antes da rolagem contra um aliado",
     "alcance": "9 m",
-    "duracao": "Até o teste do aliado",
-    "usos": "Uma vez por combate",
-    "descricao": "Você grita uma palavra no momento certo e o golpe que vinha decidido erra o ritmo. Um aliado a até 9 m que estivesse prestes a ser atingido rola o teste de defesa daquele ataque com Vantagem."
+    "duracao": "Este ataque",
+    "usos": "Uma vez por cena",
+    "descricao": "Você grita o nome de um aliado na hora certa e ele se joga para o lado. Um aliado a até 9 m que vai ser atacado ganha +4 de Defesa contra esse ataque, igual à Esquiva, sem gastar a reação dele."
   },
   {
     "id": "corte-que-lembra",
@@ -76,11 +79,12 @@
     "custo_mana": 0,
     "custo_estamina": 4,
     "acao": "Ação Livre",
+    "momento": "depois de acertar um crítico",
     "alcance": "Pessoal",
     "duracao": "Até o fim da cena",
-    "dano": "Dano máximo do dado, sem rolar",
+    "dano": "O próximo acerto contra o mesmo alvo também é crítico",
     "usos": "Uma vez por cena",
-    "descricao": "Sua arma guarda o desenho exato de onde acertou fundo. Depois de causar um dano crítico em um inimigo nesta cena, seu próximo ataque contra esse mesmo alvo, ainda nesta cena, acerta com o dano máximo possível do dado, sem precisar rolar."
+    "descricao": "A arma guarda o caminho exato do golpe que entrou fundo. Depois de acertar um crítico, marque o alvo: o próximo ataque seu que acertar essa criatura nesta cena também é crítico, com o multiplicador da arma."
   },
   {
     "id": "escudo-emprestado",
@@ -91,14 +95,15 @@
     "custo_mana": 0,
     "custo_estamina": 3,
     "acao": "Reação",
+    "momento": "quando um aliado a até 3 m sofre dano",
     "alcance": "3 m",
     "duracao": "Instantânea",
-    "usos": "Uma vez por combate",
-    "descricao": "Você se põe no meio do caminho antes de pensar direito. Quando um aliado a até 3 m sofre dano, absorva metade daquele dano você mesmo, arredondado para baixo."
+    "usos": "Uma vez por cena",
+    "descricao": "Você se joga na frente do golpe que já ia acertar. Quando um aliado a até 3 m sofre dano, você fica com metade desse dano, arredondada para baixo, e ele sofre só o resto. Sua Resistência e a sua redução de dano valem contra a sua metade."
   },
   {
     "id": "segundo-rosto",
-    "titulo": "Segundo Rosto",
+    "titulo": "Máscara de Gente",
     "tipo": "utilidade",
     "tier": "notavel",
     "custoSementes": 150,
@@ -107,7 +112,7 @@
     "alcance": "Pessoal",
     "duracao": "Uma cena",
     "usos": "Uma vez por sessão",
-    "descricao": "Você monta uma identidade tão completa que até você quase acredita nela: nome, história, gestos, sotaque. Pelo resto da cena, qualquer teste para ver através dessa máscara (Investigação, Percepção, Intuição) tem Desvantagem."
+    "descricao": "Você inventa uma pessoa inteira e passa a ser ela: nome, sotaque, postura, até o jeito de rir. Até o fim da cena, quem tenta ver através do disfarce com Intuição, Investigação ou Percepção rola com desvantagem. Numa infiltração, a primeira falha do grupo nessa cena não marca Alerta."
   },
   {
     "id": "replica-de-um-instante",
@@ -117,11 +122,12 @@
     "custoSementes": 210,
     "custo_mana": 5,
     "acao": "Ação Livre",
+    "momento": "depois de acertar um ataque",
     "alcance": "Pessoal",
     "duracao": "Instantânea",
-    "dano": "Repete o resultado do ataque anterior",
-    "usos": "Uma vez por combate",
-    "descricao": "Por um instante existem duas versões suas, e as duas acertaram o mesmo golpe. Depois de acertar um ataque nesta rodada, uma cópia semitransparente sua repete o mesmo ataque contra o mesmo alvo, usando o mesmo resultado do dado."
+    "dano": "O dano do ataque outra vez, com nova rolagem",
+    "usos": "Uma vez por cena",
+    "descricao": "Uma cópia translúcida sua aparece ao lado e repete o golpe que acabou de entrar. Depois de acertar um ataque, o alvo sofre o dano de novo: role os dados de dano outra vez e some os mesmos bônus. Se o ataque foi crítico, a cópia também é."
   },
   {
     "id": "veia-aberta-do-mundo",
@@ -134,7 +140,7 @@
     "alcance": "Pessoal",
     "duracao": "Até o fim da cena",
     "usos": "Uma vez por cena",
-    "descricao": "O Jardim empresta um pouco de si mesmo pra quem já plantou algo nele. Puxe uma força emprestada do ambiente ao seu redor e recupere Vida temporária igual ao dobro do seu nível."
+    "descricao": "Você encosta a mão no chão e puxa força da terra, da água e das plantas em volta. Ganhe Vida temporária igual ao seu nível + 5. Num lugar sem terra, planta nem água, como uma nave de metal ou o Vazio, você ganha só metade."
   },
   {
     "id": "passo-fora-do-tempo",
@@ -145,10 +151,11 @@
     "custo_mana": 0,
     "custo_estamina": 4,
     "acao": "Ação Livre",
+    "momento": "no começo ou no fim do seu turno",
     "alcance": "Pessoal",
     "duracao": "Instantânea",
     "usos": "Uma vez por cena",
-    "descricao": "Por meio segundo, ninguém mais está rodando. Fora da ordem normal de iniciativa, tome um turno extra completo de movimento mais uma ação que não seja de ataque, imediatamente antes ou depois do seu turno."
+    "descricao": "Você se mexe tão rápido que os outros só veem um borrão. Ganhe uma Ação de Movimento e uma Ação Padrão a mais neste turno. A Ação Padrão extra serve para socorrer alguém, abrir uma porta, pegar um item ou usar um poder de apoio: ela não pode ser um ataque nem causar dano."
   },
   {
     "id": "cicatriz-que-nunca-fecha",
@@ -159,10 +166,11 @@
     "custo_mana": 7,
     "acao": "Ação Padrão",
     "alcance": "9 m",
-    "duracao": "Até o fim da cena ou cura mágica",
-    "dano": "+1d8 em todo dano que o alvo sofrer",
-    "usos": "Uma vez por cena para marcar",
-    "descricao": "Você não precisa acertar fundo, só precisa marcar o lugar certo. Sem teste, escolha um alvo em alcance: pelo resto da cena, toda vez que ele sofrer dano de qualquer fonte, sofre +1d8 adicional, até ser curado por magia ou a cena acabar."
+    "duracao": "Até o fim da cena ou até cura mágica",
+    "defesa": "Nenhuma",
+    "dano": "1d8 a cada 4 níveis seus (mínimo 1d8), uma vez por rodada",
+    "usos": "Uma vez por cena",
+    "descricao": "Você aponta e uma linha vermelha se abre na pele do alvo, sem ninguém encostar nele. Escolha uma criatura a até 9 m, sem teste. Até o fim da cena, na primeira vez em cada rodada que ela sofrer dano de qualquer fonte, sofre também 1d8 a cada 4 níveis seus (mínimo 1d8). Cura mágica fecha a cicatriz."
   },
   {
     "id": "circulo-dos-que-ficam",
@@ -171,11 +179,12 @@
     "tier": "extraordinaria",
     "custoSementes": 390,
     "custo_mana": 6,
-    "acao": "Ação Padrão",
-    "alcance": "18 m para formar; sem limite depois",
-    "duracao": "Até ser desfeito",
-    "usos": "Uma vez por descanso para formar o vínculo",
-    "descricao": "Você amarra sua sorte à de até três aliados, e essa amarra não se importa com distância. Enquanto o vínculo durar, sempre que um deles for reduzido a 0 de Vida na mesma cena que você, gaste sua reação para reduzir pela metade o dano que ele recebeu, sofrendo o restante você mesmo."
+    "acao": "Reação",
+    "momento": "quando um vinculado cai a 0 de Vida ou fica Agarrado ou Imobilizado",
+    "alcance": "Qualquer distância, na mesma Árvore",
+    "duracao": "Até você formar outro vínculo",
+    "usos": "Uma vez por descanso para trocar de lugar",
+    "descricao": "No descanso completo, você amarra um fio que ninguém vê em até três aliados que aceitam. Enquanto o vínculo durar, você sabe a direção de cada um e se ele está bem, ferido, Morrendo ou inconsciente, a qualquer distância. Uma vez por descanso, quando um deles cair a 0 de Vida ou ficar Agarrado ou Imobilizado, você pode usar sua reação para trocar de lugar com ele, onde quer que ele esteja, desde que na mesma Árvore."
   },
   {
     "id": "chave-que-nao-existe",
@@ -188,7 +197,7 @@
     "alcance": "Toque",
     "duracao": "Instantânea",
     "usos": "Uma vez por sessão",
-    "descricao": "Toda fechadura tem um segredo, e o seu segredo é que nenhuma resiste a você. Destrave, desarme ou abra qualquer fechadura, selo ou passagem trancada automaticamente, sem teste. O Mestre pode negar isso só para selos que sejam o ponto central da trama da campanha."
+    "descricao": "Você encosta a mão e a fechadura cede, mesmo que nunca tenha existido chave para ela. Abra qualquer fechadura, tranca, cadeado eletrônico, selo ou porta emperrada, sem teste e sem barulho. Numa infiltração, isso passa uma etapa de porta ou cofre sem rolar. O Mestre só pode negar um selo que seja o centro da trama, e aí você sente que alguém o fechou de propósito."
   },
   {
     "id": "sombra-que-aprende",
@@ -199,12 +208,12 @@
     "custo_mana": 0,
     "custo_estamina": 6,
     "acao": "Reação",
+    "momento": "depois de sofrer dano",
     "alcance": "Pessoal",
     "duracao": "Até o fim da cena",
-    "defesa": "Nenhuma",
-    "dano": "Resistência 5 ao tipo sofrido; dano adicional igual à Resistência aplicada",
+    "dano": "Resistência e dano extra iguais a metade do seu nível (mínimo 5)",
     "usos": "Uma vez por cena",
-    "descricao": "Sua sombra guarda cada golpe que você já levou. Quando você sofre dano de um tipo específico, ganhe Resistência 5 a esse tipo pelo resto da cena, e seu próximo ataque contra quem te acertou causa dano adicional igual à Resistência que ela te deu."
+    "descricao": "Sua sombra se mexe um instante depois de você e decora o golpe que levou. Quando você sofre dano, escolha o tipo dele: você ganha Resistência a esse tipo igual a metade do seu nível (mínimo 5) até o fim da cena, e ela já vale contra esse dano. O próximo ataque seu que acertar quem causou o dano soma esse mesmo valor ao dano."
   },
   {
     "id": "requiem-silencioso",
@@ -215,10 +224,10 @@
     "custo_mana": 9,
     "acao": "Ação Padrão",
     "alcance": "6 m de raio ao seu redor",
-    "duracao": "1 hora ou até sofrer dano",
-    "defesa": "Vontade contra DT 8 + seu maior modificador + metade do seu nível (só para hostis)",
+    "duracao": "Até 1 hora",
+    "defesa": "Vontade contra a DT Padrão do seu nível",
     "usos": "Uma vez por descanso",
-    "descricao": "Uma canção sem letra passa pela área e o corpo entende antes da mente resistir. Aliados na área adormecem se quiserem, sem teste; inimigos que falharem em Vontade adormecem profundamente até sofrerem dano ou passar uma hora."
+    "descricao": "Você cantarola uma melodia sem letra e quem ouve sente o corpo pesar. Cada inimigo a até 6 m que consegue ouvir testa Vontade contra a DT Padrão do seu nível. Quem falhar fica Inconsciente, dormindo, por até 1 hora, e acorda se sofrer dano, se alguém gastar uma Ação Padrão sacudindo ele ou com um barulho alto. Quem passar fica livre do Réquiem pelo resto do dia. Aliados não são afetados, e quem não dorme, como constructo ou morto-vivo, também não."
   },
   {
     "id": "territorio-pessoal",
@@ -230,9 +239,9 @@
     "acao": "Ação Padrão",
     "alcance": "9 m de raio ao seu redor",
     "duracao": "3 rodadas",
-    "dano": "Acerto automático; dano máximo do dado uma vez por rodada",
-    "usos": "Uma vez por descanso; ao terminar, ganhe 2 níveis de Cansaço",
-    "descricao": "Por três rodadas, o espaço ao seu redor para de obedecer às regras de todo mundo e passa a obedecer só as suas. Nada que estiver preso dentro consegue sair pelos próprios meios, você incluído, e todo ataque seu contra um alvo preso ali dentro acerta sem precisar rolar, com o dano máximo do dado uma vez por rodada. Quando o território fecha, o preço cai sobre você de uma vez: 2 níveis de Cansaço."
+    "dano": "Acerto automático; o primeiro acerto de cada rodada causa o máximo dos dados",
+    "usos": "Uma vez por descanso; ao terminar, ganhe 2 de Cansaço",
+    "descricao": "Por 3 rodadas, o espaço a até 9 m de você passa a seguir as suas regras, e todo mundo ali sente isso na pele. Ninguém sai dele por conta própria, nem você, e ninguém de fora entra. Todo ataque seu contra uma criatura lá dentro acerta sem rolar, e o primeiro acerto de cada rodada causa o máximo dos dados. Quando o território se desfaz, você ganha 2 de Cansaço."
   },
   {
     "id": "o-que-ja-foi-escrito",
@@ -244,8 +253,8 @@
     "acao": "Ação Padrão",
     "alcance": "Pessoal",
     "duracao": "Instantânea",
-    "usos": "Uma vez por campanha inteira",
-    "descricao": "Existe uma página desta sessão que você se recusa a aceitar como definitiva. Escolha um evento que já aconteceu nesta sessão: ele nunca aconteceu, e a mesa renarra a partir daquele ponto. O Mestre decide junto com você o que muda e o que fica igual, e algumas coisas simplesmente não podem ser desfeitas."
+    "usos": "Uma vez por campanha",
+    "descricao": "Você risca uma página da história. Escolha uma coisa que aconteceu nesta sessão: ela não aconteceu, e a mesa volta àquele ponto e joga de novo a partir dali. Só você lembra da versão riscada. Dá para desfazer até a morte de um aliado, mas nada de uma sessão anterior. O Mestre combina com você o que volta e o que fica."
   },
   {
     "id": "coracao-compartilhado",
@@ -258,7 +267,7 @@
     "alcance": "12 m",
     "duracao": "Até o fim da cena",
     "usos": "Uma vez por descanso",
-    "descricao": "Você abre mão de ter um corpo só seu por uma cena. Escolha até quatro aliados em alcance: pelo resto da cena, todo dano que qualquer um de vocês sofrer é dividido em partes iguais entre todos os vinculados que ainda estiverem de pé, arredondado para cima."
+    "descricao": "Você liga o seu coração ao de até quatro aliados a até 12 m, e todos passam a bater no mesmo ritmo. Até o fim da cena, todo dano que qualquer um de vocês sofrer, depois da Resistência, é dividido em partes iguais entre os ligados que ainda estão de pé, arredondando para cima. Quem cair a 0 sai da ligação."
   },
   {
     "id": "fome-que-nao-se-farta",
@@ -270,10 +279,10 @@
     "acao": "Ação Padrão",
     "alcance": "18 m; área de 9 m de raio",
     "duracao": "Instantânea",
-    "defesa": "Fortitude contra DT 8 + seu maior modificador + metade do seu nível",
-    "dano": "6d12 de dano verdadeiro; metade em sucesso",
+    "defesa": "Fortitude contra a DT Padrão do seu nível",
+    "dano": "1d12 a cada 2 níveis seus (mínimo 3d12) de dano verdadeiro; metade em sucesso",
     "usos": "Uma vez por descanso",
-    "descricao": "Alguma coisa em você nunca comeu o suficiente, e por um segundo ela decide a mesa toda. Cada criatura na área sofre 6d12 de dano verdadeiro, metade em caso de sucesso em Fortitude, e você recupera Vida igual a um quarto do dano total causado a todos os alvos."
+    "descricao": "Uma boca que não é sua se abre no ar e tenta engolir tudo em volta. Cada criatura numa área de 9 m de raio, a até 18 m de você, testa Fortitude contra a DT Padrão do seu nível. Quem falhar sofre 1d12 a cada 2 níveis seus (mínimo 3d12) de dano verdadeiro, e quem passar sofre metade. A fome não escolhe: aliados na área também testam. Você recupera Vida igual a um quarto de todo o dano causado."
   },
   {
     "id": "bolso-sempre-cheio",
@@ -286,7 +295,7 @@
     "alcance": "Pessoal",
     "duracao": "Instantânea",
     "usos": "Uma vez por sessão",
-    "descricao": "Você tem o hábito de achar o que precisa no fundo da mochila, mesmo sem lembrar de ter colocado lá. Declare que já tinha um item comum consigo, de até 300 Lunaris, que não seja arma nem Relíquia. Ele passa a existir na sua mochila como se tivesse sido comprado antes."
+    "descricao": "Você enfia a mão na mochila e acha o que precisava, mesmo sem lembrar de ter guardado. Diga que já tinha consigo um item comum de até 300 Lunaris que não seja arma, armadura nem Relíquia: ele estava ali o tempo todo. Às vezes ele vem com um bilhete que você não lembra de ter escrito, e o Mestre decide o que o bilhete diz."
   },
   {
     "id": "devolucao",
@@ -295,13 +304,12 @@
     "tier": "simples",
     "custoSementes": 70,
     "custo_mana": 0,
-    "custo_estamina": 1,
-    "acao": "Ação Padrão",
-    "alcance": "Alcance de arremesso do objeto",
-    "duracao": "Instantânea",
-    "dano": "1d8 + modificador do ataque",
-    "usos": "Uma vez por combate",
-    "descricao": "Qualquer coisa serve quando ela sabe voltar para você. Arremesse um objeto qualquer que esteja ao seu alcance como ataque à distância, sem penalidade por ser improvisado, causando 1d8 + o modificador usado no ataque. No fim do seu turno, o objeto volta sozinho para a sua mão."
+    "acao": "Passivo",
+    "alcance": "9 m",
+    "duracao": "Permanente",
+    "dano": "1d6 de impacto + Mod.Força (objeto improvisado)",
+    "usos": "Sempre ativo",
+    "descricao": "Tudo o que você arremessa volta voando para a sua mão no fim do seu turno, de uma faca a uma cadeira. Objeto improvisado arremessado por você conta como arma de arremesso, sem penalidade: usa Pontaria, alcança 9 m e causa 1d6 de impacto + Mod.Força."
   },
   {
     "id": "ombro-amigo",
@@ -311,11 +319,12 @@
     "custoSementes": 75,
     "custo_mana": 0,
     "custo_estamina": 1,
-    "acao": "Ação Livre",
-    "alcance": "3 m",
-    "duracao": "Até o próximo teste do aliado",
+    "acao": "Reação",
+    "momento": "depois que um aliado falha em Vontade ou Sanidade",
+    "alcance": "9 m",
+    "duracao": "Instantânea",
     "usos": "Uma vez por cena",
-    "descricao": "Às vezes o que segura alguém de pé é só saber que tem outra pessoa do lado. Um aliado a até 3 m ganha +2 no próximo teste contra medo, pânico ou qualquer efeito que tire a coragem dele."
+    "descricao": "Você chama o aliado pelo nome e ele volta a si. Quando um aliado a até 9 m que consegue ouvir você falha num teste de Vontade ou de Sanidade, ele rola de novo com +2 e fica com o novo resultado."
   },
   {
     "id": "relogio-interno",
@@ -328,7 +337,7 @@
     "alcance": "Pessoal e aliados a até 9 m",
     "duracao": "Permanente",
     "usos": "Sempre ativo",
-    "descricao": "Uma parte de você nunca perde a conta. Você sempre sabe a hora exata e quanto tempo falta para acabar qualquer efeito com duração que esteja sobre você ou sobre aliados a até 9 m."
+    "descricao": "Você sabe a hora exata sem olhar para o céu e acorda no minuto que escolheu antes de dormir. Também sabe quanto falta para acabar qualquer efeito com duração sobre você ou sobre um aliado a até 9 m: pergunte, e o Mestre diz."
   },
   {
     "id": "memoria-cheia",
@@ -341,7 +350,7 @@
     "alcance": "Pessoal",
     "duracao": "Instantânea",
     "usos": "Uma vez por sessão",
-    "descricao": "Você viu mais do que percebeu. Peça ao Mestre 3 detalhes da cena atual que o seu personagem notou sem se dar conta: um rosto, um cheiro, algo que estava fora do lugar. O Mestre responde com a verdade."
+    "descricao": "Você fecha os olhos e repassa a cena devagar. Faça ao Mestre três perguntas sobre a cena atual ou sobre outra desta sessão em que você estava. Ele responde com o que o seu personagem viu ou ouviu sem perceber: um rosto, um cheiro, algo fora do lugar. Numa investigação, se havia pista ali, uma das respostas é essa pista."
   },
   {
     "id": "ricochete-errado",
@@ -352,11 +361,12 @@
     "custo_mana": 0,
     "custo_estamina": 3,
     "acao": "Reação",
+    "momento": "quando um ataque à distância seu erra",
     "alcance": "6 m do alvo original",
     "duracao": "Instantânea",
-    "dano": "Igual ao do ataque original",
-    "usos": "Uma vez por combate",
-    "descricao": "O tiro que erra o alvo ainda acha alguém. Quando um ataque à distância seu erra, ele rebate e ataca outra criatura a até 6 m do alvo original, usando o mesmo resultado do dado."
+    "dano": "O dano normal do ataque",
+    "usos": "Uma vez por cena",
+    "descricao": "O tiro bate numa parede ou num escudo e muda de rumo. Quando um ataque à distância seu erra, escolha outra criatura a até 6 m do alvo original e compare o mesmo total da rolagem com a Defesa dela. Se acertar, ela sofre o dano normal do ataque."
   },
   {
     "id": "oficio-herdado",
@@ -369,7 +379,7 @@
     "alcance": "Toque",
     "duracao": "1 hora",
     "usos": "Uma vez por sessão",
-    "descricao": "Mãos que sabem uma coisa a emprestam para as que não sabem. Ao tocar um aliado que aceita, você usa o bônus de uma perícia dele no lugar do seu por 1 hora."
+    "descricao": "Você segura as mãos de um aliado que aceita e, por uma hora, as suas sabem o que as dele sabem. Escolha uma perícia em que ele tenha grau maior que o seu: você usa o grau dele nessa perícia. Ele não perde nada."
   },
   {
     "id": "divida-trocada",
@@ -380,9 +390,9 @@
     "custo_mana": 3,
     "acao": "Ação Padrão",
     "alcance": "3 m",
-    "duracao": "Metade da duração original",
+    "duracao": "Metade do que restava",
     "usos": "Uma vez por cena",
-    "descricao": "Você pega para si o que estava pesando em outra pessoa. Escolha uma condição que esteja em um aliado a até 3 m: ela passa para você, com a metade da duração que restava, e ele fica livre dela."
+    "descricao": "Você puxa para o seu corpo o que estava pesando em outra pessoa. Escolha uma condição negativa em um aliado a até 3 m, como Sangramento, Envenenado, Amedrontado ou Lento: ela sai dele e passa para você, com metade da duração que restava. Morrendo e Inconsciente não podem ser trocados."
   },
   {
     "id": "ouvir-com-os-olhos",
@@ -392,10 +402,10 @@
     "custoSementes": 150,
     "custo_mana": 2,
     "acao": "Ação Padrão",
-    "alcance": "Pessoal",
+    "alcance": "9 m",
     "duracao": "1 hora",
     "usos": "Uma vez por sessão",
-    "descricao": "Os sentidos passam a se ajudar em vez de cada um cuidar do seu. Por 1 hora você troca um sentido por outro: enxerga pelo som e ouve pelo tato. Cegueira, surdez e escuridão deixam de atrapalhar você."
+    "descricao": "Seus ouvidos e a sua pele passam a desenhar o espaço em volta, do jeito de um morcego. Por 1 hora, a até 9 m de você, estar Cego, no escuro ou na fumaça não atrapalha, e quem estiver Invisível mas se mexendo aparece para você. Silêncio completo, como o de uma magia, apaga o efeito enquanto durar."
   },
   {
     "id": "linha-no-chao",
@@ -407,10 +417,10 @@
     "custo_estamina": 4,
     "acao": "Ação Padrão",
     "alcance": "Linha de até 9 m",
-    "duracao": "Até o primeiro inimigo cruzar",
-    "defesa": "Fortitude contra DT 8 + seu maior modificador + metade do seu nível",
-    "usos": "Uma vez por combate",
-    "descricao": "Você risca o chão e o chão passa a valer como parede. O primeiro inimigo que cruzar a linha faz um teste de Fortitude e, se falhar, fica com Deslocamento 0 até o fim do próximo turno dele."
+    "duracao": "Até o fim da cena",
+    "defesa": "Fortitude contra a DT Padrão do seu nível",
+    "usos": "Uma vez por cena",
+    "descricao": "Você risca o chão com a arma e avisa que ninguém passa. Até o fim da cena, cada inimigo que tentar cruzar a linha testa Fortitude contra a DT Padrão do seu nível. Quem falhar para em cima dela, fica Imobilizado até o fim do turno dele e perde o resto do movimento. Quem passar cruza e não testa mais contra essa linha."
   },
   {
     "id": "ultima-hora",
@@ -420,10 +430,11 @@
     "custoSementes": 400,
     "custo_mana": 6,
     "acao": "Reação",
+    "momento": "quando um aliado a até 9 m cairia a 0 de Vida",
     "alcance": "9 m",
     "duracao": "3 rodadas",
     "usos": "Uma vez por descanso",
-    "descricao": "Você recusa o fim de alguém por mais um pouco. Quando um aliado a até 9 m cairia a 0 de Vida, ele continua de pé e agindo por 3 rodadas, sem falhar em testes de morte. Passado esse tempo, ele cai de verdade."
+    "descricao": "Você segura o aliado de pé mais um pouco. Quando um aliado a até 9 m cairia a 0 de Vida, ele fica com 1 de Vida e continua agindo normalmente por 3 rodadas. Nesse tempo, anote todo dano que ele sofrer sem tirar da Vida. No fim da terceira rodada, o dano anotado entra de uma vez. Cura recebida nesse meio tempo abate primeiro o que estava anotado."
   },
   {
     "id": "ontem-aqui",
@@ -432,11 +443,12 @@
     "tier": "extraordinaria",
     "custoSementes": 330,
     "custo_mana": 5,
-    "acao": "Ritual de 1 minuto",
-    "alcance": "O local onde você está",
+    "acao": "Fora de combate",
+    "momento": "1 minuto parado no lugar",
+    "alcance": "O cômodo ou trecho onde você está",
     "duracao": "Instantânea",
     "usos": "Uma vez por sessão",
-    "descricao": "Toda sala guarda o que viu. Depois de um minuto parado no local, você assiste a uma repetição muda de tudo o que aconteceu ali nas últimas 24 horas, como quem espia por cima do ombro de quem esteve lá."
+    "descricao": "Depois de um minuto parado num lugar, você assiste ao que aconteceu ali nas últimas 24 horas, rápido e sem som. Você vê quem entrou, o que fez e por onde saiu, mas não ouve nada do que foi dito. Numa investigação, isso conta como procurar no lugar certo: se havia pista ali, você acha."
   },
   {
     "id": "sombra-costurada",
@@ -449,9 +461,9 @@
     "acao": "Ação Padrão",
     "alcance": "9 m",
     "duracao": "Até o fim da cena",
-    "defesa": "Fortitude contra DT 8 + seu maior modificador + metade do seu nível",
+    "defesa": "Fortitude contra a DT Padrão do seu nível",
     "usos": "Uma vez por cena",
-    "descricao": "Você prende a sombra do alvo no chão como quem costura um tecido. Sem teste de ataque, escolha uma criatura em alcance: ela não consegue se afastar mais de 3 m do ponto onde estava até o fim da cena. No começo de cada turno dela, um teste de Fortitude bem-sucedido rompe a costura."
+    "descricao": "Você crava a arma na sombra do alvo e prende a sombra no chão. Escolha uma criatura a até 9 m que tenha sombra, sem teste de ataque. Até o fim da cena, ela não consegue se afastar mais de 3 m do ponto onde estava. No fim de cada turno dela, ela testa Fortitude contra a DT Padrão do seu nível e solta a costura se passar. Em escuridão completa, sem sombra, a costura solta sozinha."
   },
   {
     "id": "contrato-falado",
@@ -462,9 +474,9 @@
     "custo_mana": 4,
     "acao": "Ação Padrão",
     "alcance": "Você e uma criatura que aceita",
-    "duracao": "Até o cumprimento da promessa",
+    "duracao": "Até cumprir ou quebrar o trato",
     "usos": "Uma vez por sessão",
-    "descricao": "Uma promessa dita em voz alta pesa mais do que uma escrita. Você e uma criatura que aceita fazem um trato claro, em voz alta. Enquanto os dois cumprirem, ambos têm +1 nos testes ligados àquela promessa. Quem quebrar sofre 2 níveis de Cansaço. O Mestre julga o que conta como cumprir e o que conta como quebrar."
+    "descricao": "Vocês dois dizem o trato em voz alta e a promessa fica pesando entre os dois. Enquanto os dois cumprirem, cada um tem +2 nos testes feitos para cumprir o que prometeu. Se um quebrar a palavra, o outro sente na hora, onde estiver, e quem quebrou ganha 2 de Cansaço que nenhum descanso tira até ele cumprir ou desfazer o trato com o outro. O Mestre decide o que conta como cumprir."
   },
   {
     "id": "segunda-opiniao-do-acaso",
@@ -474,10 +486,11 @@
     "custoSementes": 300,
     "custo_mana": 3,
     "acao": "Ação Livre",
+    "momento": "depois de uma rolagem do Mestre ao acaso",
     "alcance": "A mesa",
     "duracao": "Instantânea",
     "usos": "Uma vez por sessão",
-    "descricao": "O acaso também pode ser convencido a pensar duas vezes. Faça o Mestre rolar de novo qualquer evento aleatório, como as tabelas 2d6 do Guia do Mestre. O segundo resultado é o que vale."
+    "descricao": "Você pede para a sorte pensar de novo. Depois que o Mestre rolar algo ao acaso, como um encontro na estrada, o clima do dia, uma tabela do Guia ou o teste de moral de um bando, peça para ele rolar outra vez. Vale o segundo resultado, mesmo que seja pior."
   },
   {
     "id": "hora-extra",
@@ -489,8 +502,8 @@
     "acao": "Ação Padrão",
     "alcance": "9 m",
     "duracao": "Instantânea",
-    "usos": "Uma vez por sessão",
-    "descricao": "Você pede só mais um pouco de fôlego ao dia. Devolva o uso gasto de um poder de \"uma vez por cena\" ou \"uma vez por combate\", seu ou de um aliado a até 9 m. Poderes \"uma vez por sessão\" ou por campanha não são atingidos."
+    "usos": "Uma vez por descanso",
+    "descricao": "Você estala os dedos na direção de alguém e devolve o fôlego de algo que ele já usou. Escolha você ou um aliado a até 9 m: um poder, habilidade ou Único de uso por cena que já foi gasto volta a estar disponível. Não funciona em usos por descanso, por sessão ou por campanha, nem na própria Hora Extra."
   },
   {
     "id": "aposta-com-o-jardim",
@@ -499,11 +512,12 @@
     "tier": "lendaria",
     "custoSementes": 700,
     "custo_mana": 5,
-    "acao": "Ação Padrão",
+    "acao": "Ação Livre",
+    "momento": "no começo de um combate",
     "alcance": "Pessoal",
     "duracao": "Até o fim do combate",
     "usos": "Uma vez por sessão",
-    "descricao": "O Jardim gosta de quem confia no que planta. Antes de um combate, aposte até 100 das suas Sementes de que ninguém do grupo vai cair a 0 de Vida. Se ninguém cair até o fim do combate, você recebe o dobro do que apostou. Se alguém cair, o Jardim fica com o valor."
+    "descricao": "Quando um combate começa, aposte até 100 das suas Sementes que ninguém do grupo vai cair a 0 de Vida nele. Se ninguém cair, você ganha o dobro do que apostou. Se alguém cair, o Jardim fica com a aposta. Diga o valor ao Mestre antes da primeira rolagem, e no fim ele acerta as Sementes na aba Jardim da sua ficha."
   },
   {
     "id": "ultima-cena",
@@ -513,10 +527,11 @@
     "custoSementes": 650,
     "custo_mana": 0,
     "acao": "Reação",
+    "momento": "quando o seu personagem morre",
     "alcance": "Pessoal",
     "duracao": "Instantânea",
-    "usos": "Uma vez por campanha inteira",
-    "descricao": "Todo mundo merece dizer o que veio dizer. Quando o seu personagem morrer, ele narra um último ato: ele acontece e dá certo, sem teste. O Mestre só recusa o que quebraria a trama central da campanha, e negocia com você o que puder no lugar."
+    "usos": "Uma vez por campanha",
+    "descricao": "Quando o seu personagem morre, ele ganha uma última ação antes de fechar os olhos. Narre o que ele faz, desde que caiba num instante: um último golpe, uma porta segurada, uma frase que muda alguém. Acontece e dá certo, sem teste. O Mestre só recusa o que acabaria a campanha de uma vez, e aí vocês combinam algo parecido."
   },
   {
     "id": "lei-da-mesa",
@@ -525,11 +540,12 @@
     "tier": "lendaria",
     "custoSementes": 720,
     "custo_mana": 12,
-    "acao": "Ritual de 10 minutos",
+    "acao": "Fora de combate",
+    "momento": "10 minutos pondo a mesa",
     "alcance": "Uma mesa posta com comida",
-    "duracao": "Até alguém se levantar",
+    "duracao": "Até o último prato esvaziar",
     "usos": "Uma vez por sessão",
-    "descricao": "Quem senta à mesa de alguém está sob a proteção de quem a pôs. Arme uma mesa com comida e bebida: enquanto uma criatura estiver sentada e comendo, ela não pode atacar ninguém e ninguém pode atacá-la, nem inimigos. A proteção acaba para quem se levanta ou come a última garfada."
+    "descricao": "Você põe uma mesa com comida e bebida e convida quem quiser sentar. Enquanto alguém estiver sentado comendo ou bebendo, ninguém pode atacar essa pessoa nem usar poder contra ela, e ela também não pode atacar ninguém. Vale para inimigo jurado, monstro faminto e matador de aluguel. Quem se levanta perde a proteção, e a mesa inteira se desfaz quando o último prato fica vazio."
   },
   {
     "id": "corte-no-chao",
@@ -542,10 +558,10 @@
     "acao": "Ação Padrão",
     "alcance": "Linha de 30 m",
     "duracao": "3 rodadas",
-    "defesa": "Fortitude contra DT 8 + seu maior modificador + metade do seu nível",
-    "dano": "4d12; metade em sucesso",
-    "usos": "Uma vez por descanso; ao terminar, ganhe 1 nível de Cansaço",
-    "descricao": "Um único golpe abre o terreno como quem rasga um pano. Quem estiver na linha sofre 4d12 de dano, com metade em caso de sucesso em Fortitude. O campo se parte em dois lados por 3 rodadas, e só quem voa consegue passar de um para o outro."
+    "defesa": "Reflexos contra a DT Padrão do seu nível",
+    "dano": "1d10 de impacto a cada 2 níveis seus (mínimo 3d10); metade em sucesso",
+    "usos": "Uma vez por descanso; depois do golpe, ganhe 1 de Cansaço",
+    "descricao": "Um golpe só abre o chão numa fenda de 30 m. Cada criatura na linha testa Reflexos contra a DT Padrão do seu nível: quem falhar sofre 1d10 de impacto a cada 2 níveis seus (mínimo 3d10) e fica Caído na beira, e quem passar sofre metade. Por 3 rodadas a fenda divide o campo em dois, e só atravessa quem voa, se teleporta ou salta mais de 6 m. Depois do golpe, você ganha 1 de Cansaço."
   },
   {
     "id": "raiz-de-vigor",
@@ -558,7 +574,7 @@
     "alcance": "Pessoal",
     "duracao": "Permanente",
     "usos": "Sempre ativo",
-    "descricao": "Algo no seu corpo aprendeu a se agarrar à vida como raiz em chão duro. Você aguenta um pouco mais do que devia.\nEfeito: +6 de Vida máxima.",
+    "descricao": "Seu corpo se agarra à vida como raiz em chão duro. Enquanto você estiver Morrendo, seus testes de Fortitude para não piorar ganham +2.\nEfeito: +6 de Vida máxima.",
     "efeitos": [
       {
         "categoria": "recurso",
@@ -580,7 +596,7 @@
     "alcance": "Pessoal",
     "duracao": "Permanente",
     "usos": "Sempre ativo",
-    "descricao": "Existe uma nascente miúda dentro de você. Nunca seca e nunca transborda.\nEfeito: +4 de Mana máxima.",
+    "descricao": "Uma nascente miúda corre dentro de você e enche de novo quando você para. Ao Relaxar, você recupera 2 de Mana a mais.\nEfeito: +4 de Mana máxima.",
     "efeitos": [
       {
         "categoria": "recurso",
@@ -602,7 +618,7 @@
     "alcance": "Pessoal",
     "duracao": "Permanente",
     "usos": "Sempre ativo",
-    "descricao": "Quando o ar parece acabar, ainda sobra um pouco que você nem sabia ter.\nEfeito: +3 de Estamina máxima.",
+    "descricao": "Seus pulmões guardam um resto de ar que os outros não têm. Quando você fica sem ar, cada rodada gasta só metade da Estamina que gastaria.\nEfeito: +3 de Estamina máxima.",
     "efeitos": [
       {
         "categoria": "recurso",
@@ -624,7 +640,7 @@
     "alcance": "Pessoal",
     "duracao": "Permanente",
     "usos": "Sempre ativo",
-    "descricao": "A pele endurece onde precisa e o estômago aprende a perdoar. Doença, veneno e cansaço batem e voltam um pouco mais fracos.\nEfeito: +1 nos testes de Fortitude.",
+    "descricao": "Seu estômago aguenta o que derruba os outros. Comida estragada, água suja e bebida forte não fazem mal a você.\nEfeito: +1 nos testes de Fortitude.",
     "efeitos": [
       {
         "categoria": "pericia",
@@ -646,7 +662,7 @@
     "alcance": "Pessoal",
     "duracao": "Permanente",
     "usos": "Sempre ativo",
-    "descricao": "Você sente o tropeço antes de ele acontecer, e o corpo se ajeita sozinho.\nEfeito: +1 nos testes de Reflexos.",
+    "descricao": "Seus pés acham apoio onde não tem. Gelo, lama, chão molhado e convés balançando não derrubam você nem contam como terreno difícil.\nEfeito: +1 nos testes de Reflexos.",
     "efeitos": [
       {
         "categoria": "pericia",
@@ -668,7 +684,7 @@
     "alcance": "Pessoal",
     "duracao": "Permanente",
     "usos": "Sempre ativo",
-    "descricao": "O medo ainda chega, só que chega devagar, e dá tempo de decidir o que fazer com ele.\nEfeito: +1 nos testes de Vontade.",
+    "descricao": "Seu rosto não entrega o que você sente. Quem usa Intuição para ler suas emoções ou saber se você mente rola com desvantagem.\nEfeito: +1 nos testes de Vontade.",
     "efeitos": [
       {
         "categoria": "pericia",
@@ -690,7 +706,7 @@
     "alcance": "Pessoal",
     "duracao": "Permanente",
     "usos": "Sempre ativo",
-    "descricao": "Você acorda por dentro um segundo antes de o mundo acordar.\nEfeito: +2 de Iniciativa.",
+    "descricao": "Você acorda com qualquer barulho que não devia estar ali e já levanta pronto. Você nunca fica Surpreendido, nem dormindo.\nEfeito: +2 de Iniciativa.",
     "efeitos": [
       {
         "categoria": "combate",
@@ -712,7 +728,7 @@
     "alcance": "Pessoal",
     "duracao": "Permanente",
     "usos": "Sempre ativo",
-    "descricao": "A raiz desceu até onde a terra ainda guarda água. Quem tem esse chão dificilmente cai.\nEfeito: +12 de Vida máxima.",
+    "descricao": "Suas raízes descem fundo e seguram você no lugar. Quem tenta empurrar ou derrubar você tem desvantagem enquanto você estiver de pé no chão.\nEfeito: +12 de Vida máxima.",
     "efeitos": [
       {
         "categoria": "recurso",
@@ -734,7 +750,7 @@
     "alcance": "Pessoal",
     "duracao": "Permanente",
     "usos": "Sempre ativo",
-    "descricao": "A nascente achou o lençol de água por baixo da terra, e agora ela volta sozinha.\nEfeito: +8 de Mana máxima.",
+    "descricao": "A nascente dentro de você reconhece as outras. Você sente Relíquias, itens mágicos e magias ativas a até 9 m como um formigamento na palma da mão, e sabe a direção, mas não o que são.\nEfeito: +8 de Mana máxima.",
     "efeitos": [
       {
         "categoria": "recurso",
@@ -756,7 +772,7 @@
     "alcance": "Pessoal",
     "duracao": "Permanente",
     "usos": "Sempre ativo",
-    "descricao": "Seu corpo guarda uma segunda respiração. Quem vê de fora jura que você nunca se cansa.\nEfeito: +6 de Estamina máxima.",
+    "descricao": "Você anda o dia inteiro e ainda chega conversando. Numa viagem em ritmo Forçado, você não testa Fortitude no fim do dia e não ganha o Cansaço da marcha.\nEfeito: +6 de Estamina máxima.",
     "efeitos": [
       {
         "categoria": "recurso",
@@ -778,7 +794,7 @@
     "alcance": "Pessoal",
     "duracao": "Permanente",
     "usos": "Sempre ativo",
-    "descricao": "A manhã deixa gotas nas coisas que se escondem, e você enxerga o brilho que os outros deixam passar.\nEfeito: Vantagem nos testes de Percepção.",
+    "descricao": "Seus olhos pegam o brilho que as coisas escondidas deixam. Pouca luz não atrapalha a sua Percepção.\nEfeito: Vantagem nos testes de Percepção.",
     "efeitos": [
       {
         "categoria": "pericia",
@@ -800,7 +816,7 @@
     "alcance": "Pessoal",
     "duracao": "Permanente",
     "usos": "Sempre ativo",
-    "descricao": "Doença e veneno encontram uma casca que ninguém ensinou a atravessar.\nEfeito: Vantagem nos testes de Fortitude.",
+    "descricao": "Sua pele fecha sozinha onde o mal tentou entrar. Sangramento e Envenenado em você acabam no fim do seu próximo turno.\nEfeito: Vantagem nos testes de Fortitude.",
     "efeitos": [
       {
         "categoria": "pericia",
@@ -813,7 +829,7 @@
   },
   {
     "id": "guarda-baixa",
-    "titulo": "Guarda Baixa",
+    "titulo": "Ombros Soltos",
     "tipo": "suporte",
     "tier": "notavel",
     "custoSementes": 200,
@@ -822,7 +838,7 @@
     "alcance": "Pessoal",
     "duracao": "Permanente",
     "usos": "Sempre ativo",
-    "descricao": "Você nunca está parado de verdade. Os ombros já dão o desvio que o golpe ainda vai pedir.\nEfeito: +1 de Defesa.",
+    "descricao": "Você nunca está parado de verdade, e os ombros desviam antes de o golpe sair. Ataque de Oportunidade contra você é feito com desvantagem.\nEfeito: +1 de Defesa.",
     "efeitos": [
       {
         "categoria": "combate",
@@ -844,7 +860,7 @@
     "alcance": "Pessoal",
     "duracao": "Permanente",
     "usos": "Sempre ativo",
-    "descricao": "A gota cai sempre no mesmo ponto da folha, e suas mãos aprenderam esse ponto.\nEfeito: +1 nos testes de ataque.",
+    "descricao": "Sua mão acha a fresta que a gota acharia. Cobertura parcial não protege quem você ataca.\nEfeito: +1 nos testes de ataque.",
     "efeitos": [
       {
         "categoria": "combate",
@@ -866,7 +882,7 @@
     "alcance": "Pessoal",
     "duracao": "Permanente",
     "usos": "Sempre ativo",
-    "descricao": "Os músculos aprendem o que as raízes sabem: empurrar a pedra bem devagar até a pedra ceder.\nEfeito: +2 em Força (+1 no modificador).",
+    "descricao": "Seus braços empurram devagar até a pedra ceder. Você carrega o dobro da carga normal e levanta sozinho o que pediria duas pessoas.\nEfeito: +2 em Força (+1 no modificador).",
     "efeitos": [
       {
         "categoria": "atributo",
@@ -888,7 +904,7 @@
     "alcance": "Pessoal",
     "duracao": "Permanente",
     "usos": "Sempre ativo",
-    "descricao": "Folha não pesa, e cai onde quiser.\nEfeito: +2 em Destreza (+1 no modificador).",
+    "descricao": "Você cai leve como folha. Queda de até 9 m não causa dano em você, e você sempre cai de pé.\nEfeito: +2 em Destreza (+1 no modificador).",
     "efeitos": [
       {
         "categoria": "atributo",
@@ -910,7 +926,7 @@
     "alcance": "Pessoal",
     "duracao": "Permanente",
     "usos": "Sempre ativo",
-    "descricao": "O corpo vira casco de árvore velha, rústico por fora e firme por dentro.\nEfeito: +2 em Constituição (+1 no modificador).",
+    "descricao": "Seu corpo guarda reserva como tronco velho. Você passa até 3 dias sem comer e a fome não faz nada com você nesse tempo.\nEfeito: +2 em Constituição (+1 no modificador).",
     "efeitos": [
       {
         "categoria": "atributo",
@@ -932,7 +948,7 @@
     "alcance": "Pessoal",
     "duracao": "Permanente",
     "usos": "Sempre ativo",
-    "descricao": "Os pensamentos passam a se ramificar sozinhos, e cada galho acha outro galho.\nEfeito: +2 em Inteligência (+1 no modificador).",
+    "descricao": "Seus pensamentos se ramificam e um puxa o outro. Você lembra palavra por palavra de tudo o que leu e lê um livro inteiro em uma hora.\nEfeito: +2 em Inteligência (+1 no modificador).",
     "efeitos": [
       {
         "categoria": "atributo",
@@ -954,7 +970,7 @@
     "alcance": "Pessoal",
     "duracao": "Permanente",
     "usos": "Sempre ativo",
-    "descricao": "Você olha para o fundo do poço e enxerga o que a água esconde.\nEfeito: +2 em Sabedoria (+1 no modificador).",
+    "descricao": "Você olha para alguém e enxerga mais fundo do que ele gostaria. Uma vez por cena, depois que alguém responde a uma pergunta sua olhando nos seus olhos, pergunte ao Mestre se foi mentira: ele responde sim ou não.\nEfeito: +2 em Sabedoria (+1 no modificador).",
     "efeitos": [
       {
         "categoria": "atributo",
@@ -976,7 +992,7 @@
     "alcance": "Pessoal",
     "duracao": "Permanente",
     "usos": "Sempre ativo",
-    "descricao": "Abrir a boca vira abrir uma flor. Ninguém decide olhar, e todo mundo olha.\nEfeito: +2 em Carisma (+1 no modificador).",
+    "descricao": "Quando você abre a boca, as pessoas param para ouvir. Numa conversa difícil, a primeira falha do grupo não marca Paciência.\nEfeito: +2 em Carisma (+1 no modificador).",
     "efeitos": [
       {
         "categoria": "atributo",
@@ -998,7 +1014,7 @@
     "alcance": "Pessoal",
     "duracao": "Permanente",
     "usos": "Sempre ativo",
-    "descricao": "O Fluxo passa por você como vento pela copa, sem pedir licença e sem ser mal recebido.\nEfeito: +2 em Fluxo (+1 no modificador).",
+    "descricao": "O Fluxo passa por você como vento pela copa de uma árvore. Você enxerga a cor do Fluxo: só de olhar, sabe qual Fluxo uma magia, um item ou uma criatura a até 18 m usa.\nEfeito: +2 em Fluxo (+1 no modificador).",
     "efeitos": [
       {
         "categoria": "atributo",
@@ -1020,7 +1036,7 @@
     "alcance": "Pessoal",
     "duracao": "Permanente",
     "usos": "Sempre ativo",
-    "descricao": "Quem vê não acredita que o tronco aguentou tanto tempo em pé.\nEfeito: +20 de Vida máxima.",
+    "descricao": "Seu tronco aguenta o machado. Golpe que tira metade ou mais da sua Vida máxima não pede a tabela de trauma.\nEfeito: +20 de Vida máxima.",
     "efeitos": [
       {
         "categoria": "recurso",
@@ -1033,7 +1049,7 @@
   },
   {
     "id": "sangue-frio",
-    "titulo": "Sangue Frio",
+    "titulo": "Nervo de Raiz",
     "tipo": "suporte",
     "tier": "extraordinaria",
     "custoSementes": 400,
@@ -1042,7 +1058,7 @@
     "alcance": "Pessoal",
     "duracao": "Permanente",
     "usos": "Sempre ativo",
-    "descricao": "O susto é um visitante que você aprendeu a deixar na porta.\nEfeito: Vantagem nos testes de Reflexos e de Vontade.",
+    "descricao": "O medo bate em você e não acha onde se segurar. As condições Pânico e Fúria nunca pegam você.\nEfeito: Vantagem nos testes de Reflexos e de Vontade.",
     "efeitos": [
       {
         "categoria": "pericia",
@@ -1071,7 +1087,7 @@
     "alcance": "Pessoal",
     "duracao": "Permanente",
     "usos": "Sempre ativo",
-    "descricao": "O Jardim te plantou inteiro, do chão até a copa, e agora tudo em você dá fruto.\nEfeito: +30 de Vida máxima, +15 de Mana máxima e +10 de Estamina máxima.",
+    "descricao": "O Jardim plantou você inteiro, da raiz à copa. Uma vez por descanso, quando você cairia a 0 de Vida, brotos fecham a ferida e você fica com 1 de Vida.\nEfeito: +30 de Vida máxima, +15 de Mana máxima e +10 de Estamina máxima.",
     "efeitos": [
       {
         "categoria": "recurso",
@@ -1107,7 +1123,7 @@
     "alcance": "Pessoal",
     "duracao": "Permanente",
     "usos": "Sempre ativo",
-    "descricao": "Todas as portas do corpo ganharam o mesmo selo, e nenhum mal sabe qual delas abrir.\nEfeito: Vantagem nos testes de Fortitude, Reflexos e Vontade.",
+    "descricao": "Toda porta do seu corpo tem a mesma casca por cima. Uma vez por cena, quando você passar num teste de Fortitude, Reflexos ou Vontade contra um efeito que causaria metade do dano no sucesso, você não sofre nada.\nEfeito: Vantagem nos testes de Fortitude, Reflexos e Vontade.",
     "efeitos": [
       {
         "categoria": "pericia",
@@ -1143,7 +1159,7 @@
     "alcance": "Pessoal",
     "duracao": "Permanente",
     "usos": "Sempre ativo",
-    "descricao": "Quando a árvore cresce o bastante, ela deixa de pedir licença à floresta.\nEfeito: +2 em Força e +2 em Constituição (+1 no modificador de cada).",
+    "descricao": "Você cresce por dentro e o chão sente o seu peso. Você conta como um tamanho maior para agarrar, empurrar, derrubar e carregar, e também para ser agarrado, empurrado ou derrubado.\nEfeito: +2 em Força e +2 em Constituição (+1 no modificador de cada).",
     "efeitos": [
       {
         "categoria": "atributo",
@@ -1172,7 +1188,7 @@
     "alcance": "Pessoal",
     "duracao": "Permanente",
     "usos": "Sempre ativo",
-    "descricao": "Um dia o pensamento e a intuição se encontram no meio do caminho e passam a andar juntos.\nEfeito: +2 em Inteligência e +2 em Sabedoria (+1 no modificador de cada).",
+    "descricao": "Pensamento e intuição andam juntos na sua cabeça. Uma vez por sessão, pergunte ao Mestre o que você está deixando passar: ele aponta a pergunta mais importante que segue aberta e um lugar para procurar.\nEfeito: +2 em Inteligência e +2 em Sabedoria (+1 no modificador de cada).",
     "efeitos": [
       {
         "categoria": "atributo",
@@ -1189,5 +1205,277 @@
         "id": "mente-desperta:1"
       }
     ]
+  },
+  {
+    "id": "conversa-de-quintal",
+    "titulo": "Conversa de Quintal",
+    "tipo": "utilidade",
+    "tier": "simples",
+    "custoSementes": 65,
+    "custo_mana": 1,
+    "acao": "Ação Padrão",
+    "alcance": "Um animal a até 9 m",
+    "duracao": "Uma cena",
+    "usos": "Uma vez por cena",
+    "descricao": "Você agacha, faz um som baixinho e o bicho entende que você quer conversar. Até o fim da cena, você e um animal comum a até 9 m se entendem. Ele responde do jeito que bicho pensa: fome, medo, cheiro, quem passou por ali e para onde foi. Ele não vira seu amigo, mas também não foge de você enquanto a conversa durar."
+  },
+  {
+    "id": "cara-de-conhecido",
+    "titulo": "Cara de Conhecido",
+    "tipo": "utilidade",
+    "tier": "simples",
+    "custoSementes": 70,
+    "custo_mana": 0,
+    "acao": "Fora de combate",
+    "momento": "ao chegar a um lugar habitado",
+    "alcance": "Uma cidade, vila ou acampamento",
+    "duracao": "Até o fim da sessão",
+    "usos": "Uma vez por sessão",
+    "descricao": "Você sempre conhece alguém em qualquer lugar. Ao chegar a uma cidade, vila ou acampamento, diga que já conhece alguém dali. O Mestre cria essa pessoa, com nome e ramo, e ela vale como um contato de Confiança 1 até o fim da sessão. Se a amizade render, o Mestre pode deixar ela ficar como contato de verdade."
+  },
+  {
+    "id": "tropeco-oportuno",
+    "titulo": "Tropeço Oportuno",
+    "tipo": "ataque",
+    "tier": "simples",
+    "custoSementes": 75,
+    "custo_mana": 1,
+    "acao": "Reação",
+    "momento": "quando um inimigo se move na direção de você ou de um aliado",
+    "alcance": "9 m",
+    "duracao": "Instantânea",
+    "defesa": "Reflexos contra a DT Padrão do seu nível",
+    "usos": "Uma vez por cena",
+    "descricao": "Uma raiz aparece no lugar exato onde o pé ia pisar. Quando um inimigo a até 9 m se move na direção de você ou de um aliado, ele testa Reflexos contra a DT Padrão do seu nível. Se falhar, fica Caído onde está e perde o resto do movimento."
+  },
+  {
+    "id": "cheiro-de-encrenca",
+    "titulo": "Cheiro de Encrenca",
+    "tipo": "utilidade",
+    "tier": "simples",
+    "custoSementes": 60,
+    "custo_mana": 0,
+    "acao": "Passivo",
+    "alcance": "18 m",
+    "duracao": "Permanente",
+    "usos": "Sempre ativo",
+    "descricao": "Você sente um cheiro de ferro quente quando a coisa vai ficar feia. Quando alguém a até 18 m está decidido a atacar você ou um aliado nos próximos minutos, o Mestre avisa que você sentiu o cheiro. Você não sabe quem é nem quando, só que vai acontecer."
+  },
+  {
+    "id": "fogueira-de-bolso",
+    "titulo": "Fogueira de Bolso",
+    "tipo": "utilidade",
+    "tier": "simples",
+    "custoSementes": 60,
+    "custo_mana": 1,
+    "acao": "Fora de combate",
+    "alcance": "Um ponto no chão perto de você",
+    "duracao": "Até o amanhecer",
+    "usos": "Uma vez por descanso",
+    "descricao": "Você tira do bolso uma brasa do tamanho de uma noz e ela vira uma fogueira sem lenha. O fogo dura a noite toda, não solta fumaça, só é visto a menos de 9 m e esquenta todo mundo em volta. Um descanso completo perto dela conta como tendo abrigo básico."
+  },
+  {
+    "id": "rastro-de-petalas",
+    "titulo": "Rastro de Pétalas",
+    "tipo": "utilidade",
+    "tier": "notavel",
+    "custoSementes": 160,
+    "custo_mana": 2,
+    "acao": "Ação Padrão",
+    "alcance": "Uma criatura que você veja a até 18 m",
+    "duracao": "Um dia",
+    "usos": "Uma vez por sessão",
+    "descricao": "Você marca alguém com o olhar e ele começa a soltar pétalas que só você vê. Por um dia, você sabe por onde essa criatura passou e segue o rastro sem teste, mesmo pela água ou por cima dos telhados. Numa perseguição a pé contra ela, quem rola do seu lado ganha +2."
+  },
+  {
+    "id": "voz-alheia",
+    "titulo": "Voz Alheia",
+    "tipo": "utilidade",
+    "tier": "notavel",
+    "custoSementes": 160,
+    "custo_mana": 2,
+    "acao": "Ação Padrão",
+    "alcance": "Pessoal",
+    "duracao": "Uma cena",
+    "usos": "Uma vez por cena",
+    "descricao": "Sua garganta aprende qualquer voz que você ouviu por pelo menos um minuto. Até o fim da cena, você fala exatamente como aquela pessoa, com o timbre, o sotaque e as manias dela. Quem conhece a pessoa só desconfia se estiver vendo você, e mesmo assim rola Intuição com desvantagem."
+  },
+  {
+    "id": "puxao-de-raiz",
+    "titulo": "Puxão de Raiz",
+    "tipo": "ataque",
+    "tier": "notavel",
+    "custoSementes": 190,
+    "custo_mana": 3,
+    "acao": "Ação de Movimento",
+    "alcance": "9 m",
+    "duracao": "Instantânea",
+    "defesa": "Fortitude contra a DT Padrão do seu nível",
+    "usos": "Uma vez por cena",
+    "descricao": "Raízes saem do chão, enrolam o tornozelo do alvo e puxam. Escolha uma criatura a até 9 m: ela testa Fortitude contra a DT Padrão do seu nível. Se falhar, é arrastada até 6 m na sua direção, sem provocar reação, e termina Caído no fim do caminho. Criatura dois tamanhos maior que você não sai do lugar."
+  },
+  {
+    "id": "rosto-trocado",
+    "titulo": "Rosto Trocado",
+    "tipo": "utilidade",
+    "tier": "notavel",
+    "custoSementes": 170,
+    "custo_mana": 3,
+    "acao": "Ação Completa",
+    "alcance": "Toque, num aliado que aceita",
+    "duracao": "1 hora",
+    "usos": "Uma vez por sessão",
+    "descricao": "Você e um aliado encostam a testa e trocam de rosto. Por 1 hora, cada um fica com a aparência e a voz do outro, menos as roupas. Quem não sabe da troca não percebe nada sem um motivo forte, e mesmo com motivo rola Investigação ou Intuição com desvantagem. Se um dos dois sofrer dano, a troca se desfaz nos dois."
+  },
+  {
+    "id": "guarda-chuva-de-folhas",
+    "titulo": "Guarda-Chuva de Folhas",
+    "tipo": "suporte",
+    "tier": "notavel",
+    "custoSementes": 200,
+    "custo_mana": 3,
+    "acao": "Reação",
+    "momento": "quando um efeito em área atinge você",
+    "alcance": "3 m",
+    "duracao": "Instantânea",
+    "usos": "Uma vez por cena",
+    "descricao": "Uma copa de folhas largas se abre por cima da sua cabeça. Quando um efeito em área atinge você, você e cada aliado a até 3 m de você sofrem só metade do dano dele, e quem passar no teste do efeito não sofre nada."
+  },
+  {
+    "id": "palavra-que-pesa",
+    "titulo": "Palavra que Pesa",
+    "tipo": "utilidade",
+    "tier": "notavel",
+    "custoSementes": 180,
+    "custo_mana": 0,
+    "acao": "Ação Livre",
+    "momento": "antes de rolar uma abordagem numa conversa difícil",
+    "alcance": "Pessoal",
+    "duracao": "Uma abordagem",
+    "usos": "Uma vez por cena",
+    "descricao": "Você acha a frase certa e ela chega na hora certa. Numa conversa difícil, declare antes de rolar: se a sua abordagem der certo, ela conta como algo forte e tira 2 de Resistência, mesmo sem prova nem segredo na mão. Se falhar, marca Paciência normalmente."
+  },
+  {
+    "id": "companheiro-de-bolso",
+    "titulo": "Companheiro de Bolso",
+    "tipo": "utilidade",
+    "tier": "notavel",
+    "custoSementes": 180,
+    "custo_mana": 2,
+    "acao": "Ação Padrão",
+    "alcance": "1 km",
+    "duracao": "10 minutos",
+    "usos": "Uma vez por cena",
+    "descricao": "Um bichinho do Jardim vive com você: escolha um besouro brilhante, um sapo, uma lagarta listrada ou um passarinho. Ele não luta, e se morrer volta no próximo descanso. Uma vez por cena, ele leva uma mensagem curta até alguém a até 1 km, ou sai para explorar e você vê e ouve o que ele vê e ouve por 10 minutos."
+  },
+  {
+    "id": "folha-lida",
+    "titulo": "Folha Lida",
+    "tipo": "utilidade",
+    "tier": "extraordinaria",
+    "custoSementes": 320,
+    "custo_mana": 4,
+    "acao": "Ação Padrão",
+    "alcance": "Uma criatura que você veja a até 18 m",
+    "duracao": "Instantânea",
+    "usos": "Uma vez por cena",
+    "descricao": "Você olha para a criatura e ela vira uma folha aberta contra a luz, com as nervuras à mostra. Faça ao Mestre três perguntas sobre ela, e ele responde a verdade: Resistências e vulnerabilidades, se ela está inteira, ferida ou quase caindo, qual o ataque mais forte dela, o que ela quer agora ou de onde ela veio. Se ela estiver disfarçada, você também vê o que ela é de verdade."
+  },
+  {
+    "id": "ouvido-plantado",
+    "titulo": "Ouvido Plantado",
+    "tipo": "utilidade",
+    "tier": "extraordinaria",
+    "custoSementes": 310,
+    "custo_mana": 3,
+    "acao": "Fora de combate",
+    "momento": "1 minuto para plantar",
+    "alcance": "Qualquer distância, na mesma Árvore",
+    "duracao": "Até a planta ser arrancada ou você plantar outra",
+    "usos": "Uma vez por sessão para escutar",
+    "descricao": "Você enterra uma semente num vaso, numa fresta de parede ou num canto qualquer, e ela brota parecendo uma plantinha comum. Uma vez por sessão, de onde você estiver, você escuta por 10 minutos tudo o que é dito perto dela e pode falar baixinho de volta, se quiser ser ouvido. Só cabe uma semente plantada por vez, e quem arranca a planta corta a escuta."
+  },
+  {
+    "id": "juramento-de-revanche",
+    "titulo": "Juramento de Revanche",
+    "tipo": "ataque",
+    "tier": "extraordinaria",
+    "custoSementes": 350,
+    "custo_mana": 0,
+    "custo_estamina": 5,
+    "acao": "Reação",
+    "momento": "quando um aliado a até 18 m cai a 0 de Vida",
+    "alcance": "18 m",
+    "duracao": "Até o fim da cena",
+    "dano": "+1d6 a cada 4 níveis seus (mínimo 1d6) contra quem derrubou o aliado",
+    "usos": "Uma vez por cena",
+    "descricao": "Você vê o aliado cair e jura em voz alta quem vai pagar por isso. Até o fim da cena, seus ataques contra a criatura que derrubou o aliado têm vantagem e causam +1d6 a cada 4 níveis seus (mínimo 1d6). Se você derrubar essa criatura, o aliado caído fica estabilizado na hora, se ainda estiver Morrendo."
+  },
+  {
+    "id": "portao-de-galhos",
+    "titulo": "Portão de Galhos",
+    "tipo": "suporte",
+    "tier": "extraordinaria",
+    "custoSementes": 380,
+    "custo_mana": 7,
+    "acao": "Ação Padrão",
+    "alcance": "Dois pontos que você veja, a até 30 m um do outro",
+    "duracao": "Até o começo do seu próximo turno",
+    "usos": "Uma vez por cena",
+    "descricao": "Dois arcos de galhos trançados brotam do chão em dois pontos que você vê, a até 30 m um do outro. Até o começo do seu próximo turno, quem entrar por um arco sai pelo outro, gastando só 1,5 m de movimento e sem provocar reação. Aliados e inimigos podem usar, então escolha bem onde abrir."
+  },
+  {
+    "id": "volta-da-semente",
+    "titulo": "Volta da Semente",
+    "tipo": "suporte",
+    "tier": "lendaria",
+    "custoSementes": 850,
+    "custo_mana": 0,
+    "acao": "Reação",
+    "momento": "quando o seu personagem morre",
+    "alcance": "Pessoal",
+    "duracao": "Até o próximo amanhecer",
+    "usos": "Uma vez por campanha",
+    "descricao": "Quando você morre, seu corpo se desfaz em terra e uma semente cai no lugar. No próximo amanhecer, você brota de volta debaixo de uma árvore perto do grupo, com 1 de Vida, Ferido 1 e tudo o que estava carregando. O Jardim cobra um preço: fica com uma lembrança sua, e o Mestre escolhe qual. Você sabe que esqueceu alguma coisa, mas não sabe o quê."
+  },
+  {
+    "id": "estacao-propria",
+    "titulo": "Estação Própria",
+    "tipo": "utilidade",
+    "tier": "lendaria",
+    "custoSementes": 680,
+    "custo_mana": 12,
+    "acao": "Fora de combate",
+    "momento": "10 minutos com as mãos na terra",
+    "alcance": "1 km ao seu redor",
+    "duracao": "Um dia",
+    "usos": "Uma vez por sessão",
+    "descricao": "Você enfia as mãos na terra e pede outro tempo ao céu. O clima num raio de 1 km muda para o que você escolher e fica assim por um dia: céu limpo, chuva forte, neblina, ventania, neve, calor ou frio. Neblina dá camuflagem a quem estiver a mais de 9 m, chuva forte apaga fogo comum e dá desvantagem na Percepção pelo som, e calor e frio chegam no máximo ao grau Severo. Quem vive na região percebe que tem alguma coisa errada."
+  },
+  {
+    "id": "relogio-parado",
+    "titulo": "Relógio Parado",
+    "tipo": "ataque",
+    "tier": "lendaria",
+    "custoSementes": 900,
+    "custo_mana": 15,
+    "acao": "Ação Padrão",
+    "alcance": "Pessoal",
+    "duracao": "Dois turnos seus",
+    "usos": "Uma vez por descanso; ao terminar, ganhe 2 de Cansaço",
+    "descricao": "Você para o tempo para todo mundo, menos para você. Faça dois turnos completos seguidos, e ninguém mais age nem reage enquanto isso. Ataques e efeitos que você fizer contra outras criaturas ficam parados no ar e só acontecem quando o tempo volta, todos de uma vez, na ordem que você escolher. Quando o tempo volta, você ganha 2 de Cansaço."
+  },
+  {
+    "id": "primavera-tardia",
+    "titulo": "Primavera Tardia",
+    "tipo": "suporte",
+    "tier": "lendaria",
+    "custoSementes": 760,
+    "custo_mana": 14,
+    "acao": "Ação Padrão",
+    "alcance": "18 m de raio ao seu redor",
+    "duracao": "Instantânea",
+    "usos": "Uma vez por descanso",
+    "descricao": "Flores brotam do chão em volta de você e o ar cheira a chuva. Cada aliado a até 18 m recupera Vida igual ao seu nível + 10, e quem estava Morrendo para de morrer e acorda. Sangramento, Envenenado e Queimando acabam em todos eles."
   }
 ]

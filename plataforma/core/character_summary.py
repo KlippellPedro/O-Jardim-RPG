@@ -332,6 +332,24 @@ def _vagas_poder(classe: dict, nivel: int) -> int:
     )
 
 
+def _contar_poderes(lista) -> dict[tuple[str, str], int]:
+    """Conta as entradas {classeId, poderId} de uma lista da ficha."""
+    contagem: dict[tuple[str, str], int] = {}
+    for item in lista if isinstance(lista, list) else []:
+        if isinstance(item, dict) and item.get("classeId") and item.get("poderId"):
+            chave = (str(item["classeId"]), str(item["poderId"]))
+            contagem[chave] = contagem.get(chave, 0) + 1
+    return contagem
+
+
+def _poderes_podados(ficha: dict | None) -> dict[tuple[str, str], int]:
+    """Poderes da propria classe podados no Jardim (`jardim.poderesPodados`).
+    Cada um gasta uma vaga de poder da classe para sempre (decisao de
+    2026-11-19); so o mestre devolve a vaga."""
+    jardim = ficha.get("jardim") if isinstance(ficha, dict) else None
+    return _contar_poderes(jardim.get("poderesPodados") if isinstance(jardim, dict) else None)
+
+
 def _vagas_escolha_habilidade(habilidade: dict, nivel: int) -> int:
     """Vagas de escolha de uma habilidade com catalogo proprio (as Engenhocas
     do Engenheiro, por exemplo). Espelha `vagasEscolhaHabilidade` em
@@ -582,10 +600,14 @@ def _validar_escolhas_progressao(ficha: dict, anterior: dict, classes: list[tupl
             return "um poder de classe foi escolhido mais vezes que o permitido"
         if not all(_atende_requisito_poder(item, referencia[0], referencia[1], ficha, ids_selecionados) for item in poder.get("pre_requisitos") or []):
             return "a ficha nao atende aos pre-requisitos de um poder de classe"
+    podados = _poderes_podados(ficha)
+    podados_por_classe: dict[str, int] = {}
+    for (classe_id, _poder_id), quantidade in podados.items():
+        podados_por_classe[classe_id] = podados_por_classe.get(classe_id, 0) + quantidade
     for classe_id, quantidade in contagem.items():
         classe, nivel = referencias[classe_id]
-        if quantidade > _vagas_poder(classe, nivel):
-            return "a ficha possui mais poderes de classe do que as vagas liberadas"
+        if quantidade + podados_por_classe.get(classe_id, 0) > _vagas_poder(classe, nivel):
+            return "a ficha possui mais poderes de classe do que as vagas liberadas (as podadas no Jardim contam como gastas)"
 
     escolhas_habilidade = ficha.get("escolhasHabilidade") or {}
     if not isinstance(escolhas_habilidade, dict):
@@ -643,10 +665,18 @@ def _validar_escolhas_progressao(ficha: dict, anterior: dict, classes: list[tupl
             return "a ficha nao atende aos pre-requisitos de um Legado escolhido"
 
     if anterior:
-        poderes_anteriores = anterior.get("poderesClasseSelecionados") or []
         legados_anteriores = anterior.get("legadosSelecionados") or []
-        if any(item not in selecoes for item in poderes_anteriores if isinstance(item, dict)):
-            return "poderes de classe adquiridos so podem ser removidos pelo mestre"
+        # Podar no Jardim tira o poder e grava a vaga em jardim.poderesPodados no
+        # mesmo salvamento. Fora disso, so o mestre tira poder de classe.
+        agora = _contar_poderes(selecoes)
+        podados_antes = _poderes_podados(anterior)
+        for chave, antes in _contar_poderes(anterior.get("poderesClasseSelecionados")).items():
+            removidos = antes - agora.get(chave, 0)
+            podados_novos = podados.get(chave, 0) - podados_antes.get(chave, 0)
+            if removidos > 0 and removidos > podados_novos:
+                return "poderes de classe adquiridos so podem ser removidos pelo mestre"
+        if any(podados.get(chave, 0) < quantidade for chave, quantidade in podados_antes.items()):
+            return "vagas de poder podadas no Jardim so podem ser devolvidas pelo mestre"
         if any(selecionados.count(item) < legados_anteriores.count(item) for item in set(legados_anteriores)):
             return "Legados adquiridos so podem ser removidos pelo mestre"
     return None

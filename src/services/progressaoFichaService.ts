@@ -113,6 +113,25 @@ export function vagasPoderDaClasse(classe: IClasse, nivel: number): number {
   ), 0);
 }
 
+/** Poderes da própria classe podados no Jardim. Cada entrada gasta para sempre
+ * uma vaga de poder daquela classe (decisão do Pedro em 2026-11-19): quando a
+ * vaga voltava, escolher e podar de novo virava Sementes sem fim. Só o Mestre
+ * devolve uma vaga podada. */
+export function poderesPodadosJardim(ficha: any): ISelecaoPoderClasse[] {
+  const bruto = Array.isArray(ficha?.jardim?.poderesPodados) ? ficha.jardim.poderesPodados : [];
+  return bruto.filter((item: any) => item && typeof item.classeId === 'string' && typeof item.poderId === 'string');
+}
+
+export function vagasPodadasDaClasse(ficha: any, classeId: string): number {
+  return poderesPodadosJardim(ficha).filter((item) => item.classeId === classeId).length;
+}
+
+/** Vagas de poder que a classe oferece nesta ficha: as do nível, menos as
+ * que foram podadas no Jardim. */
+export function vagasPoderNaFicha(ficha: any, classe: IClasse, nivel: number): number {
+  return Math.max(0, vagasPoderDaClasse(classe, nivel) - vagasPodadasDaClasse(ficha, classe.id));
+}
+
 export interface IEscolhaHabilidadeClasse {
   /** Chave usada em `ficha.escolhasHabilidade`. */
   chave: string;
@@ -402,9 +421,13 @@ ${rotulo} (${escolhidos.length}/${vagas}): ${titulos.join(', ')}.`;
 export function habilidadesAutomaticas(ficha: any): IConteudoAutomatico[] {
   const escolhas = selecoesHabilidadeValidas(ficha);
   const vendidasNoJardim = new Set(habilidadesVendidasJardim(ficha).map((item) => `${item.classeId}:${item.habilidadeId}`));
+  // Quem plantou a habilidade de uma classe e depois entrou nela tem duas cópias.
+  // Fica só a do Jardim, que escala pelo nível total e nunca tem menos estágios.
+  const plantadasNoJardim = new Set(habilidadesCompradasJardim(ficha).map((item) => `${item.classeId}:${item.habilidadeId}`));
   const habilidades = classesDaFicha(ficha).flatMap(({ classe, nivel }) => (classe.habilidades || [])
     .filter((habilidade) => (habilidade.niveis || []).some((marco) => marco <= nivel))
     .filter((habilidade) => !vendidasNoJardim.has(`${classe.id}:${habilidade.id}`))
+    .filter((habilidade) => !(habilidadeElegivelParaJardim(habilidade) && plantadasNoJardim.has(`${classe.id}:${habilidade.id}`)))
     .map((habilidade) => ({
       id: `classe:${classe.id}:${habilidade.id}`,
       titulo: habilidade.titulo,
@@ -522,6 +545,17 @@ export function nivelEstimadoPoder(poder: IPoderClasse): number {
   return 2;
 }
 
+/** Nível que o poder pede por escrito ("Nível 10 de Guerreiro"), ou 1 quando não
+ * pede nenhum. No Jardim esse número é comparado com o nível total, do mesmo
+ * jeito que as habilidades só aparecem no catálogo quando cabem no nível. */
+export function nivelExigidoPoder(poder: IPoderClasse): number {
+  for (const requisito of poder.pre_requisitos || []) {
+    const encontrado = String(requisito).match(/n[ií]vel\s+(\d+)/i);
+    if (encontrado) return Math.max(1, Number(encontrado[1]));
+  }
+  return 1;
+}
+
 const JARDIM_SEMENTES_BASE = 10;
 const JARDIM_SEMENTES_POR_NIVEL = 4;
 const JARDIM_MARKUP_COMPRA = 1.5;
@@ -592,20 +626,25 @@ export interface IPoderCatalogoJardim {
 }
 
 /** Catálogo de poderes disponíveis para comprar no Jardim: todo poder de
- * classe que o personagem não tem hoje (classes que não são as dele). */
+ * classe que o personagem não tem hoje (classes que não são as dele) e cujo
+ * nível pedido o nível total já alcança. Os outros requisitos (atributo, outro
+ * poder, estágio de habilidade) não escondem nada: a ficha mostra como aviso. */
 export function catalogoJardimDisponivel(ficha: any): IPoderCatalogoJardim[] {
+  const nivel = nivelTotalFicha(ficha);
   const classesProprias = new Set(classesDaFicha(ficha).map((item) => item.classe.id));
   const jaComprados = new Set(poderesComprasJardim(ficha).map((item) => `${item.classeId}:${item.poderId}`));
   return CLASSES_CATALOGO
     .filter((classe) => !classesProprias.has(classe.id))
-    .flatMap((classe) => (classe.poderes || []).map((poder) => ({
-      classeId: classe.id,
-      classeTitulo: classe.titulo,
-      categoriaClasse: classe.categoria,
-      poder,
-      custoSementes: sementesPorComprarPoder(poder, classe),
-      jaAdquirido: jaComprados.has(`${classe.id}:${poder.id}`),
-    })));
+    .flatMap((classe) => (classe.poderes || [])
+      .filter((poder) => nivelExigidoPoder(poder) <= nivel || jaComprados.has(`${classe.id}:${poder.id}`))
+      .map((poder) => ({
+        classeId: classe.id,
+        classeTitulo: classe.titulo,
+        categoriaClasse: classe.categoria,
+        poder,
+        custoSementes: sementesPorComprarPoder(poder, classe),
+        jaAdquirido: jaComprados.has(`${classe.id}:${poder.id}`),
+      })));
 }
 
 export interface IPoderVendavelJardim {
@@ -661,12 +700,21 @@ export function poderesVendaveisJardim(ficha: any): IPoderVendavelJardim[] {
   return [...proprios, ...doJardim];
 }
 
-/** Remove a ocorrência `indice` de `poderesClasseSelecionados` (venda de um
- * poder da própria classe: a vaga volta a ficar livre para escolher outro). */
-export function venderPoderDeClasseNoJardim(ficha: any, indice: number): ISelecaoPoderClasse[] | null {
+/** Poda a ocorrência `indice` de `poderesClasseSelecionados` (poder da própria
+ * classe) e registra a vaga como gasta em `jardim.poderesPodados`. As duas
+ * listas precisam ser gravadas juntas: o servidor só aceita sem alerta a
+ * remoção de um poder que aparece podado na mesma ficha. */
+export function venderPoderDeClasseNoJardim(
+  ficha: any,
+  indice: number,
+): { poderesClasseSelecionados: ISelecaoPoderClasse[]; poderesPodados: ISelecaoPoderClasse[] } | null {
   const atuais = selecoesPoderValidas(ficha);
   if (indice < 0 || indice >= atuais.length) return null;
-  return [...atuais.slice(0, indice), ...atuais.slice(indice + 1)];
+  const { classeId, poderId } = atuais[indice];
+  return {
+    poderesClasseSelecionados: [...atuais.slice(0, indice), ...atuais.slice(indice + 1)],
+    poderesPodados: [...poderesPodadosJardim(ficha), { classeId, poderId }],
+  };
 }
 
 /** Remove a ocorrência `indice` de `jardim.comprados` (venda de um poder que
@@ -818,7 +866,10 @@ export interface IHabilidadeVendavelJardim {
 
 /** Tudo que o personagem pode podar hoje: a habilidade principal da própria
  * classe (inteira, todos os estágios já alcançados) e habilidades plantadas
- * no Jardim vindas de outra classe. */
+ * no Jardim vindas de outra classe. A da própria classe vale pelo nível
+ * daquela classe, que é o que a ficha realmente tem: Guerreiro 1 com Ninja 19
+ * tem Implacável no estágio 1, não no 5. As plantadas valem pelo nível total,
+ * que é como o Jardim as entrega. */
 export function habilidadesVendaveisJardim(ficha: any): IHabilidadeVendavelJardim[] {
   const nivel = nivelTotalFicha(ficha);
   const vendidas = new Set(habilidadesVendidasJardim(ficha).map((item) => `${item.classeId}:${item.habilidadeId}`));
@@ -832,9 +883,9 @@ export function habilidadesVendaveisJardim(ficha: any): IHabilidadeVendavelJardi
       titulo: habilidade.titulo,
       origem: classe.titulo,
       origemTipo: 'classe',
-      estagiosAlcancados: estagiosAlcancadosHabilidade(habilidade, nivel),
-      sementesRecebidas: sementesPorVenderHabilidade(habilidade, nivel, classe),
-      descricaoAtual: descricaoHabilidadeNoNivel(habilidade, nivel),
+      estagiosAlcancados: estagiosAlcancadosHabilidade(habilidade, nivelClasse),
+      sementesRecebidas: sementesPorVenderHabilidade(habilidade, nivelClasse, classe),
+      descricaoAtual: descricaoHabilidadeNoNivel(habilidade, nivelClasse),
     })));
   const doJardim = habilidadesCompradasJardim(ficha).flatMap((selecao): IHabilidadeVendavelJardim[] => {
     const classe = CLASSES_CATALOGO.find((item) => item.id === selecao.classeId);
@@ -977,7 +1028,14 @@ export function podeSelecionarPoder(
 ): { permitido: boolean; motivo?: string } {
   const daClasse = selecoes.filter((item) => item.classeId === classe.id);
   const repeticoes = daClasse.filter((item) => item.poderId === poder.id).length;
-  if (daClasse.length >= vagasPoderDaClasse(classe, nivel)) return { permitido: false, motivo: 'Todas as vagas desta classe já foram preenchidas.' };
+  if (daClasse.length >= vagasPoderNaFicha(ficha, classe, nivel)) {
+    return {
+      permitido: false,
+      motivo: daClasse.length < vagasPoderDaClasse(classe, nivel)
+        ? 'A vaga que sobrou nesta classe foi podada no Jardim.'
+        : 'Todas as vagas desta classe já foram preenchidas.',
+    };
+  }
   const limite = poder.repetivel ? Math.max(1, Number(poder.limite) || 99) : 1;
   if (repeticoes >= limite) return { permitido: false, motivo: poder.repetivel ? `Limite ${limite}.` : 'Poder já escolhido.' };
   for (const requisito of poder.pre_requisitos || []) {
@@ -1183,7 +1241,7 @@ export function pendenciasProgressao(ficha: any): IPendenciaProgressao[] {
 
   const selecoesPoder = selecoesPoderValidas(ficha);
   for (const { classe, nivel } of classesDaFicha(ficha)) {
-    const vagas = vagasPoderDaClasse(classe, nivel);
+    const vagas = vagasPoderNaFicha(ficha, classe, nivel);
     const escolhidos = selecoesPoder.filter((item) => item.classeId === classe.id).length;
     const livres = vagas - escolhidos;
     if (livres > 0) {

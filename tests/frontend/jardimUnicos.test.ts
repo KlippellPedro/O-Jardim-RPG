@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readdirSync, readFileSync } from 'node:fs';
 import test from 'node:test';
 import { PERICIAS_CATALOGO, UNICOS_JARDIM_CATALOGO } from '../../src/services/catalogoService';
 import { efeitosDosUnicosJardim, resumirEquipamentos } from '../../src/services/equipamentoService';
@@ -16,10 +17,10 @@ import {
 const TIPOS_VALIDOS = new Set(['ataque', 'suporte', 'utilidade']);
 const TIERS_VALIDOS = new Set(['simples', 'notavel', 'extraordinaria', 'lendaria']);
 
-const TOTAL_UNICOS = 67;
+const TOTAL_UNICOS = 87;
 const passivosComEfeito = UNICOS_JARDIM_CATALOGO.filter((u) => u.efeitos?.length);
 
-test('o catálogo de Únicos tem 67 exemplares (40 ativos e 27 passivos de ficha), sem id nem título repetido', () => {
+test('o catálogo de Únicos tem 87 exemplares (27 deles passivos de ficha), sem id nem título repetido', () => {
   assert.equal(UNICOS_JARDIM_CATALOGO.length, TOTAL_UNICOS);
   assert.equal(new Set(UNICOS_JARDIM_CATALOGO.map((u) => u.id)).size, TOTAL_UNICOS);
   assert.equal(new Set(UNICOS_JARDIM_CATALOGO.map((u) => u.titulo)).size, TOTAL_UNICOS);
@@ -231,4 +232,57 @@ test('passivos cobrem Vida, Mana, Estamina, os sete atributos, as três resistê
     ...['fortitude', 'reflexos', 'vontade'].flatMap((p) => [`pericia:${p}:bonus`, `pericia:${p}:vantagem`]),
     'combate:defesa:bonus', 'combate:ataque:bonus', 'combate:iniciativa:bonus', 'pericia:percepcao:vantagem',
   ]) assert.ok(alvos.has(esperado), `faltou ${esperado}`);
+});
+
+// Revisão de 2026-11-19: os Únicos falam a língua do Livro de hoje.
+const ACOES_DO_LIVRO = new Set(['Passivo', 'Ação Livre', 'Ação de Movimento', 'Ação Padrão', 'Ação Completa', 'Reação', 'Fora de combate']);
+
+test('todo Único usa uma das sete ações do Livro e um limite de uso que existe', () => {
+  for (const unico of UNICOS_JARDIM_CATALOGO) {
+    assert.ok(ACOES_DO_LIVRO.has(unico.acao || ''), `${unico.id}: ação "${unico.acao}" fora das sete do Livro`);
+    // "Por combate" não é janela do Livro: um combate inteiro é uma cena.
+    assert.doesNotMatch(String(unico.usos), /por combate/i, `${unico.id}: usos`);
+    const texto = JSON.stringify(unico);
+    assert.doesNotMatch(texto, /teste de morte|teste de defesa|n[íi]veis de Cansa[çc]o/i, `${unico.id}: regra que o jogo não tem`);
+  }
+});
+
+test('Único que pede teste de resistência usa a DT Padrão do seu nível, que cresce com o personagem', () => {
+  for (const unico of UNICOS_JARDIM_CATALOGO) {
+    const texto = `${unico.defesa || ''} ${unico.descricao}`;
+    if (!texto.includes('DT')) continue;
+    assert.match(texto, /DT Padrão do seu nível/, `${unico.id}: DT fora do padrão`);
+    assert.doesNotMatch(texto, /DT 8 \+/, `${unico.id}: fórmula antiga de DT`);
+  }
+});
+
+test('dano de Único extraordinário ou lendário cresce com o nível', () => {
+  for (const unico of UNICOS_JARDIM_CATALOGO.filter((u) => u.tier === 'extraordinaria' || u.tier === 'lendaria')) {
+    if (!/\d+d\d+/.test(String(unico.dano || ''))) continue;
+    assert.match(String(unico.dano), /a cada \d+ níveis seus/, `${unico.id}: dado fixo some em nível alto`);
+  }
+});
+
+const titulosDe = (no: unknown, saida: Map<string, string>, fonte: string) => {
+  if (Array.isArray(no)) no.forEach((item) => titulosDe(item, saida, fonte));
+  else if (no && typeof no === 'object') {
+    const titulo = (no as { titulo?: unknown }).titulo;
+    if (typeof titulo === 'string') saida.set(titulo.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase().trim(), fonte);
+    Object.values(no).forEach((valor) => titulosDe(valor, saida, fonte));
+  }
+};
+
+test('nenhum Único repete o nome de um poder, habilidade, magia, raça ou legado', () => {
+  const titulos = new Map<string, string>();
+  const lerJson = (caminho: string) => JSON.parse(readFileSync(new URL(`../../${caminho}`, import.meta.url), 'utf8'));
+  titulosDe(lerJson('data/ficha/classes.json'), titulos, 'classes');
+  titulosDe(lerJson('data/ficha/magias.json'), titulos, 'magias');
+  titulosDe(lerJson('data/ficha/racas.json'), titulos, 'raças');
+  for (const arquivo of readdirSync(new URL('../../data/ficha/', import.meta.url)).filter((nome) => /legado/i.test(nome) && nome.endsWith('.json'))) {
+    titulosDe(lerJson(`data/ficha/${arquivo}`), titulos, arquivo);
+  }
+  for (const unico of UNICOS_JARDIM_CATALOGO) {
+    const chave = unico.titulo.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase().trim();
+    assert.equal(titulos.get(chave), undefined, `${unico.id}: "${unico.titulo}" já existe em ${titulos.get(chave)}`);
+  }
 });
