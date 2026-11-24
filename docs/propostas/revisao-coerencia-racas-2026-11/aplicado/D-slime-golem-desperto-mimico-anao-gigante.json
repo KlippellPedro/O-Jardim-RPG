@@ -1,0 +1,824 @@
+{
+  "correcoes": [
+    {
+      "achado": "[ERRO] secrecao-virulenta",
+      "raca": "slime",
+      "no": "secrecao-virulenta",
+      "campo": "descricao",
+      "de": "gastando uma ação e 3 Mana. O próximo acerto aplica uma Aflição de veneno de nível 1 no alvo.",
+      "para": "gastando uma Ação Padrão e 3 Mana. Até o fim da cena, o próximo acerto expõe o alvo à Peçonha Hemorrágica: ele faz Fortitude contra a sua DT de Slime e, se falhar, fica no estágio 1."
+    },
+    {
+      "achado": "[INCOERÊNCIA] casca-prismatica",
+      "raca": "slime",
+      "no": "casca-prismatica",
+      "campo": "descricao",
+      "de": "Resistência 10 contra dano físico comum e vantagem em testes de resistência contra luz e cegueira",
+      "para": "Resistência 10 contra dano físico que não venha de magia e vantagem em testes contra efeitos de Luz e contra a condição Cego"
+    },
+    {
+      "achado": "[INCOERÊNCIA] corpo-de-aco",
+      "raca": "slime",
+      "no": "corpo-de-aco",
+      "campo": "descricao",
+      "de": "Resistência 10 contra dano físico comum",
+      "para": "Resistência 10 contra dano físico que não venha de magia"
+    },
+    {
+      "achado": "[LACUNA] reflexo-faceta",
+      "raca": "slime",
+      "no": "reflexo-faceta",
+      "campo": "descricao",
+      "de": "metade do dano que causou, até",
+      "para": "metade do dano que causou, em dano de corte, até"
+    },
+    {
+      "achado": "[LACUNA] absorcao-metalica",
+      "raca": "slime",
+      "no": "absorcao-metalica",
+      "campo": "descricao",
+      "de": "dano-base 1d8. No início de cada cena você escolhe o formato: lâmina, martelo ou espinho.",
+      "para": "dano-base 1d8 + Mod. Força, crítico 20/x2. No início de cada cena você escolhe o formato: lâmina (corte), martelo (impacto) ou espinho (perfuração)."
+    },
+    {
+      "achado": "[INCOERÊNCIA] superficie-gelida frio",
+      "raca": "slime",
+      "no": "superficie-gelida",
+      "campo": "descricao",
+      "de": "Você é imune aos efeitos ambientais de frio extremo",
+      "para": "Você ignora o Frio do clima, em qualquer grau"
+    },
+    {
+      "achado": "[LACUNA] superficie-gelida Acrobacia",
+      "raca": "slime",
+      "no": "superficie-gelida",
+      "campo": "descricao",
+      "de": "faz um teste de Acrobacia para não cair",
+      "para": "faz Reflexos contra a sua DT de Slime, uma vez por turno, ou fica Caído"
+    },
+    {
+      "achado": "[INCOERÊNCIA] nucleo-em-brasa frio",
+      "raca": "slime",
+      "no": "nucleo-em-brasa",
+      "campo": "descricao",
+      "de": "o frio do ambiente não incomoda",
+      "para": "o Frio do clima não afeta você"
+    },
+    {
+      "achado": "[MELHORIA] nucleo-em-brasa metade",
+      "raca": "slime",
+      "no": "nucleo-em-brasa",
+      "campo": "descricao",
+      "de": "Fogo causa metade do dano em você",
+      "para": "o dano de Fogo causa metade em você (a metade entra depois da vulnerabilidade e antes da Resistência)"
+    },
+    {
+      "achado": "[LACUNA] erupcao",
+      "raca": "slime",
+      "no": "erupcao",
+      "campo": "descricao",
+      "de": "e a área vira terreno em brasa por cinco rodadas.",
+      "para": "e a área vira terreno em brasa por cinco rodadas: quem entrar ali ou começar o turno ali faz Reflexos contra a sua DT de Slime e sofre 1d6 de dano de Fogo, ou metade se passar."
+    },
+    {
+      "achado": "[LACUNA] engolir",
+      "raca": "slime",
+      "no": "engolir",
+      "campo": "descricao",
+      "de": "gaste uma ação e 3 Mana para engolir uma criatura Pequena ou menor que você já esteja agarrando. Lá dentro ela não consegue fazer nada além de tentar escapar e sofre 1d6 de dano ácido por turno. Com uma Ação Padrão e Atletismo contra a sua DT de Slime, ela volta ao lado de fora.",
+      "para": "gaste uma Ação Padrão e 3 Mana para engolir uma criatura Pequena ou menor que você esteja agarrando. Você só engole uma criatura por vez. Ela fica Imobilizada dentro de você e sofre 1d6 de dano de ácido no início de cada turno dela. Para sair, ela gasta uma Ação Padrão e faz Atletismo ou Acrobacia contra a sua DT de Slime."
+    },
+    {
+      "achado": "[LACUNA] divisao-instavel",
+      "raca": "slime",
+      "no": "divisao-instavel",
+      "campo": "descricao",
+      "de": "Custa uma ação completa e 8 Mana",
+      "para": "Ao fim da cena as metades se fundem e sua Vida é a soma das duas. Se uma metade cair a 0 de Vida, a fusão acontece sem Morrendo e sem Déficit, e a metade que caiu não conta para a Vida que sobra. Coreografia e outros limites por turno valem uma vez para as duas metades juntas. Custa uma ação completa e 8 Mana"
+    },
+    {
+      "achado": "[LACUNA] dissolver-amarras fortitude",
+      "raca": "slime",
+      "no": "dissolver-amarras",
+      "campo": "descricao",
+      "de": "o Mestre pode pedir um teste de Fortitude",
+      "para": "faça Fortitude contra a DT da raridade do item para derreter"
+    },
+    {
+      "achado": "[LACUNA] dissolver-amarras ação",
+      "raca": "slime",
+      "no": "dissolver-amarras",
+      "campo": "descricao",
+      "de": "gaste uma ação e 2 Mana",
+      "para": "gaste uma Ação Padrão e 2 Mana"
+    },
+    {
+      "achado": "[LACUNA] slime tamanho",
+      "raca": "slime",
+      "no": "__raca__",
+      "campo": "fisiologia",
+      "de": "Corpo semissólido: não possui ossos nem órgãos em posições fixas.",
+      "para": "Corpo semissólido: não possui ossos nem órgãos em posições fixas. Tamanho Normal no estágio Coeso."
+    },
+    {
+      "achado": "[MELHORIA] colossal titulo",
+      "raca": "slime",
+      "no": "colossal",
+      "campo": "titulo",
+      "de": "Slime Colossal",
+      "para": "Slime Imenso"
+    },
+    {
+      "achado": "[MELHORIA] colossal descricao",
+      "raca": "slime",
+      "no": "__raca__",
+      "campo": "descricao",
+      "de": "de Coeso até Colossal",
+      "para": "de Coeso até Imenso"
+    },
+    {
+      "achado": "[MELHORIA] massa-colossal alcance",
+      "raca": "slime",
+      "no": "massa-colossal",
+      "campo": "descricao",
+      "de": "ganha mais 1,5 m de alcance para agarrar",
+      "para": "passa a ter alcance de 4,5 m para agarrar"
+    },
+    {
+      "achado": "[MELHORIA] massa-crescente alcance",
+      "raca": "slime",
+      "no": "massa-crescente",
+      "campo": "descricao",
+      "de": "seu alcance para agarrar aumenta em 1,5 m",
+      "para": "seu alcance para agarrar passa a ser de 3 m"
+    },
+    {
+      "achado": "[MELHORIA] sangue-peconhento imune",
+      "raca": "slime",
+      "no": "sangue-peconhento",
+      "campo": "descricao",
+      "de": "Você é imune a veneno.",
+      "para": "Você é imune à condição Envenenado, a dano de veneno e a aflições de veneno."
+    },
+    {
+      "achado": "[MELHORIA] sangue-peconhento limite",
+      "raca": "slime",
+      "no": "sangue-peconhento",
+      "campo": "descricao",
+      "de": "essa criatura faz um teste",
+      "para": "essa criatura faz, uma vez por turno dela, um teste"
+    },
+    {
+      "achado": "[LACUNA] toque-corrosivo turno",
+      "raca": "slime",
+      "no": "toque-corrosivo",
+      "campo": "descricao",
+      "de": "no início de cada turno. Equipamento",
+      "para": "no início de cada turno dela. Equipamento"
+    },
+    {
+      "achado": "[LACUNA] agarrao-congelante turno",
+      "raca": "slime",
+      "no": "agarrao-congelante",
+      "campo": "descricao",
+      "de": "no início de cada turno e fica",
+      "para": "no início de cada turno dela e fica"
+    },
+    {
+      "achado": "[LACUNA] nucleo-em-brasa turno",
+      "raca": "slime",
+      "no": "nucleo-em-brasa",
+      "campo": "descricao",
+      "de": "a cada turno em que o agarrão continuar",
+      "para": "no início de cada turno dela em que o agarrão continuar"
+    },
+    {
+      "achado": "[INCOERÊNCIA] golem descricao",
+      "raca": "golem",
+      "no": "__raca__",
+      "campo": "descricao",
+      "de": "não respira, não come e não fica doente",
+      "para": "não respira, não come e não contrai doenças comuns"
+    },
+    {
+      "achado": "[INCOERÊNCIA] conducao-de-fluxo",
+      "raca": "golem",
+      "no": "conducao-de-fluxo",
+      "campo": "descricao",
+      "de": "você recupera 1 Mana adicional por descanso",
+      "para": "você tem +1 de Mana máxima"
+    },
+    {
+      "achado": "[LACUNA] massa-de-rocha",
+      "raca": "golem",
+      "no": "massa-de-rocha",
+      "campo": "descricao",
+      "de": " e vantagem para resistir a qualquer efeito que tente empurrar, derrubar ou mover você contra a vontade",
+      "para": ", e quem tenta empurrar, derrubar ou agarrar você tem desvantagem"
+    },
+    {
+      "achado": "[LACUNA] punho-de-cantaria",
+      "raca": "golem",
+      "no": "punho-de-cantaria",
+      "campo": "descricao",
+      "de": "usam dano-base 1d10 e",
+      "para": "causam 1d10 de impacto + Mod. Força e"
+    },
+    {
+      "achado": "[LACUNA] peso-que-esmaga",
+      "raca": "golem",
+      "no": "peso-que-esmaga",
+      "campo": "descricao",
+      "de": "Avance até 6 m em linha reta, por cima de quem estiver no caminho. Cada criatura atingida sofre 3d6 de dano de impacto e cai no chão; quem passar",
+      "para": "Avance até 6 m em linha reta, sem provocar reação, por cima de quem estiver no caminho. Cada criatura de até uma categoria de tamanho acima da sua que for atingida sofre 3d6 de dano de impacto e fica Caída; quem passar"
+    },
+    {
+      "achado": "[LACUNA] nucleo-magnetico",
+      "raca": "golem",
+      "no": "nucleo-magnetico",
+      "campo": "descricao",
+      "de": "criatura a até 9 m carregando metal pesado precisa passar em Atletismo para conseguir se afastar",
+      "para": "criatura a até 9 m que vista armadura de metal ou segure arma de metal faz Atletismo contra a sua DT de Golem para se afastar de você e, se falhar, anda com metade do Movimento neste turno"
+    },
+    {
+      "achado": "[INCOERÊNCIA] refracao",
+      "raca": "golem",
+      "no": "refracao",
+      "campo": "descricao",
+      "de": "uma magia que exige ataque tiver você como alvo, o corpo refrata parte dela: o dano cai pela metade, e o conjurador leva 1d6 de volta",
+      "para": "uma magia de ataque tiver você como alvo, o corpo refrata parte dela: o dano cai pela metade (depois da vulnerabilidade e antes da Resistência), e o conjurador leva 1d6 de dano de Luz de volta"
+    },
+    {
+      "achado": "[LACUNA] selo-na-testa",
+      "raca": "golem",
+      "no": "selo-na-testa",
+      "campo": "descricao",
+      "de": "encerra toda condição física ou Aflição que dependia da forma antiga",
+      "para": "encerra toda condição de peso leve ou médio e baixa em 1 estágio cada Aflição. Não remove Ferido, lesão de longo prazo nem membro perdido"
+    },
+    {
+      "achado": "[LACUNA] estilhaco",
+      "raca": "golem",
+      "no": "estilhaco",
+      "campo": "descricao",
+      "de": "Você sofre 1d6 de dano ao fazer isso.",
+      "para": "Você sofre 1d6 de dano de corte ao fazer isso."
+    },
+    {
+      "achado": "[LACUNA] quinas-vivas",
+      "raca": "golem",
+      "no": "quinas-vivas",
+      "campo": "descricao",
+      "de": "sofre 1d6 de dano de corte. Seus",
+      "para": "sofre 1d6 de dano de corte, uma vez por turno dela. Seus"
+    },
+    {
+      "achado": "[INCOERÊNCIA] estrutura-monumental",
+      "raca": "golem",
+      "no": "estrutura-monumental",
+      "campo": "descricao",
+      "de": "acertos críticos causados por armas comuns",
+      "para": "acerto crítico de arma não mágica: o golpe acerta como um acerto normal"
+    },
+    {
+      "achado": "[INCOERÊNCIA] nao-se-derruba",
+      "raca": "golem",
+      "no": "nao-se-derruba",
+      "campo": "descricao",
+      "de": ", e continua agindo normalmente enquanto tiver ao menos uma parte estrutural inteira; o Mestre descreve o que sobrou",
+      "para": ". Um golpe que mutilaria você só racha o corpo: você não perde membro por Mutilação"
+    },
+    {
+      "achado": "[LACUNA] permanencia",
+      "raca": "golem",
+      "no": "permanencia",
+      "campo": "descricao",
+      "de": "até o próximo descanso. Duas",
+      "para": "até o próximo descanso, sem acumular. Não vale contra a morte na hora (Déficit igual à Vida máxima). Duas"
+    },
+    {
+      "achado": "[LACUNA] conserto-em-campo",
+      "raca": "golem",
+      "no": "conserto-em-campo",
+      "campo": "descricao",
+      "de": "gastando a ação dele no lugar da sua.",
+      "para": "gastando a ação dele no lugar da sua. A Mana é sua."
+    },
+    {
+      "achado": "[MELHORIA] raiz-ancora",
+      "raca": "golem",
+      "no": "raiz-ancora",
+      "campo": "descricao",
+      "de": "ninguém consegue mover você,",
+      "para": "ninguém consegue mover você, você fica com Movimento 0,"
+    },
+    {
+      "achado": "[MELHORIA] campo-de-lascas",
+      "raca": "golem",
+      "no": "campo-de-lascas",
+      "campo": "descricao",
+      "de": "a criatura que se mover dentro dela testa",
+      "para": "a criatura que entrar nela ou começar o turno nela testa"
+    },
+    {
+      "achado": "[INCOERÊNCIA] espirito-incompleto",
+      "raca": "desperto",
+      "no": "espirito-incompleto",
+      "campo": "descricao",
+      "de": "vantagens e resistências concedidas",
+      "para": "vantagens concedidas"
+    },
+    {
+      "achado": "[INCOERÊNCIA] ausencia-momentanea",
+      "raca": "desperto",
+      "no": "ausencia-momentanea",
+      "campo": "descricao",
+      "de": "você fica incorpóreo, pode atravessar até 1,5 m de matéria sólida, mas não pode atacar, manipular objetos nem terminar dentro de algo",
+      "para": "você fica Incorpóreo e não pode atacar nem manipular objetos"
+    },
+    {
+      "achado": "[LACUNA] folego-roubado",
+      "raca": "desperto",
+      "no": "folego-roubado",
+      "campo": "descricao",
+      "de": "gaste uma ação e 4 Mana para escolher um ser vivo a até 9 m e fazer Religião contra a Fortitude dele. Se superar a defesa, cause 2d6 + Mod.Sabedoria de dano e recupere",
+      "para": "gaste uma Ação Padrão e 4 Mana para escolher um ser vivo a até 9 m e fazer Religião contra 10 + Fortitude dele. Se acertar, cause 2d6 + Mod.Sabedoria de dano de Essência e recupere"
+    },
+    {
+      "achado": "[LACUNA] folego-roubado errar",
+      "raca": "desperto",
+      "no": "folego-roubado",
+      "campo": "descricao",
+      "de": "Caso não supere, cause e recupere metade.",
+      "para": "Se errar, cause e recupere metade."
+    },
+    {
+      "achado": "[LACUNA] laco-do-retorno",
+      "raca": "desperto",
+      "no": "laco-do-retorno",
+      "campo": "descricao",
+      "de": "você sofre metade desse dano e recebe os efeitos no lugar dela",
+      "para": "você sofre metade desse dano (a metade entra depois da vulnerabilidade e antes da Resistência) e recebe os efeitos no lugar dela, rolando você mesmo os testes"
+    },
+    {
+      "achado": "[LACUNA] recusar-o-fim",
+      "raca": "desperto",
+      "no": "recusar-o-fim",
+      "campo": "descricao",
+      "de": "Não funciona sem Mana suficiente",
+      "para": "Não nega Alcançar o próprio Fim. Não funciona sem Mana suficiente"
+    },
+    {
+      "achado": "[MELHORIA] ecos rerrolagem",
+      "raca": "desperto",
+      "no": "ecos-de-seculos-mortos",
+      "campo": "descricao",
+      "de": "mas deve manter o novo resultado.",
+      "para": "mas deve manter o novo resultado. Se outra fonte também puder rolar o mesmo teste de novo, escolha uma só."
+    },
+    {
+      "achado": "[MELHORIA] carne-refeita",
+      "raca": "desperto",
+      "no": "carne-refeita",
+      "campo": "descricao",
+      "de": "é imune a doenças e venenos comuns",
+      "para": "é imune a doenças comuns e a venenos comuns (aflições, a condição Envenenado e dano de veneno)"
+    },
+    {
+      "achado": "[ERRO] formas-guardadas",
+      "raca": "mimico",
+      "no": "formas-guardadas",
+      "campo": "descricao",
+      "de": "gastando só o seu Movimento",
+      "para": "gastando uma Ação de Movimento"
+    },
+    {
+      "achado": "[LACUNA] dt_efeitos",
+      "raca": "mimico",
+      "no": "__raca__",
+      "campo": "dt_efeitos",
+      "de": null,
+      "para": {
+        "rotulo": "DT de Mímico",
+        "pericia": "enganacao",
+        "descricao": "Quando um traço seu manda alguém testar Fortitude, Reflexos, Vontade, Intuição ou Percepção, role Enganação na hora: quem decide é o quanto a farsa convence. O resultado é a DT que a criatura precisa alcançar, e uma rolagem vale para todos os alvos daquele uso."
+      }
+    },
+    {
+      "achado": "[LACUNA] boca-sem-dono DT",
+      "raca": "mimico",
+      "no": "boca-sem-dono",
+      "campo": "descricao",
+      "de": "Intuição contra a sua Enganação",
+      "para": "Intuição contra a sua DT de Mímico"
+    },
+    {
+      "achado": "[LACUNA] trejeito-roubado DT",
+      "raca": "mimico",
+      "no": "trejeito-roubado",
+      "campo": "descricao",
+      "de": "Intuição contra a sua Enganação",
+      "para": "Intuição contra a sua DT de Mímico"
+    },
+    {
+      "achado": "[LACUNA] forma-emprestada observada",
+      "raca": "mimico",
+      "no": "forma-emprestada",
+      "campo": "descricao",
+      "de": "assumir a forma de uma criatura de tamanho até",
+      "para": "assumir a forma de uma criatura que você observou de perto, de tamanho até"
+    },
+    {
+      "achado": "[LACUNA] forma-emprestada espaço",
+      "raca": "mimico",
+      "no": "forma-emprestada",
+      "campo": "descricao",
+      "de": "Você copia só a aparência: atributos,",
+      "para": "Você copia só a aparência: espaço, atributos,"
+    },
+    {
+      "achado": "[LACUNA] bicho-grande",
+      "raca": "mimico",
+      "no": "bicho-grande",
+      "campo": "descricao",
+      "de": "uma categoria de tamanho acima da sua.",
+      "para": "uma categoria de tamanho acima da sua. Seu espaço e seu alcance também sobem para essa categoria."
+    },
+    {
+      "achado": "[LACUNA] bote-do-bau",
+      "raca": "mimico",
+      "no": "bote-do-bau",
+      "campo": "descricao",
+      "de": "para atacar com vantagem. Acertando, o ataque causa 2d6 de dano extra e deixa a criatura agarrada até o começo do seu próximo turno.",
+      "para": "para atacar com vantagem, sem crítico. Acertando, o ataque causa 2d6 de dano extra e deixa a criatura Agarrada até o começo do seu próximo turno (a trava de tamanho de Agarrar continua valendo)."
+    },
+    {
+      "achado": "[LACUNA] casco-e-garra",
+      "raca": "mimico",
+      "no": "casco-e-garra",
+      "campo": "descricao",
+      "de": "uma arma natural de dano-base 1d6",
+      "para": "uma arma natural de dano-base 1d6 + Mod. Força, de corte, perfuração ou impacto, conforme a arma natural, com crítico 20/x2"
+    },
+    {
+      "achado": "[LACUNA] qualquer-um tamanho",
+      "raca": "mimico",
+      "no": "qualquer-um",
+      "campo": "descricao",
+      "de": "uma criatura que você tenha visto de perto.",
+      "para": "uma criatura de tamanho até uma categoria acima ou abaixo da sua que você tenha visto de perto."
+    },
+    {
+      "achado": "[LACUNA] qualquer-um traço",
+      "raca": "mimico",
+      "no": "qualquer-um",
+      "campo": "descricao",
+      "de": "de nível 1 que ela possua.",
+      "para": "de nível 1 que ela possua e que não seja de morte, do Fim nem de aflição."
+    },
+    {
+      "achado": "[LACUNA] qualquer-um DT",
+      "raca": "mimico",
+      "no": "qualquer-um",
+      "campo": "descricao",
+      "de": "Percepção contra a sua Enganação",
+      "para": "Percepção contra a sua DT de Mímico"
+    },
+    {
+      "achado": "[MELHORIA] cara-de-ninguem DT",
+      "raca": "mimico",
+      "no": "cara-de-ninguem",
+      "campo": "descricao",
+      "de": "Vontade contra a sua Enganação",
+      "para": "Vontade contra a sua DT de Mímico"
+    },
+    {
+      "achado": "[MELHORIA] barulho-de-muitos área",
+      "raca": "mimico",
+      "no": "barulho-de-muitos",
+      "campo": "descricao",
+      "de": "uma área de 9 m",
+      "para": "um raio de 9 m"
+    },
+    {
+      "achado": "[MELHORIA] barulho-de-muitos efeito",
+      "raca": "mimico",
+      "no": "barulho-de-muitos",
+      "campo": "descricao",
+      "de": "faz Vontade contra a sua Enganação e, falhando, gasta o próximo turno virada para o lado errado, atacando com desvantagem.",
+      "para": "faz Vontade contra a sua DT de Mímico e, falhando, fica Desorientada até o fim do próximo turno dela."
+    },
+    {
+      "achado": "[MELHORIA] palavra-na-boca teste",
+      "raca": "mimico",
+      "no": "palavra-na-boca-do-outro",
+      "campo": "descricao",
+      "de": "com desvantagem em Intuição e Vontade nesse tempo.",
+      "para": "com desvantagem em Intuição e Vontade nesse tempo. No fim de cada turno dela, ela repete a Vontade e encerra o efeito se passar."
+    },
+    {
+      "achado": "[MELHORIA] palavra-na-boca DT",
+      "raca": "mimico",
+      "no": "palavra-na-boca-do-outro",
+      "campo": "descricao",
+      "de": "Vontade contra a sua Enganação",
+      "para": "Vontade contra a sua DT de Mímico"
+    },
+    {
+      "achado": "[MELHORIA] peso-de-mentira",
+      "raca": "mimico",
+      "no": "peso-de-mentira",
+      "campo": "descricao",
+      "de": "só magia que revele forma verdadeira desfaz a farsa",
+      "para": "só uma magia que deixe você Revelado desfaz a farsa"
+    },
+    {
+      "achado": "[ERRO] obra-de-mestre janela",
+      "raca": "anao",
+      "no": "obra-de-mestre",
+      "campo": "descricao",
+      "de": "Uma vez por arco da campanha",
+      "para": "Uma vez por sessão"
+    },
+    {
+      "achado": "[ERRO] obra-de-mestre termo",
+      "raca": "anao",
+      "no": "obra-de-mestre",
+      "campo": "descricao",
+      "de": "transforme um item comum em obra-prima:",
+      "para": "aplique no item uma melhoria técnica:"
+    },
+    {
+      "achado": "[ERRO] obra-de-mestre vaga",
+      "raca": "anao",
+      "no": "obra-de-mestre",
+      "campo": "descricao",
+      "de": ", e quem avaliar o item reconhece nele uma obra-prima",
+      "para": ". Ela ocupa uma vaga de modificação do item"
+    },
+    {
+      "achado": "[ERRO] obra-de-mestre usos",
+      "raca": "anao",
+      "no": "obra-de-mestre",
+      "campo": "usos",
+      "de": null,
+      "para": 1
+    },
+    {
+      "achado": "[ERRO] obra-de-mestre recuperacao",
+      "raca": "anao",
+      "no": "obra-de-mestre",
+      "campo": "recuperacao",
+      "de": null,
+      "para": "sessao"
+    },
+    {
+      "achado": "[INCOERÊNCIA] obra-que-fica janela",
+      "raca": "anao",
+      "no": "obra-que-fica",
+      "campo": "descricao",
+      "de": "Duas vezes por sessão, gaste dez minutos",
+      "para": "Duas vezes por descanso, gaste dez minutos"
+    },
+    {
+      "achado": "[INCOERÊNCIA] obra-que-fica duração",
+      "raca": "anao",
+      "no": "obra-que-fica",
+      "campo": "descricao",
+      "de": "Até o fim da sessão, ela concede",
+      "para": "Até o próximo descanso, ela concede"
+    },
+    {
+      "achado": "[INCOERÊNCIA] obra-que-fica campo",
+      "raca": "anao",
+      "no": "obra-que-fica",
+      "campo": "recuperacao",
+      "de": "sessao",
+      "para": "descanso"
+    },
+    {
+      "achado": "[LACUNA] selo-ancestral",
+      "raca": "anao",
+      "no": "selo-ancestral",
+      "campo": "descricao",
+      "de": "Grave um selo no chão, cobrindo uma área de 6 m. Enquanto você permanecer nela, seus aliados recebem +2 de Defesa e vantagem para resistir a medo e a controle. Sair da área encerra o efeito.",
+      "para": "Grave um selo no chão, num raio de 6 m, por cinco rodadas. Aliados dentro dele recebem +2 de Defesa e vantagem para resistir à condição Amedrontado e a efeitos que controlem a mente. O efeito de cada aliado acaba quando ele sai do selo."
+    },
+    {
+      "achado": "[LACUNA] runa-de-guarda",
+      "raca": "anao",
+      "no": "runa-de-guarda",
+      "campo": "descricao",
+      "de": "Marque uma superfície ou um aliado com a runa. O próximo dano que o protegido sofrer é reduzido em 10.",
+      "para": "Toque um aliado e marque-o com a runa. O próximo dano que ele sofrer até o fim da cena é reduzido em 10."
+    },
+    {
+      "achado": "[INCOERÊNCIA] mao-treinada",
+      "raca": "anao",
+      "no": "mao-treinada",
+      "campo": "descricao",
+      "de": "você não sofre penalidade por trabalhar sem oficina adequada",
+      "para": "você pode trabalhar com ferramentas improvisadas em item Comum ou Incomum, sem o Kit de Ofício"
+    },
+    {
+      "achado": "[MELHORIA] mao-de-mestre",
+      "raca": "anao",
+      "no": "mao-de-mestre",
+      "campo": "descricao",
+      "de": "nunca destrói o material trabalhado, e uma vez por descanso você fecha em uma hora um trabalho que levaria o dia inteiro",
+      "para": "nunca perde o material já investido, e uma vez por descanso você cumpre um dia de trabalho em uma hora"
+    },
+    {
+      "achado": "[LACUNA] reforco-de-campo",
+      "raca": "anao",
+      "no": "reforco-de-campo",
+      "campo": "descricao",
+      "de": "Conserte um item danificado ali mesmo, sem oficina, ou faça uma arma quebrada voltar a funcionar por uma cena inteira.",
+      "para": "Restaure a Durabilidade de um item até o máximo, sem oficina e sem custo em Lunaris, ou faça um item com Durabilidade 0 funcionar até o fim da cena."
+    },
+    {
+      "achado": "[LACUNA] armadilha-armada",
+      "raca": "anao",
+      "no": "armadilha-armada",
+      "campo": "descricao",
+      "de": "A primeira criatura que pisar ali testa",
+      "para": "A primeira criatura hostil que pisar ali até o fim da cena testa"
+    },
+    {
+      "achado": "[LACUNA] armadilha-armada achar",
+      "raca": "anao",
+      "no": "armadilha-armada",
+      "campo": "descricao",
+      "de": "em sucesso, sofre metade e não fica presa.",
+      "para": "em sucesso, sofre metade e não fica presa. Achar a armadilha pede Percepção contra a sua DT de Anão."
+    },
+    {
+      "achado": "[LACUNA] engenho-de-cerco",
+      "raca": "anao",
+      "no": "engenho-de-cerco",
+      "campo": "descricao",
+      "de": "ele atira sozinho, no seu turno, num alvo a até 18 m, que testa",
+      "para": "ele atira no seu turno, sem gastar ação, num alvo a até 18 m que você escolhe e que testa"
+    },
+    {
+      "achado": "[LACUNA] escavacao-rapida",
+      "raca": "anao",
+      "no": "escavacao-rapida",
+      "campo": "descricao",
+      "de": "Abra uma passagem de 1,5 m em pedra",
+      "para": "Abra uma passagem de 1,5 m de largura e até 9 m de comprimento em pedra"
+    },
+    {
+      "achado": "[LACUNA] mecanismo-de-bolso",
+      "raca": "anao",
+      "no": "mecanismo-de-bolso",
+      "campo": "descricao",
+      "de": "monte um mecanismo simples (gancho, alavanca, gatilho ou alarme).",
+      "para": "monte um mecanismo simples: um gancho (+5 em Atletismo para escalar), uma alavanca (abre um mecanismo travado), um gatilho (aciona uma armadilha a até 9 m) ou um alarme (um aviso audível a 30 m)."
+    },
+    {
+      "achado": "[MELHORIA] maos-de-oficio",
+      "raca": "anao",
+      "no": "maos-de-oficio",
+      "campo": "descricao",
+      "de": "mesmo se vier pior que o primeiro.",
+      "para": "mesmo se vier pior que o primeiro. Vantagem de mais de uma fonte vale uma só, e um teste só é rolado de novo uma vez."
+    },
+    {
+      "achado": "[LACUNA] colossal tamanho",
+      "raca": "gigante",
+      "no": "peso-que-nao-para",
+      "campo": "descricao",
+      "de": "Seu porte torna você imune",
+      "para": "Seu tamanho passa a Colossal. Seu porte torna você imune"
+    },
+    {
+      "achado": "[MELHORIA] peso-que-nao-para armas",
+      "raca": "gigante",
+      "no": "peso-que-nao-para",
+      "campo": "descricao",
+      "de": "armas de porte grande",
+      "para": "armas feitas para o seu tamanho"
+    },
+    {
+      "achado": "[LACUNA] porte-colossal",
+      "raca": "gigante",
+      "no": "porte-colossal",
+      "campo": "descricao",
+      "de": "Receba vantagem para resistir a empurrões e quedas causados por outra criatura.",
+      "para": "Quem tenta empurrar, derrubar ou agarrar você faz a manobra com desvantagem."
+    },
+    {
+      "achado": "[INCOERÊNCIA] forma-de-montanha",
+      "raca": "gigante",
+      "no": "forma-de-montanha",
+      "campo": "descricao",
+      "de": "ninguém consegue te mover contra a sua vontade, e você ganha Resistência 10 contra dano físico comum",
+      "para": "ninguém consegue empurrar, puxar ou arrastar você à força, e você ganha Resistência 10 contra dano físico que não venha de magia"
+    },
+    {
+      "achado": "[INCOERÊNCIA] golpe-de-forja",
+      "raca": "gigante",
+      "no": "golpe-de-forja",
+      "campo": "descricao",
+      "de": "sofrem 7d6 de dano de fogo e impacto e fazem um teste de Reflexos contra a sua DT de Gigante: quem passar sofre metade do dano e fica de pé, quem falhar cai no chão.",
+      "para": "sofrem 4d6 de dano de Fogo e 3d6 de dano de impacto e fazem Reflexos contra a sua DT de Gigante: quem passar sofre metade do dano e não cai, quem falhar fica Caído."
+    },
+    {
+      "achado": "[LACUNA] arremessar-criatura",
+      "raca": "gigante",
+      "no": "arremessar-criatura",
+      "campo": "descricao",
+      "de": "Ela sofre 2d6 de dano e cai no chão, e quem estiver no caminho do arremesso sofre metade desse dano.",
+      "para": "Ela sofre 2d6 de dano de impacto, fica Caída e deixa de estar Agarrada. Quem estiver no caminho do arremesso faz Reflexos contra a sua DT de Gigante e, se falhar, sofre metade desse dano."
+    },
+    {
+      "achado": "[LACUNA] coroa-de-raios",
+      "raca": "gigante",
+      "no": "coroa-de-raios",
+      "campo": "descricao",
+      "de": "quem te atacar corpo a corpo testa Reflexos",
+      "para": "quem te atacar corpo a corpo testa, uma vez por turno dele, Reflexos"
+    },
+    {
+      "achado": "[MELHORIA] golpe-congelante",
+      "raca": "gigante",
+      "no": "golpe-congelante",
+      "campo": "descricao",
+      "de": "até o fim do próximo turno dele.",
+      "para": "até o fim do próximo turno dele. Não acumula consigo mesmo."
+    },
+    {
+      "achado": "[MELHORIA] envergadura",
+      "raca": "gigante",
+      "no": "envergadura",
+      "campo": "descricao",
+      "de": "seus ataques corpo a corpo alcançam 1,5 m além do que alcançavam antes",
+      "para": "seu alcance corpo a corpo passa a 4,5 m"
+    },
+    {
+      "achado": "[MELHORIA] sopro-invernal",
+      "raca": "gigante",
+      "no": "sopro-invernal",
+      "campo": "descricao",
+      "de": "todo dano de gelo que você sofrer cai pela metade",
+      "para": "todo dano de Gelo que você sofrer cai pela metade (a metade entra depois da vulnerabilidade e antes da Resistência)"
+    },
+    {
+      "achado": "[MELHORIA] bigorna-viva",
+      "raca": "gigante",
+      "no": "bigorna-viva",
+      "campo": "descricao",
+      "de": "todo dano de fogo que você sofrer cai pela metade",
+      "para": "todo dano de Fogo que você sofrer cai pela metade (a metade entra depois da vulnerabilidade e antes da Resistência)"
+    }
+  ],
+  "resolvidos": [
+    {
+      "achado": "[ERRO] recuperacao sessao (poca-corrosiva, nuvem-de-esporos, erupcao, divisao-instavel)",
+      "por": "janela trocada pela sessão principal"
+    },
+    {
+      "achado": "[ERRO] recuperacao sessao (permanencia, raiz-ancora, campo-de-lascas, selo-na-testa)",
+      "por": "janela trocada pela sessão principal"
+    },
+    {
+      "achado": "[ERRO] veredito-inacabado · recuperacao",
+      "por": "janela trocada pela sessão principal"
+    },
+    {
+      "achado": "[ERRO] recuperacao sessao (mais-de-um-voce, qualquer-um)",
+      "por": "janela trocada pela sessão principal"
+    },
+    {
+      "achado": "[ERRO] recuperacao sessao (selo-ancestral, desabamento-calculado, engenho-de-cerco)",
+      "por": "janela trocada pela sessão principal"
+    },
+    {
+      "achado": "[ERRO] recuperacao sessao (invernia, golpe-de-forja)",
+      "por": "janela trocada pela sessão principal"
+    }
+  ],
+  "mantidos": [
+    {
+      "achado": "[MELHORIA] golem tamanho Grande ou Enorme na criação",
+      "motivo": "Fica como está: não fere regra escrita e o equilíbrio já foi decidido."
+    },
+    {
+      "achado": "[INCOERÊNCIA] alma-fragmentada · ajustes_pericias",
+      "motivo": "O -4 do campo já cancela o +4 da raça e dá o 0 que o texto pede; só se corrigiu a palavra 'resistências'."
+    },
+    {
+      "achado": "[LACUNA] desperto sem dt_efeitos",
+      "motivo": "Folego Roubado rola Religião contra 10 + Fortitude, não manda o alvo testar, então não precisa de dt_efeitos."
+    },
+    {
+      "achado": "[LACUNA] colossal-gigante · tamanho (descrição geral)",
+      "motivo": "A descrição já diz Grande, Enorme e Colossal; o tamanho foi acrescentado no traço Peso que Não Para."
+    },
+    {
+      "achado": "[MELHORIA] estágios · titulo e povo (Anão)",
+      "motivo": "sessão principal: \"de Forja\" já separa o estágio do grau de perícia"
+    }
+  ]
+}

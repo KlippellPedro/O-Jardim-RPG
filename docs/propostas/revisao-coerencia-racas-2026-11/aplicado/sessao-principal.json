@@ -1,0 +1,14 @@
+{
+  "correcoes": [
+    {"achado": "trava do questionário: Possessão repete no fim de cada turno seu", "raca": "espirito", "no": "possessao", "campo": "descricao",
+     "de": "repete o teste no fim de cada turno dele, mesmo apagado", "para": "repete o teste no fim de cada turno seu, mesmo apagado"},
+    {"achado": "tom: sem \"não é X: Y\"", "raca": "espirito", "no": "__raca__", "campo": "fisiologia",
+     "de": "Não é Incorpóreo: só atravessa material pela Passagem Etérea.", "para": "Atravessa material só pela Passagem Etérea, sem a condição Incorpóreo."},
+    {"achado": "tom: sem \"não é X: Y\"", "raca": "elfo", "no": "memoria-inesgotavel", "campo": "descricao",
+     "de": "trata o d20 como um 20 que não é natural: o dado vale 20, mas não é crítico.", "para": "trata o d20 como se tivesse tirado 20. Esse 20 não conta como natural e não gera crítico."},
+    {"achado": "Simbionte manda testar e precisa de DT de raça", "raca": "simbionte", "no": "__raca__", "campo": "dt_efeitos", "de": null,
+     "para": {"rotulo": "DT de Simbionte", "pericia": "fortitude", "descricao": "Quando um traço seu manda alguém testar Fortitude, Reflexos, Vontade ou Percepção, role Fortitude na hora: quem decide é a força da colônia. O resultado é a DT que a criatura precisa alcançar, e uma rolagem vale para todos os alvos daquele uso."}},
+    {"achado": "Simbionte: teste contra a DT da raça", "raca": "simbionte", "no": "hospedeiro-mutuo", "campo": "descricao",
+     "de": "testa Fortitude contra a DT Padrão do nível dela", "para": "testa Fortitude contra a DT de Simbionte"}
+  ]
+}

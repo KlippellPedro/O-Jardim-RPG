@@ -1,0 +1,796 @@
+{
+  "correcoes": [
+    {
+      "achado": "[LACUNA] canto-fascinante · campos",
+      "raca": "sereia",
+      "no": "canto-fascinante",
+      "campo": "usos",
+      "de": null,
+      "para": 1
+    },
+    {
+      "achado": "[LACUNA] canto-fascinante · campos",
+      "raca": "sereia",
+      "no": "canto-fascinante",
+      "campo": "recuperacao",
+      "de": null,
+      "para": "cena"
+    },
+    {
+      "achado": "[LACUNA] canto-fascinante · campos",
+      "raca": "sereia",
+      "no": "canto-fascinante",
+      "campo": "custo_mana",
+      "de": null,
+      "para": 2
+    },
+    {
+      "achado": "[LACUNA] canto-fascinante · campos",
+      "raca": "sereia",
+      "no": "canto-fascinante",
+      "campo": "alcance_m",
+      "de": null,
+      "para": 9
+    },
+    {
+      "achado": "[LACUNA] canto-fascinante · ação",
+      "raca": "sereia",
+      "no": "canto-fascinante",
+      "campo": "descricao",
+      "de": "Custa uma ação e 2 Mana",
+      "para": "Custa uma Ação Padrão e 2 Mana"
+    },
+    {
+      "achado": "[INCOERÊNCIA] canto-fascinante-cor · duplicata",
+      "raca": "sereia",
+      "no": "canto-fascinante-cor",
+      "campo": "descricao",
+      "de": "Sua Canção é o próprio Canto Fascinante da raça, do jeito que ele já funciona.",
+      "para": "Este traço marca o Canto Fascinante da raça como a sua Canção e não dá um segundo uso por cena."
+    },
+    {
+      "achado": "[INCOERÊNCIA] canto-fascinante-cor · duplicata",
+      "raca": "sereia",
+      "no": "canto-fascinante-cor",
+      "campo": "descricao",
+      "de": "Custa uma ação e 2 Mana",
+      "para": "Custa uma Ação Padrão e 2 Mana"
+    },
+    {
+      "achado": "[LACUNA] coro-do-encanto, chamado-do-fundo, canto-que-atravessa · hostil",
+      "raca": "sereia",
+      "no": "coro-do-encanto",
+      "campo": "descricao",
+      "de": "cada criatura a até 12 m",
+      "para": "cada criatura hostil a até 12 m"
+    },
+    {
+      "achado": "[LACUNA] coro-do-encanto, chamado-do-fundo, canto-que-atravessa · hostil",
+      "raca": "sereia",
+      "no": "coro-do-encanto",
+      "campo": "descricao",
+      "de": "Custa uma ação completa",
+      "para": "Custa uma Ação Completa"
+    },
+    {
+      "achado": "[LACUNA] coro-do-encanto, chamado-do-fundo, canto-que-atravessa · hostil",
+      "raca": "sereia",
+      "no": "canto-que-atravessa",
+      "campo": "descricao",
+      "de": "pegar todas as criaturas dentro do alcance",
+      "para": "pegar todas as criaturas hostis dentro do alcance"
+    },
+    {
+      "achado": "[LACUNA] coro-do-encanto, chamado-do-fundo, canto-que-atravessa · hostil",
+      "raca": "sereia",
+      "no": "canto-que-atravessa",
+      "campo": "descricao",
+      "de": "cada criatura afetada faz o seu próprio.",
+      "para": "cada criatura afetada faz o seu próprio. Canção de toque, como o Fôlego Emprestado, não muda."
+    },
+    {
+      "achado": "[LACUNA] chamado-do-fundo · escuridão",
+      "raca": "sereia",
+      "no": "chamado-do-fundo",
+      "campo": "descricao",
+      "de": "a área de 9 m ao seu redor fica escura e pesada.",
+      "para": "a água num raio de 9 m ao seu redor, que acompanha você, fica turva e pesada, sem deixar ninguém Cego."
+    },
+    {
+      "achado": "[LACUNA] chamado-do-fundo · escuridão",
+      "raca": "sereia",
+      "no": "chamado-do-fundo",
+      "campo": "descricao",
+      "de": "Quem começa o turno ali testa",
+      "para": "Toda criatura hostil que começar o turno ali testa"
+    },
+    {
+      "achado": "[LACUNA] chamado-do-fundo · escuridão",
+      "raca": "sereia",
+      "no": "chamado-do-fundo",
+      "campo": "descricao",
+      "de": "Custa uma ação completa",
+      "para": "Custa uma Ação Completa"
+    },
+    {
+      "achado": "[LACUNA] mare-que-devolve · Déficit",
+      "raca": "sereia",
+      "no": "mare-que-devolve",
+      "campo": "descricao",
+      "de": "um aliado caído a 0 volta de pé com um quarto da Vida máxima.",
+      "para": "um aliado a 0 de Vida ou menos tem o Déficit apagado e volta de pé com um quarto da Vida máxima, sem Morrendo, e ganha Ferido 1."
+    },
+    {
+      "achado": "[LACUNA] mare-que-devolve · Déficit",
+      "raca": "sereia",
+      "no": "mare-que-devolve",
+      "campo": "descricao",
+      "de": "Custa uma ação completa",
+      "para": "Custa uma Ação Completa"
+    },
+    {
+      "achado": "[INCOERÊNCIA] pressao-das-profundezas · sucesso",
+      "raca": "sereia",
+      "no": "pressao-das-profundezas",
+      "campo": "descricao",
+      "de": "A pressão do fundo despenca sobre uma criatura a até 9 m: 2d6 de dano de Água, e o Movimento dela cai pela metade até o fim do próximo turno dela. Ela faz um teste de Fortitude contra a sua DT de Sereia e, passando, sofre metade do dano.",
+      "para": "A pressão do fundo despenca sobre uma criatura a até 9 m, que faz um teste de Fortitude contra a sua DT de Sereia. Falhando, sofre 2d6 de dano de Água e fica Lento até o fim do próximo turno dela. Passando, sofre metade do dano e nada mais."
+    },
+    {
+      "achado": "[INCOERÊNCIA] pressao-das-profundezas · sucesso",
+      "raca": "sereia",
+      "no": "pressao-das-profundezas",
+      "campo": "descricao",
+      "de": "Custa uma ação e 4 Mana",
+      "para": "Custa uma Ação Padrão e 4 Mana"
+    },
+    {
+      "achado": "[LACUNA] eco-abissal · Invisível e parede",
+      "raca": "sereia",
+      "no": "eco-abissal",
+      "campo": "descricao",
+      "de": "a forma de tudo a até 18 m, mesmo no escuro completo ou na água turva.",
+      "para": "a forma de tudo que esteja ao alcance do som a até 18 m, mesmo no escuro completo ou na água turva. Não atravessa parede nem revela criatura Invisível, e não funciona enquanto você estiver Silenciada."
+    },
+    {
+      "achado": "[MELHORIA] olhos-de-profundeza · pressão",
+      "raca": "sereia",
+      "no": "olhos-de-profundeza",
+      "campo": "descricao",
+      "de": "é imune a dano e penalidades causados por pressão.",
+      "para": "ignora os efeitos da pressão da água funda, o que não protege contra o dano de Água de outras criaturas."
+    },
+    {
+      "achado": "[MELHORIA] dominio-das-aguas · Resguardado e área",
+      "raca": "sereia",
+      "no": "dominio-das-aguas",
+      "campo": "descricao",
+      "de": "de uma área de 12 m.",
+      "para": "num raio de 12 m ao redor de um ponto a até 12 m de você."
+    },
+    {
+      "achado": "[MELHORIA] dominio-das-aguas · Resguardado e área",
+      "raca": "sereia",
+      "no": "dominio-das-aguas",
+      "campo": "descricao",
+      "de": "e recebem +2 de Defesa.",
+      "para": "e ficam Resguardados enquanto estiverem ali."
+    },
+    {
+      "achado": "[MELHORIA] dominio-das-aguas · Resguardado e área",
+      "raca": "sereia",
+      "no": "dominio-das-aguas",
+      "campo": "descricao",
+      "de": "Custa uma ação e 6 Mana",
+      "para": "Custa uma Ação Padrão e 6 Mana"
+    },
+    {
+      "achado": "[MELHORIA] cancao-restauradora · Amedrontado",
+      "raca": "sereia",
+      "no": "cancao-restauradora",
+      "campo": "descricao",
+      "de": "se livra do medo que estiver em cima dele.",
+      "para": "se livra da condição Amedrontado."
+    },
+    {
+      "achado": "[MELHORIA] cancao-restauradora · Amedrontado",
+      "raca": "sereia",
+      "no": "cancao-restauradora",
+      "campo": "descricao",
+      "de": "Custa uma ação e 4 Mana",
+      "para": "Custa uma Ação Padrão e 4 Mana"
+    },
+    {
+      "achado": "[MELHORIA] refrao-persistente · fim",
+      "raca": "sereia",
+      "no": "refrao-persistente",
+      "campo": "descricao",
+      "de": "o primeiro ataque que aquela criatura fizer contra você sai",
+      "para": "o primeiro ataque que aquela criatura fizer contra você nesta cena sai"
+    },
+    {
+      "achado": "[MELHORIA] ação (padrão P2) · Sereia",
+      "raca": "sereia",
+      "no": "lamento-frio",
+      "campo": "descricao",
+      "de": "Custa uma ação e 2 Mana",
+      "para": "Custa uma Ação Padrão e 2 Mana"
+    },
+    {
+      "achado": "[MELHORIA] ação (padrão P2) · Sereia",
+      "raca": "sereia",
+      "no": "pranto-que-corroi",
+      "campo": "descricao",
+      "de": "Custa uma ação e 4 Mana",
+      "para": "Custa uma Ação Padrão e 4 Mana"
+    },
+    {
+      "achado": "[MELHORIA] ação (padrão P2) · Sereia",
+      "raca": "sereia",
+      "no": "reboque-dos-afogados",
+      "campo": "descricao",
+      "de": "Custa uma ação completa",
+      "para": "Custa uma Ação Completa"
+    },
+    {
+      "achado": "[MELHORIA] ação (padrão P2) · Sereia",
+      "raca": "sereia",
+      "no": "folego-emprestado",
+      "campo": "descricao",
+      "de": "Toque uma criatura e gaste 2 Mana:",
+      "para": "Toque uma criatura e gaste uma Ação Padrão e 2 Mana:"
+    },
+    {
+      "achado": "[INCOERÊNCIA] metabolismo-composto",
+      "raca": "simbionte",
+      "no": "metabolismo-composto",
+      "campo": "descricao",
+      "de": "Você aguenta o dobro do tempo normal sem comer, beber ou descansar antes de sentir qualquer coisa, e recebe vantagem em Fortitude contra fome, sede e exaustão.",
+      "para": "Você aguenta o dobro de dias sem comer antes de começar a ganhar Cansaço, e o primeiro Cansaço de sede só chega no fim do segundo dia sem beber. Duas noites em claro valem 1 de Cansaço, em vez de uma. Recebe vantagem em Fortitude contra clima Severo ou pior."
+    },
+    {
+      "achado": "[INCOERÊNCIA] nuvem-viva · Incorpóreo",
+      "raca": "simbionte",
+      "no": "nuvem-viva",
+      "campo": "descricao",
+      "de": "gaste uma ação e 7 Mana",
+      "para": "gaste uma Ação Padrão e 7 Mana"
+    },
+    {
+      "achado": "[INCOERÊNCIA] nuvem-viva · Incorpóreo",
+      "raca": "simbionte",
+      "no": "nuvem-viva",
+      "campo": "descricao",
+      "de": "Enquanto durar, você não pode ser agarrado, atravessa criaturas e grades e sofre metade do dano de ataques corpo a corpo, mas não consegue atacar nem carregar equipamento pesado.",
+      "para": "Enquanto durar, você fica Incorpóreo, mas não consegue atacar nem carregar equipamento pesado."
+    },
+    {
+      "achado": "[LACUNA] hospedeiro-mutuo · custo da vítima",
+      "raca": "simbionte",
+      "no": "hospedeiro-mutuo",
+      "campo": "descricao",
+      "de": "gaste uma ação para se alimentar",
+      "para": "gaste uma Ação Padrão para se alimentar"
+    },
+    {
+      "achado": "[LACUNA] hospedeiro-mutuo · custo da vítima",
+      "raca": "simbionte",
+      "no": "hospedeiro-mutuo",
+      "campo": "descricao",
+      "de": "e recuperar 1d6 de Vida.",
+      "para": "e recuperar 1d6 de Vida. A criatura sofre 1d6 de dano de Essência: sem teste se for voluntária; se estiver incapacitada, testa Fortitude contra a DT Padrão do nível dela e sofre metade se passar."
+    },
+    {
+      "achado": "[ERRO] digestao-profunda · termos",
+      "raca": "simbionte",
+      "no": "digestao-profunda",
+      "campo": "descricao",
+      "de": "e a tirar de você uma condição de veneno, doença ou sangramento, escolhida na hora.",
+      "para": "e, à sua escolha, a reduzir em 1 estágio uma aflição de veneno ou doença que você tenha, ou a encerrar uma condição Envenenado ou Sangramento."
+    },
+    {
+      "achado": "[INCOERÊNCIA] duas-cabecas · tipo e custo",
+      "raca": "simbionte",
+      "no": "duas-cabecas",
+      "campo": "tipo",
+      "de": "passiva",
+      "para": "acao_livre"
+    },
+    {
+      "achado": "[INCOERÊNCIA] duas-cabecas · tipo e custo",
+      "raca": "simbionte",
+      "no": "duas-cabecas",
+      "campo": "custo_mana",
+      "de": null,
+      "para": 4
+    },
+    {
+      "achado": "[INCOERÊNCIA] duas-cabecas · tipo e custo",
+      "raca": "simbionte",
+      "no": "duas-cabecas",
+      "campo": "descricao",
+      "de": "Uma vez por rodada, gaste 4 Mana para receber uma ação de movimento adicional no seu turno.",
+      "para": "Ação Livre. Uma vez por turno, gaste 4 Mana para receber uma Ação de Movimento adicional neste turno."
+    },
+    {
+      "achado": "[LACUNA] memoria-coletiva · DT",
+      "raca": "simbionte",
+      "no": "memoria-coletiva",
+      "campo": "descricao",
+      "de": "faça um teste de Sobrevivência (DT 15, ou 20 se o rastro tiver mais de um dia)",
+      "para": "faça um teste de Sobrevivência contra a DT Padrão do nível do lugar (DT Difícil se o rastro tiver mais de um dia)"
+    },
+    {
+      "achado": "[LACUNA] assimilacao-superficial · resistência",
+      "raca": "simbionte",
+      "no": "assimilacao-superficial",
+      "campo": "descricao",
+      "de": "uma resistência",
+      "para": "uma Resistência 5 a um tipo de dano que a criatura tenha"
+    },
+    {
+      "achado": "[LACUNA] assimilacao-superficial · resistência",
+      "raca": "simbionte",
+      "no": "assimilacao-superficial",
+      "campo": "descricao",
+      "de": "gaste uma ação para tocar",
+      "para": "gaste uma Ação Padrão para tocar"
+    },
+    {
+      "achado": "[MELHORIA] colonia-estendida, corpo-redundante",
+      "raca": "simbionte",
+      "no": "colonia-estendida",
+      "campo": "descricao",
+      "de": "gaste uma ação e 6 Mana",
+      "para": "gaste uma Ação Padrão e 6 Mana"
+    },
+    {
+      "achado": "[MELHORIA] colonia-estendida, corpo-redundante",
+      "raca": "simbionte",
+      "no": "colonia-estendida",
+      "campo": "descricao",
+      "de": "seus aliados dentro dela recebem +2 de Defesa",
+      "para": "seus aliados dentro dela ficam Resguardados"
+    },
+    {
+      "achado": "[MELHORIA] colonia-estendida, corpo-redundante",
+      "raca": "simbionte",
+      "no": "corpo-redundante",
+      "campo": "descricao",
+      "de": "sua Vida vira 1.",
+      "para": "você fica com 1 de Vida (veja Ficar com 1 de Vida, em Ferimentos)."
+    },
+    {
+      "achado": "[MELHORIA] ação (padrão P2) · Simbionte",
+      "raca": "simbionte",
+      "no": "enxerto-vivo",
+      "campo": "descricao",
+      "de": "gaste uma ação e 4 Mana",
+      "para": "gaste uma Ação Padrão e 4 Mana"
+    },
+    {
+      "achado": "[MELHORIA] ação (padrão P2) · Simbionte",
+      "raca": "simbionte",
+      "no": "rede-da-colonia",
+      "campo": "descricao",
+      "de": "Gaste uma ação para deixar",
+      "para": "Gaste uma Ação Padrão para deixar"
+    },
+    {
+      "achado": "[ERRO] sobrevivente-outra-historia · texto",
+      "raca": "anomalia",
+      "no": "sobrevivente-outra-historia",
+      "campo": "descricao",
+      "de": "sua Vida torna-se 1. Isso não impede morte instantânea, destruição da alma ou uma consequência narrativa que não seja causada por dano.",
+      "para": "você fica com 1 de Vida (sem Morrendo e sem Ferido, como em Ficar com 1 de Vida). Isso não vale contra a morte na hora, a destruição da alma nem uma consequência narrativa que não venha de dano."
+    },
+    {
+      "achado": "[INCOERÊNCIA] assinatura-firmada · janela",
+      "raca": "anomalia",
+      "no": "assinatura-firmada",
+      "campo": "descricao",
+      "de": "quatro rerrolagens por descanso",
+      "para": "quatro rerrolagens por sessão"
+    },
+    {
+      "achado": "[LACUNA] assinaturas · dano sem tipo e DT",
+      "raca": "anomalia",
+      "no": "__raca__",
+      "campo": "dt_efeitos",
+      "de": null,
+      "para": {
+        "rotulo": "DT de Anomalia",
+        "pericia": "misticismo",
+        "descricao": "Quando uma Assinatura sua manda alguém testar, role Misticismo na hora. O resultado é a DT que a criatura precisa alcançar, e uma rolagem vale para todos os alvos daquele uso."
+      }
+    },
+    {
+      "achado": "[LACUNA] assinaturas · dano sem tipo e DT",
+      "raca": "anomalia",
+      "no": "ofensiva",
+      "campo": "descricao",
+      "de": "gaste uma ação e 5 Mana e role a perícia da sua Assinatura: o resultado é a DT da resistência que o Mestre escolher para o alvo. Em falha, ele sofre 3d6 + Mod.Atributo de dano; em sucesso, metade.",
+      "para": "gaste uma Ação Padrão e 5 Mana para atingir uma criatura a até 9 m, que testa Reflexos, Fortitude ou Vontade (a que combinar com a Assinatura) contra a sua DT de Anomalia. Em falha, ela sofre 3d6 + Mod.Atributo de dano de um tipo do Livro, escolhido quando a Assinatura for aprovada; em sucesso, metade. Em todas as Assinaturas, Mod.Atributo é o do atributo escolhido quando a Assinatura for aprovada."
+    },
+    {
+      "achado": "[LACUNA] assinaturas · dano sem tipo e DT",
+      "raca": "anomalia",
+      "no": "ofensiva",
+      "campo": "alcance_m",
+      "de": null,
+      "para": 9
+    },
+    {
+      "achado": "[MELHORIA] controle (assinatura) · condição",
+      "raca": "anomalia",
+      "no": "controle",
+      "campo": "descricao",
+      "de": "gaste uma ação e 5 Mana e role a perícia da sua Assinatura: o resultado é a DT da resistência que o Mestre escolher para o alvo. Em falha, ele recebe uma condição leve aprovada pelo Mestre até o fim do próximo turno dele; em sucesso, nada acontece.",
+      "para": "gaste uma Ação Padrão e 5 Mana para atingir uma criatura a até 9 m, que testa Fortitude ou Vontade (a que combinar com a Assinatura) contra a sua DT de Anomalia. Em falha, ela recebe uma condição leve da lista de Condições, aprovada pelo Mestre, até o fim do próximo turno dela, sem as que causam dano (Sangramento, Queimando e Envenenado); em sucesso, nada acontece."
+    },
+    {
+      "achado": "[ERRO] movimento (assinatura) · ação",
+      "raca": "anomalia",
+      "no": "movimento",
+      "campo": "descricao",
+      "de": "gaste seu Movimento e 4 Mana",
+      "para": "gaste sua Ação de Movimento e 4 Mana"
+    },
+    {
+      "achado": "[MELHORIA] restauradora · ação",
+      "raca": "anomalia",
+      "no": "restauradora",
+      "campo": "descricao",
+      "de": "gaste uma ação e 5 Mana",
+      "para": "gaste uma Ação Padrão e 5 Mana"
+    },
+    {
+      "achado": "[MELHORIA] transformacao (assinatura) · ação e Resguardado",
+      "raca": "anomalia",
+      "no": "transformacao",
+      "campo": "descricao",
+      "de": "gaste uma ação e 6 Mana",
+      "para": "gaste uma Ação Padrão e 6 Mana"
+    },
+    {
+      "achado": "[MELHORIA] transformacao (assinatura) · ação e Resguardado",
+      "raca": "anomalia",
+      "no": "transformacao",
+      "campo": "descricao",
+      "de": "Receba +2 Defesa e vantagem",
+      "para": "Fique Resguardado e receba vantagem"
+    },
+    {
+      "achado": "[INCOERÊNCIA] maldicao-tecida, grande-saba · teste",
+      "raca": "bruxa",
+      "no": "maldicao-tecida",
+      "campo": "descricao",
+      "de": "gaste uma ação e 5 Mana para amaldiçoar uma criatura a até 15 m. Faça Misticismo contra a Vontade dela. Se a criatura falhar, a Maldição dura três rodadas; se resistir, dura somente até o final do próximo turno dela.",
+      "para": "gaste uma Ação Padrão e 5 Mana para amaldiçoar uma criatura a até 15 m com uma Maldição conhecida. Ela testa Vontade contra a sua DT de Bruxa. Se falhar, a Maldição dura três rodadas; se passar, dura somente até o final do próximo turno dela."
+    },
+    {
+      "achado": "[INCOERÊNCIA] maldicao-tecida, grande-saba · teste",
+      "raca": "bruxa",
+      "no": "maldicao-tecida",
+      "campo": "teste",
+      "de": "misticismo_vs_vontade",
+      "para": "vontade_vs_dt_bruxa"
+    },
+    {
+      "achado": "[INCOERÊNCIA] maldicao-tecida, grande-saba · teste",
+      "raca": "bruxa",
+      "no": "grande-saba",
+      "campo": "descricao",
+      "de": "gaste uma ação e 8 Mana",
+      "para": "gaste uma Ação Padrão e 8 Mana"
+    },
+    {
+      "achado": "[INCOERÊNCIA] maldicao-tecida, grande-saba · teste",
+      "raca": "bruxa",
+      "no": "grande-saba",
+      "campo": "descricao",
+      "de": "Faça um único teste de Misticismo e compare com a Vontade de cada alvo.",
+      "para": "Role uma vez a sua DT de Bruxa, e cada alvo testa Vontade contra ela."
+    },
+    {
+      "achado": "[INCOERÊNCIA] maldicao-tecida, grande-saba · teste",
+      "raca": "bruxa",
+      "no": "grande-saba",
+      "campo": "teste",
+      "de": "misticismo_vs_vontade",
+      "para": "vontade_vs_dt_bruxa"
+    },
+    {
+      "achado": "[ERRO] passos-presos · reações de movimento",
+      "raca": "bruxa",
+      "no": "passos-presos",
+      "campo": "descricao",
+      "de": "O Movimento da criatura é reduzido à metade e ela não pode realizar reações de movimento.",
+      "para": "A criatura fica Lento e não pode usar Esquiva."
+    },
+    {
+      "achado": "[LACUNA] definhamento · tipo",
+      "raca": "bruxa",
+      "no": "definhamento",
+      "campo": "descricao",
+      "de": "ela sofre 1d6 de dano no começo do turno.",
+      "para": "ela sofre 1d6 de dano de Essência no começo do turno dela, a cada turno da duração."
+    },
+    {
+      "achado": "[LACUNA] pele-exposta · ordem",
+      "raca": "bruxa",
+      "no": "pele-exposta",
+      "campo": "descricao",
+      "de": "A criatura perde Resistência contra ele e sofre +2 desse dano sempre que for atingida por ele.",
+      "para": "A Resistência dela a esse tipo (e a redução de dano que venha dele) vale 0 enquanto a Maldição durar, e cada golpe desse tipo causa +2 de dano, somado uma vez ao total antes da Resistência. Não vale contra imunidade nem contra dano verdadeiro."
+    },
+    {
+      "achado": "[LACUNA] caldeirao-bruxo · ação",
+      "raca": "bruxa",
+      "no": "caldeirao-bruxo",
+      "campo": "descricao",
+      "de": "e não podem ser acumuladas.",
+      "para": "e não podem ser acumuladas. Usar uma dose é uma Ação Padrão, e a dose pode ser dada a uma criatura que você toque."
+    },
+    {
+      "achado": "[MELHORIA] Preço da Bruxaria · povo e descrição",
+      "raca": "bruxa",
+      "no": "__raca__",
+      "campo": "povo",
+      "de": "Quando a Mana acaba, paga com Vida, e toda bruxa aprende",
+      "para": "Quando falta um pouco de Mana para um feitiço da raça, paga com Vida (uma vez por cena), e toda bruxa aprende"
+    },
+    {
+      "achado": "[MELHORIA] Preço da Bruxaria · povo e descrição",
+      "raca": "bruxa",
+      "no": "__raca__",
+      "campo": "descricao",
+      "de": "e, quando a Mana acaba, paga com Vida.",
+      "para": "e, quando falta um pouco de Mana para um feitiço da raça, paga com Vida (uma vez por cena)."
+    },
+    {
+      "achado": "[MELHORIA] lingua-selada · Silenciada",
+      "raca": "bruxa",
+      "no": "lingua-selada",
+      "campo": "descricao",
+      "de": "A criatura não pode usar características que exijam fala, canto ou palavras de ativação.",
+      "para": "A criatura fica Silenciada."
+    },
+    {
+      "achado": "[MELHORIA] vassoura · ação",
+      "raca": "bruxa",
+      "no": "voo-da-vassoura",
+      "campo": "descricao",
+      "de": "gaste uma ação e 3 Mana",
+      "para": "gaste uma Ação Padrão e 3 Mana"
+    },
+    {
+      "achado": "[INCOERÊNCIA] corpo-reserva · voltar da morte",
+      "raca": "clone",
+      "no": "corpo-reserva",
+      "campo": "descricao",
+      "de": "Quando sua morte for concluída, sua consciência desperta nele após 24 horas, se a instalação e o corpo continuarem intactos. Equipamentos não são transportados. O novo corpo conserva atributos, classes e progressão, mas possui somente as memórias registradas na última sincronização.",
+      "para": "Quando você morrer, sua consciência desperta nele após 24 horas, se a instalação e o corpo continuarem intactos. Equipamentos não são transportados. O novo corpo conserva atributos, classes e progressão, mas possui somente as memórias registradas na última sincronização. Quem volta paga o preço de Voltar da morte: Ferido 2, 2 de Cansaço, e Arkarin fica com alguma coisa, que aqui são as memórias perdidas desde a última sincronização. O corpo reserva usado se perde, e o Mestre pode negar a volta de quem já voltou uma vez."
+    },
+    {
+      "achado": "[MELHORIA] corpo-otimizado · fadiga",
+      "raca": "clone",
+      "no": "corpo-otimizado",
+      "campo": "descricao",
+      "de": "contra doenças, fadiga e venenos.",
+      "para": "contra doenças e venenos e contra o Cansaço de clima e de esforço prolongado."
+    },
+    {
+      "achado": "[MELHORIA] regeneracao-programada · consciente",
+      "raca": "clone",
+      "no": "regeneracao-programada",
+      "campo": "descricao",
+      "de": "quando sofrer dano e ficar com metade",
+      "para": "quando sofrer dano e continuar consciente com metade"
+    },
+    {
+      "achado": "[LACUNA] predador · tipo de dano",
+      "raca": "amalgamo",
+      "no": "predador",
+      "campo": "descricao",
+      "de": "Receba uma arma natural de dano-base 1d8 e",
+      "para": "Receba uma arma natural (garra, presa ou chifre) de dano-base 1d8, de corte, perfuração ou impacto conforme a arma natural, que usa Luta, soma Mod.Força e tem crítico 20/x2, e"
+    },
+    {
+      "achado": "[ERRO] massa-colossal · vantagem passiva",
+      "raca": "amalgamo",
+      "no": "massa-colossal",
+      "campo": "descricao",
+      "de": "e vantagem contra empurrões e quedas provocadas por outras criaturas.",
+      "para": "e quem tenta empurrar ou derrubar você tem desvantagem."
+    },
+    {
+      "achado": "[MELHORIA] membros-multiplos · interação",
+      "raca": "amalgamo",
+      "no": "membros-multiplos",
+      "campo": "descricao",
+      "de": "uma interação adicional com objeto por turno.",
+      "para": "uma vez por turno, mexer num objeto não gasta a sua Ação de Movimento."
+    },
+    {
+      "achado": "[MELHORIA] reconfiguracao-visceral · retroativo",
+      "raca": "amalgamo",
+      "no": "reconfiguracao-visceral",
+      "campo": "descricao",
+      "de": "incluindo o dano que ativou a reação.",
+      "para": "e ela já vale para o dano que ativou a reação: você recupera até 5 de Vida desse golpe. Não vale contra dano verdadeiro."
+    },
+    {
+      "achado": "[MELHORIA] anatomia-plural · termos",
+      "raca": "amalgamo",
+      "no": "anatomia-plural",
+      "campo": "descricao",
+      "de": "doença, veneno, Cansaço ou alteração corporal",
+      "para": "aflição (doença, veneno ou vício), clima ou um efeito que mude o seu corpo"
+    },
+    {
+      "achado": "[MELHORIA] ação (padrão P2) · Amálgamo",
+      "raca": "amalgamo",
+      "no": "regenerador",
+      "campo": "descricao",
+      "de": "gaste uma ação e 5 Mana",
+      "para": "gaste uma Ação Padrão e 5 Mana"
+    },
+    {
+      "achado": "[MELHORIA] ação (padrão P2) · Amálgamo",
+      "raca": "amalgamo",
+      "no": "surto-convergencia",
+      "campo": "descricao",
+      "de": "gaste uma ação e 6 Mana",
+      "para": "gaste uma Ação Padrão e 6 Mana"
+    },
+    {
+      "achado": "[INCOERÊNCIA] glamour · DT, Concentrando, campos",
+      "raca": "feerico",
+      "no": "glamour",
+      "campo": "descricao",
+      "de": "gaste uma ação e 2 Mana",
+      "para": "gaste uma Ação Padrão e 2 Mana"
+    },
+    {
+      "achado": "[INCOERÊNCIA] glamour · DT, Concentrando, campos",
+      "raca": "feerico",
+      "no": "glamour",
+      "campo": "descricao",
+      "de": "enquanto você mantiver concentração",
+      "para": "enquanto você estiver Concentrando"
+    },
+    {
+      "achado": "[INCOERÊNCIA] glamour · DT, Concentrando, campos",
+      "raca": "feerico",
+      "no": "glamour",
+      "campo": "descricao",
+      "de": "contra o seu Misticismo para reconhecer",
+      "para": "contra a sua DT de Feérico para reconhecer"
+    },
+    {
+      "achado": "[INCOERÊNCIA] glamour · DT, Concentrando, campos",
+      "raca": "feerico",
+      "no": "glamour",
+      "campo": "usos",
+      "de": null,
+      "para": 1
+    },
+    {
+      "achado": "[INCOERÊNCIA] glamour · DT, Concentrando, campos",
+      "raca": "feerico",
+      "no": "glamour",
+      "campo": "recuperacao",
+      "de": null,
+      "para": "cena"
+    },
+    {
+      "achado": "[INCOERÊNCIA] glamour · DT, Concentrando, campos",
+      "raca": "feerico",
+      "no": "glamour",
+      "campo": "custo_mana",
+      "de": null,
+      "para": 2
+    },
+    {
+      "achado": "[INCOERÊNCIA] glamour · DT, Concentrando, campos",
+      "raca": "feerico",
+      "no": "glamour",
+      "campo": "alcance_m",
+      "de": null,
+      "para": 15
+    },
+    {
+      "achado": "[MELHORIA] ilusao-da-corte · ação",
+      "raca": "feerico",
+      "no": "ilusao-da-corte",
+      "campo": "descricao",
+      "de": "gaste uma ação e 8 Mana",
+      "para": "gaste uma Ação Padrão e 8 Mana"
+    },
+    {
+      "achado": "[MELHORIA] truque-feerico · tipo",
+      "raca": "feerico",
+      "no": "truque-feerico",
+      "campo": "tipo",
+      "de": "passiva",
+      "para": "acao_livre"
+    },
+    {
+      "achado": "[MELHORIA] truque-feerico · tipo",
+      "raca": "feerico",
+      "no": "truque-feerico",
+      "campo": "descricao",
+      "de": "Você cria à vontade",
+      "para": "Ação Livre. Você cria à vontade"
+    },
+    {
+      "achado": "[INCOERÊNCIA] um-pouco-de-tudo · Iniciante",
+      "raca": "humano",
+      "no": "um-pouco-de-tudo",
+      "campo": "descricao",
+      "de": "em que você não tem grau nenhum, some +2.",
+      "para": "em que você está em Iniciante, some +2."
+    },
+    {
+      "achado": "[MELHORIA] teimosia-humana · rerrolar",
+      "raca": "humano",
+      "no": "teimosia-humana",
+      "campo": "descricao",
+      "de": "que preferir. Gente",
+      "para": "que preferir. Se outra fonte já rolou de novo esse teste, você escolhe uma delas. Gente"
+    },
+    {
+      "achado": "[LACUNA] mercador-improvisador · teste",
+      "raca": "goblim",
+      "no": "mercador-improvisador",
+      "campo": "descricao",
+      "de": "receba vantagem no teste. Vale",
+      "para": "faça o teste de Diplomacia com vantagem, e o Mestre diz o que o sucesso rende (um preço melhor). Vale"
+    },
+    {
+      "achado": "[LACUNA] mercador-improvisador · teste",
+      "raca": "goblim",
+      "no": "freguesia-cativa",
+      "campo": "descricao",
+      "de": "com vantagem no teste.",
+      "para": "com um teste de Diplomacia com vantagem."
+    }
+  ],
+  "resolvidos": [
+    {
+      "achado": "[ERRO] coro-do-encanto, reboque-dos-afogados, mare-que-devolve, chamado-do-fundo, dominio-das-aguas · recuperacao",
+      "por": "janela trocada pela sessão principal"
+    },
+    {
+      "achado": "[ERRO] nuvem-viva, colonia-estendida, corpo-redundante · recuperacao",
+      "por": "janela trocada pela sessão principal"
+    },
+    {
+      "achado": "[ERRO] sobrevivente-outra-historia, transformacao (assinatura) · recuperacao",
+      "por": "janela trocada pela sessão principal"
+    },
+    {
+      "achado": "[ERRO] grande-saba · recuperacao",
+      "por": "janela trocada pela sessão principal"
+    },
+    {
+      "achado": "[ERRO] surto-convergencia, convergencia-assentada · recuperacao",
+      "por": "janela trocada pela sessão principal"
+    },
+    {
+      "achado": "[ERRO] ilusao-da-corte · recuperacao",
+      "por": "janela trocada pela sessão principal"
+    }
+  ],
+  "mantidos": [
+    {
+      "achado": "[MELHORIA] enfraquecimento (Maldição) · Enfraquecido",
+      "motivo": "A Maldição vale para qualquer ataque e tem conta própria; fica como está."
+    },
+    {
+      "achado": "Entidade e raca-personalizada",
+      "motivo": "Sem mecânica, sem achados."
+    }
+  ]
+}

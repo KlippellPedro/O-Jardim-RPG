@@ -1,0 +1,830 @@
+{
+  "correcoes": [
+    {
+      "achado": "[ERRO] furia-sagrada · janela \"por combate\"",
+      "raca": "divino",
+      "no": "furia-sagrada",
+      "campo": "descricao",
+      "de": "em cada combate, e o primeiro acerto de cada combate",
+      "para": "em cada cena, e o primeiro acerto de cada cena"
+    },
+    {
+      "achado": "[INCOERÊNCIA] volta-aqui · descricao",
+      "raca": "divino",
+      "no": "volta-aqui",
+      "campo": "descricao",
+      "de": "trazê-lo de volta com um quarto da Vida máxima e Ferido +2. A mesma criatura só volta assim uma vez.",
+      "para": "trazê-lo de volta com um quarto da Vida máxima. Quem volta paga o preço de Voltar da morte: Ferido 2, 2 de Cansaço, e Arkarin fica com alguma coisa. A mesma criatura só volta assim uma vez."
+    },
+    {
+      "achado": "[INCOERÊNCIA] folego-para-todos · descricao",
+      "raca": "divino",
+      "no": "folego-para-todos",
+      "campo": "descricao",
+      "de": "tirar de cada um deles uma condição de veneno, doença ou sangramento.",
+      "para": "encerrar em cada um deles Sangramento ou Envenenado, ou reduzir em 1 estágio uma aflição de veneno ou doença."
+    },
+    {
+      "achado": "[LACUNA] sol-nas-maos · dano",
+      "raca": "divino",
+      "no": "sol-nas-maos",
+      "campo": "descricao",
+      "de": "Ela sofre 6d6 de dano e fica Cega",
+      "para": "Ela sofre 6d6 de dano de Luz e fica Cega"
+    },
+    {
+      "achado": "[LACUNA] sol-nas-maos · dano",
+      "raca": "divino",
+      "no": "sol-nas-maos",
+      "campo": "dano",
+      "de": "6d6",
+      "para": "6d6 de Luz"
+    },
+    {
+      "achado": "[INCOERÊNCIA] raio-divino, ceu-em-furia, senhor-da-tempestade, terra-viva · tipo de dano em minúscula",
+      "raca": "divino",
+      "no": "raio-divino",
+      "campo": "descricao",
+      "de": "3d6 de dano de raio",
+      "para": "3d6 de dano de Raio"
+    },
+    {
+      "achado": "[INCOERÊNCIA] raio-divino, ceu-em-furia, senhor-da-tempestade, terra-viva · tipo de dano em minúscula",
+      "raca": "divino",
+      "no": "raio-divino",
+      "campo": "dano",
+      "de": "3d6 de raio",
+      "para": "3d6 de Raio"
+    },
+    {
+      "achado": "[INCOERÊNCIA] raio-divino, ceu-em-furia, senhor-da-tempestade, terra-viva · tipo de dano em minúscula",
+      "raca": "divino",
+      "no": "ceu-em-furia",
+      "campo": "descricao",
+      "de": "5d6 de dano de raio",
+      "para": "5d6 de dano de Raio"
+    },
+    {
+      "achado": "[INCOERÊNCIA] raio-divino, ceu-em-furia, senhor-da-tempestade, terra-viva · tipo de dano em minúscula",
+      "raca": "divino",
+      "no": "ceu-em-furia",
+      "campo": "dano",
+      "de": "5d6 de raio",
+      "para": "5d6 de Raio"
+    },
+    {
+      "achado": "[INCOERÊNCIA] raio-divino, ceu-em-furia, senhor-da-tempestade, terra-viva · tipo de dano em minúscula",
+      "raca": "divino",
+      "no": "senhor-da-tempestade",
+      "campo": "descricao",
+      "de": "5d6 de dano de raio",
+      "para": "5d6 de dano de Raio"
+    },
+    {
+      "achado": "[INCOERÊNCIA] raio-divino, ceu-em-furia, senhor-da-tempestade, terra-viva · tipo de dano em minúscula",
+      "raca": "divino",
+      "no": "senhor-da-tempestade",
+      "campo": "dano",
+      "de": "5d6 de raio",
+      "para": "5d6 de Raio"
+    },
+    {
+      "achado": "[INCOERÊNCIA] nome-de-batalha, dia-sem-fim · termo \"medo\"",
+      "raca": "divino",
+      "no": "nome-de-batalha",
+      "campo": "descricao",
+      "de": "imunidade a medo",
+      "para": "imunidade à condição Amedrontado"
+    },
+    {
+      "achado": "[INCOERÊNCIA] nome-de-batalha, dia-sem-fim · termo \"medo\"",
+      "raca": "divino",
+      "no": "dia-sem-fim",
+      "campo": "descricao",
+      "de": "não podem ficar com medo",
+      "para": "não podem ficar Amedrontados"
+    },
+    {
+      "achado": "[LACUNA] barganha-divina · controle sem teste repetido",
+      "raca": "divino",
+      "no": "barganha-divina",
+      "campo": "descricao",
+      "de": "aceita e cumpre o acordo por uma cena, desde que você não mande ela morrer nem trair quem mais ama.",
+      "para": "aceita o acordo e o cumpre até o fim da cena, desde que você não mande ela morrer nem trair quem mais ama. No fim de cada turno dela, ela repete a Vontade contra a mesma DT e, passando, o acordo se desfaz. Sofrer dano também o desfaz."
+    },
+    {
+      "achado": "[LACUNA] toque-frio · efeito extra ignora o teste",
+      "raca": "divino",
+      "no": "toque-frio",
+      "campo": "descricao",
+      "de": "Fortitude contra a sua DT de Divino reduz o dano pela metade.",
+      "para": "Fortitude contra a sua DT de Divino: quem passar sofre metade do dano e pode recuperar Vida normalmente."
+    },
+    {
+      "achado": "[LACUNA] raizes-que-prendem · duração e saída",
+      "raca": "divino",
+      "no": "raizes-que-prendem",
+      "campo": "descricao",
+      "de": "fica Imobilizada até gastar uma ação e passar no mesmo teste.",
+      "para": "fica Imobilizada até o fim da cena. Para sair, gasta uma Ação Padrão e passa no mesmo teste."
+    },
+    {
+      "achado": "[LACUNA] investida-do-deus · derrubar sem trava de tamanho",
+      "raca": "divino",
+      "no": "investida-do-deus",
+      "campo": "descricao",
+      "de": "ele fica Caído.",
+      "para": "ele fica Caído. Criatura duas categorias de tamanho maior que você não cai."
+    },
+    {
+      "achado": "[INCOERÊNCIA] luz-que-revela · invisibilidade e disfarce",
+      "raca": "divino",
+      "no": "luz-que-revela",
+      "campo": "descricao",
+      "de": "Dentro da luz, invisibilidade e disfarces mágicos deixam de esconder criaturas, e seus aliados",
+      "para": "Quem estiver Invisível ou disfarçado por magia dentro da luz fica Revelado enquanto estiver nela, e seus aliados"
+    },
+    {
+      "achado": "[LACUNA] bencao-de-sangue · uso extra ou o mesmo uso",
+      "raca": "divino",
+      "no": "bencao-de-sangue",
+      "campo": "descricao",
+      "de": "use a Bênção Concedida sem gastar Mana.",
+      "para": "use a Bênção Concedida sem gastar Mana. Esse uso vem além do uso normal dela."
+    },
+    {
+      "achado": "[LACUNA] regra_fe · redução de custo repetida",
+      "raca": "divino",
+      "no": "fe-conhecida",
+      "campo": "efeito",
+      "de": "de Mana de um poder do seu Domínio, até o mínimo de 1.",
+      "para": "de Mana de um poder do seu Domínio, até o mínimo de 1. Se outro efeito também reduzir esse custo, use apenas a maior redução."
+    },
+    {
+      "achado": "[LACUNA] regra_fe · redução de custo repetida",
+      "raca": "divino",
+      "no": "grande-culto",
+      "campo": "efeito",
+      "de": "de Mana de um poder do seu Domínio, até o mínimo de 1.",
+      "para": "de Mana de um poder do seu Domínio, até o mínimo de 1. Se outro efeito também reduzir esse custo, use apenas a maior redução."
+    },
+    {
+      "achado": "[MELHORIA] Divino e Elfo · \"gaste uma ação\" e ação completa em minúscula",
+      "raca": "divino",
+      "no": "bencao-concedida",
+      "campo": "descricao",
+      "de": "gaste sua reação",
+      "para": "gaste sua Reação"
+    },
+    {
+      "achado": "[MELHORIA] Divino e Elfo · \"gaste uma ação\" e ação completa em minúscula",
+      "raca": "divino",
+      "no": "primeira-centelha",
+      "campo": "descricao",
+      "de": "gaste uma ação",
+      "para": "gaste uma Ação Padrão"
+    },
+    {
+      "achado": "[MELHORIA] Divino e Elfo · \"gaste uma ação\" e ação completa em minúscula",
+      "raca": "divino",
+      "no": "mao-que-conserta",
+      "campo": "descricao",
+      "de": "gaste uma ação",
+      "para": "gaste uma Ação Padrão"
+    },
+    {
+      "achado": "[MELHORIA] Divino e Elfo · \"gaste uma ação\" e ação completa em minúscula",
+      "raca": "divino",
+      "no": "obra-do-nada",
+      "campo": "descricao",
+      "de": "gaste uma ação completa",
+      "para": "gaste uma Ação Completa"
+    },
+    {
+      "achado": "[MELHORIA] Divino e Elfo · \"gaste uma ação\" e ação completa em minúscula",
+      "raca": "divino",
+      "no": "toque-que-cura",
+      "campo": "descricao",
+      "de": "gaste uma ação",
+      "para": "gaste uma Ação Padrão"
+    },
+    {
+      "achado": "[MELHORIA] Divino e Elfo · \"gaste uma ação\" e ação completa em minúscula",
+      "raca": "divino",
+      "no": "folego-para-todos",
+      "campo": "descricao",
+      "de": "gaste uma ação",
+      "para": "gaste uma Ação Padrão"
+    },
+    {
+      "achado": "[MELHORIA] Divino e Elfo · \"gaste uma ação\" e ação completa em minúscula",
+      "raca": "divino",
+      "no": "volta-aqui",
+      "campo": "descricao",
+      "de": "gaste uma ação completa",
+      "para": "gaste uma Ação Completa"
+    },
+    {
+      "achado": "[MELHORIA] Divino e Elfo · \"gaste uma ação\" e ação completa em minúscula",
+      "raca": "divino",
+      "no": "investida-do-deus",
+      "campo": "descricao",
+      "de": "gaste uma ação",
+      "para": "gaste uma Ação Padrão"
+    },
+    {
+      "achado": "[MELHORIA] Divino e Elfo · \"gaste uma ação\" e ação completa em minúscula",
+      "raca": "divino",
+      "no": "nome-de-batalha",
+      "campo": "descricao",
+      "de": "gaste uma ação",
+      "para": "gaste uma Ação Padrão"
+    },
+    {
+      "achado": "[MELHORIA] Divino e Elfo · \"gaste uma ação\" e ação completa em minúscula",
+      "raca": "divino",
+      "no": "nunca-estive-aqui",
+      "campo": "descricao",
+      "de": "gaste uma ação",
+      "para": "gaste uma Ação Padrão"
+    },
+    {
+      "achado": "[MELHORIA] Divino e Elfo · \"gaste uma ação\" e ação completa em minúscula",
+      "raca": "divino",
+      "no": "barganha-divina",
+      "campo": "descricao",
+      "de": "gaste uma ação",
+      "para": "gaste uma Ação Padrão"
+    },
+    {
+      "achado": "[MELHORIA] Divino e Elfo · \"gaste uma ação\" e ação completa em minúscula",
+      "raca": "divino",
+      "no": "raizes-que-prendem",
+      "campo": "descricao",
+      "de": "gaste uma ação",
+      "para": "gaste uma Ação Padrão"
+    },
+    {
+      "achado": "[MELHORIA] Divino e Elfo · \"gaste uma ação\" e ação completa em minúscula",
+      "raca": "divino",
+      "no": "terra-viva",
+      "campo": "descricao",
+      "de": "gaste uma ação",
+      "para": "gaste uma Ação Padrão"
+    },
+    {
+      "achado": "[MELHORIA] Divino e Elfo · \"gaste uma ação\" e ação completa em minúscula",
+      "raca": "divino",
+      "no": "mundo-selvagem",
+      "campo": "descricao",
+      "de": "gaste uma ação completa",
+      "para": "gaste uma Ação Completa"
+    },
+    {
+      "achado": "[MELHORIA] Divino e Elfo · \"gaste uma ação\" e ação completa em minúscula",
+      "raca": "divino",
+      "no": "vejo-a-fraqueza",
+      "campo": "descricao",
+      "de": "gaste uma ação",
+      "para": "gaste uma Ação Padrão"
+    },
+    {
+      "achado": "[MELHORIA] Divino e Elfo · \"gaste uma ação\" e ação completa em minúscula",
+      "raca": "divino",
+      "no": "memoria-do-mundo",
+      "campo": "descricao",
+      "de": "gaste uma ação completa",
+      "para": "gaste uma Ação Completa"
+    },
+    {
+      "achado": "[MELHORIA] Divino e Elfo · \"gaste uma ação\" e ação completa em minúscula",
+      "raca": "divino",
+      "no": "raio-divino",
+      "campo": "descricao",
+      "de": "gaste uma ação",
+      "para": "gaste uma Ação Padrão"
+    },
+    {
+      "achado": "[MELHORIA] Divino e Elfo · \"gaste uma ação\" e ação completa em minúscula",
+      "raca": "divino",
+      "no": "ceu-em-furia",
+      "campo": "descricao",
+      "de": "gaste uma ação",
+      "para": "gaste uma Ação Padrão"
+    },
+    {
+      "achado": "[MELHORIA] Divino e Elfo · \"gaste uma ação\" e ação completa em minúscula",
+      "raca": "divino",
+      "no": "senhor-da-tempestade",
+      "campo": "descricao",
+      "de": "gaste uma ação",
+      "para": "gaste uma Ação Padrão"
+    },
+    {
+      "achado": "[MELHORIA] Divino e Elfo · \"gaste uma ação\" e ação completa em minúscula",
+      "raca": "divino",
+      "no": "luz-que-revela",
+      "campo": "descricao",
+      "de": "gaste uma ação",
+      "para": "gaste uma Ação Padrão"
+    },
+    {
+      "achado": "[MELHORIA] Divino e Elfo · \"gaste uma ação\" e ação completa em minúscula",
+      "raca": "divino",
+      "no": "sol-nas-maos",
+      "campo": "descricao",
+      "de": "gaste uma ação",
+      "para": "gaste uma Ação Padrão"
+    },
+    {
+      "achado": "[MELHORIA] Divino e Elfo · \"gaste uma ação\" e ação completa em minúscula",
+      "raca": "divino",
+      "no": "dia-sem-fim",
+      "campo": "descricao",
+      "de": "gaste uma ação",
+      "para": "gaste uma Ação Padrão"
+    },
+    {
+      "achado": "[MELHORIA] Divino e Elfo · \"gaste uma ação\" e ação completa em minúscula",
+      "raca": "divino",
+      "no": "toque-frio",
+      "campo": "descricao",
+      "de": "gaste uma ação",
+      "para": "gaste uma Ação Padrão"
+    },
+    {
+      "achado": "[MELHORIA] Divino e Elfo · \"gaste uma ação\" e ação completa em minúscula",
+      "raca": "divino",
+      "no": "a-hora-chegou",
+      "campo": "descricao",
+      "de": "gaste sua reação",
+      "para": "gaste sua Reação"
+    },
+    {
+      "achado": "[MELHORIA] Divino e Elfo · \"gaste uma ação\" e ação completa em minúscula",
+      "raca": "divino",
+      "no": "parar-o-coracao",
+      "campo": "descricao",
+      "de": "gaste uma ação completa",
+      "para": "gaste uma Ação Completa"
+    },
+    {
+      "achado": "[MELHORIA] Divino e Elfo · \"gaste uma ação\" e ação completa em minúscula",
+      "raca": "divino",
+      "no": "forma-divina",
+      "campo": "descricao",
+      "de": "gaste uma ação",
+      "para": "gaste uma Ação Padrão"
+    },
+    {
+      "achado": "[INCOERÊNCIA] povo, fisiologia · \"não adoece\"",
+      "raca": "divino",
+      "no": "__raca__",
+      "campo": "povo",
+      "de": "Não envelhece e não adoece, e vê",
+      "para": "Não envelhece, as doenças comuns não pegam nele, e vê"
+    },
+    {
+      "achado": "[INCOERÊNCIA] raizes-aprisionadoras, sepulcro-glacial, avatar-das-chamas, reinado-da-noite, olho-da-tempestade · quem rola e contra o quê",
+      "raca": "elfo",
+      "no": "raizes-aprisionadoras",
+      "campo": "descricao",
+      "de": "Faça um teste de Misticismo e compare com os Reflexos de cada inimigo escolhido na área. Em falha, o Movimento da criatura vira 0 até o final do próximo turno dela.",
+      "para": "Role Misticismo na hora (essa é a DT de Elfo). Cada inimigo escolhido na área testa Reflexos contra ela. Em falha, a criatura fica Imobilizada até o final do próximo turno dela."
+    },
+    {
+      "achado": "[INCOERÊNCIA] raizes-aprisionadoras, sepulcro-glacial, avatar-das-chamas, reinado-da-noite, olho-da-tempestade · quem rola e contra o quê",
+      "raca": "elfo",
+      "no": "sepulcro-glacial",
+      "campo": "descricao",
+      "de": "fazer um teste de Misticismo contra a Fortitude dela.",
+      "para": "rolar Misticismo na hora (essa é a DT de Elfo). Ela testa Fortitude contra esse resultado."
+    },
+    {
+      "achado": "[INCOERÊNCIA] sepulcro-glacial · estado de \"aprisionado\"",
+      "raca": "elfo",
+      "no": "sepulcro-glacial",
+      "campo": "descricao",
+      "de": "ela fica aprisionada no gelo até o final do próximo turno dela: seu Movimento vira 0, ela não pode realizar ações ou reações e reduz",
+      "para": "ela fica Imobilizada no gelo até o final do próximo turno dela: não pode realizar ações nem reações e reduz"
+    },
+    {
+      "achado": "[MELHORIA] sepulcro-glacial · ação",
+      "raca": "elfo",
+      "no": "sepulcro-glacial",
+      "campo": "descricao",
+      "de": "gaste uma ação e 5 Mana",
+      "para": "gaste uma Ação Padrão e 5 Mana"
+    },
+    {
+      "achado": "[MELHORIA] sepulcro-glacial · ação",
+      "raca": "elfo",
+      "no": "sepulcro-glacial",
+      "campo": "descricao",
+      "de": "pode gastar uma ação e superar",
+      "para": "pode gastar uma Ação Padrão e superar"
+    },
+    {
+      "achado": "[INCOERÊNCIA] raizes-aprisionadoras, sepulcro-glacial, avatar-das-chamas, reinado-da-noite, olho-da-tempestade · quem rola e contra o quê",
+      "raca": "elfo",
+      "no": "avatar-das-chamas",
+      "campo": "descricao",
+      "de": "faça um único teste de Misticismo e compare com os Reflexos de cada inimigo escolhido a até 6 m: em falha, ele sofre 2d6 + Mod.Inteligência de dano de fogo; em sucesso, sofre metade.",
+      "para": "role Misticismo uma vez (essa é a DT de Elfo). Cada inimigo escolhido a até 6 m testa Reflexos contra ela: em falha, sofre 2d6 + Mod.Inteligência de dano de Fogo; em sucesso, sofre metade."
+    },
+    {
+      "achado": "[INCOERÊNCIA] avatar-das-chamas · dano de contragolpe sem teste",
+      "raca": "elfo",
+      "no": "avatar-das-chamas",
+      "campo": "descricao",
+      "de": "uma criatura que acertar você com um ataque corpo a corpo sofre 1d6 de dano de fogo.",
+      "para": "uma criatura que acertar você com um ataque corpo a corpo testa Reflexos contra a DT de Elfo e sofre 1d6 de dano de Fogo, ou metade se passar."
+    },
+    {
+      "achado": "[INCOERÊNCIA] avatar-das-chamas · +1d6",
+      "raca": "elfo",
+      "no": "avatar-das-chamas",
+      "campo": "descricao",
+      "de": "causa +1d6 de dano de fogo",
+      "para": "causa +1d6 de dano de Fogo"
+    },
+    {
+      "achado": "[INCOERÊNCIA] raizes-aprisionadoras, sepulcro-glacial, avatar-das-chamas, reinado-da-noite, olho-da-tempestade · quem rola e contra o quê",
+      "raca": "elfo",
+      "no": "reinado-da-noite",
+      "campo": "descricao",
+      "de": "Faça um único teste de Misticismo e compare com a Vontade de cada inimigo que entrar ou começar o turno na área.",
+      "para": "Role Misticismo uma vez (essa é a DT de Elfo). Cada inimigo que entrar na área ou começar o turno nela testa Vontade contra ela."
+    },
+    {
+      "achado": "[INCOERÊNCIA] reinado-da-noite · escuridão sem a condição Cego",
+      "raca": "elfo",
+      "no": "reinado-da-noite",
+      "campo": "descricao",
+      "de": "as demais enxergam somente a 1,5 m, sofrem desvantagem em Percepção baseada em visão e não podem realizar reações",
+      "para": "as demais ficam Cegas para o que estiver a mais de 1,5 m e não podem realizar reações"
+    },
+    {
+      "achado": "[INCOERÊNCIA] raizes-aprisionadoras, sepulcro-glacial, avatar-das-chamas, reinado-da-noite, olho-da-tempestade · quem rola e contra o quê",
+      "raca": "elfo",
+      "no": "olho-da-tempestade",
+      "campo": "descricao",
+      "de": "faça um único teste de Misticismo contra os Reflexos deles. Em falha, cada alvo sofre 1d6 + Mod.Inteligência de dano de raio",
+      "para": "role Misticismo uma vez (essa é a DT de Elfo) e cada alvo testa Reflexos contra ela. Em falha, cada alvo sofre 1d6 + Mod.Inteligência de dano de Raio"
+    },
+    {
+      "achado": "[INCOERÊNCIA] tormenta-sobre-o-campo · dano de raio",
+      "raca": "elfo",
+      "no": "tormenta-sobre-o-campo",
+      "campo": "descricao",
+      "de": "4d6 de dano de raio",
+      "para": "4d6 de dano de Raio"
+    },
+    {
+      "achado": "[INCOERÊNCIA] sombra-viva · escuridão sobrenatural",
+      "raca": "elfo",
+      "no": "sombra-viva",
+      "campo": "descricao",
+      "de": "Você enxerga normalmente através de escuridão natural ou sobrenatural.",
+      "para": "Você enxerga normalmente através de escuridão natural ou sobrenatural. Exceção a Ver e ser visto: a escuridão criada por magia ou Fluxo também cede para você."
+    },
+    {
+      "achado": "[INCOERÊNCIA] veu-sem-aurora · escuridão sobrenatural e condições",
+      "raca": "elfo",
+      "no": "veu-sem-aurora",
+      "campo": "descricao",
+      "de": "Você enxerga normalmente através de qualquer escuridão e é imune a cegueira ou medo causados exclusivamente pela falta de luz.",
+      "para": "Você enxerga normalmente através de qualquer escuridão. Exceção a Ver e ser visto: a escuridão criada por magia ou Fluxo também cede para você. Você é imune às condições Cego e Amedrontado quando causadas só pela falta de luz."
+    },
+    {
+      "achado": "[MELHORIA] veu-sem-aurora · Ação Livre",
+      "raca": "elfo",
+      "no": "veu-sem-aurora",
+      "campo": "descricao",
+      "de": "como ação livre",
+      "para": "como Ação Livre"
+    },
+    {
+      "achado": "[INCOERÊNCIA] coracao-invernal, coracao-incandescente, sangue-da-tormenta · \"reduz pela metade o dano\"",
+      "raca": "elfo",
+      "no": "coracao-invernal",
+      "campo": "descricao",
+      "de": "reduz pela metade o dano causado diretamente por frio ou gelo",
+      "para": "reduz pela metade o dano de Gelo que sofrer e o dano de Frio do ambiente (a metade entra depois da vulnerabilidade e antes da Resistência)"
+    },
+    {
+      "achado": "[LACUNA] coracao-invernal · graus do clima",
+      "raca": "elfo",
+      "no": "coracao-invernal",
+      "campo": "descricao",
+      "de": "Você é imune aos efeitos ambientais de frio extremo,",
+      "para": "Você ignora o clima de Frio nos graus Severo e Extremo (o Mortal ainda cobra, com o dano pela metade),"
+    },
+    {
+      "achado": "[INCOERÊNCIA] coracao-invernal, coracao-incandescente, sangue-da-tormenta · \"reduz pela metade o dano\"",
+      "raca": "elfo",
+      "no": "coracao-incandescente",
+      "campo": "descricao",
+      "de": "reduz pela metade o dano causado diretamente por fogo ou calor.",
+      "para": "reduz pela metade o dano de Fogo que sofrer e o dano de Calor do ambiente (a metade entra depois da vulnerabilidade e antes da Resistência)."
+    },
+    {
+      "achado": "[LACUNA] coracao-incandescente · graus do clima",
+      "raca": "elfo",
+      "no": "coracao-incandescente",
+      "campo": "descricao",
+      "de": "Você é imune aos efeitos ambientais de calor extremo e",
+      "para": "Você ignora o clima de Calor nos graus Severo e Extremo (o Mortal ainda cobra, com o dano pela metade) e"
+    },
+    {
+      "achado": "[INCOERÊNCIA] coracao-invernal, coracao-incandescente, sangue-da-tormenta · \"reduz pela metade o dano\"",
+      "raca": "elfo",
+      "no": "sangue-da-tormenta",
+      "campo": "descricao",
+      "de": "reduz pela metade o dano de raio e o dano de ar e sempre",
+      "para": "reduz pela metade o dano de Raio e o dano de Ar que sofrer (a metade entra depois da vulnerabilidade e antes da Resistência) e sempre"
+    },
+    {
+      "achado": "[INCOERÊNCIA] floresta-desperta · \"agarrado\" e saída",
+      "raca": "elfo",
+      "no": "floresta-desperta",
+      "campo": "descricao",
+      "de": "fica Agarrada pela vegetação até se soltar com uma Ação Padrão e Atletismo contra a mesma DT. Quem já estiver agarrado sofre",
+      "para": "fica Imobilizada pela vegetação até se soltar com uma Ação Padrão e Atletismo ou Acrobacia contra a mesma DT. Quem já estiver Imobilizado no início do seu turno sofre"
+    },
+    {
+      "achado": "[INCOERÊNCIA] floresta-desperta · raio",
+      "raca": "elfo",
+      "no": "floresta-desperta",
+      "campo": "descricao",
+      "de": "vegetação de uma área de 18 m por",
+      "para": "vegetação de uma área de 18 m de raio por"
+    },
+    {
+      "achado": "[INCOERÊNCIA] memoria-inesgotavel · \"como se tivesse tirado 20\"",
+      "raca": "elfo",
+      "no": "memoria-inesgotavel",
+      "campo": "descricao",
+      "de": "trata o d20 como se tivesse tirado 20.",
+      "para": "trata o d20 como um 20 que não é natural: o dado vale 20, mas não é crítico."
+    },
+    {
+      "achado": "[LACUNA] memoria-milenar · regra de rolar de novo",
+      "raca": "elfo",
+      "no": "memoria-milenar",
+      "campo": "descricao",
+      "de": "rerrole o teste e use o novo resultado.",
+      "para": "rerrole o teste e use o novo resultado. Um mesmo teste só pode ser rerrolado uma vez, por esta ou por qualquer outra fonte."
+    },
+    {
+      "achado": "[LACUNA] manto-sem-fim · \"ataques à distância\"",
+      "raca": "elfo",
+      "no": "manto-sem-fim",
+      "campo": "descricao",
+      "de": "não pode ser alvo de ataques à distância.",
+      "para": "não pode ser alvo de ataques à distância, inclusive magia de ataque. Efeito em área ainda alcança você."
+    },
+    {
+      "achado": "[MELHORIA] grafia · \"5º Círculo\"",
+      "raca": "elfo",
+      "no": "noite-sobre-o-dia",
+      "campo": "descricao",
+      "de": "até 5º Círculo",
+      "para": "até 5º círculo"
+    },
+    {
+      "achado": "[ERRO] recursos de nível 50 · duracao_rodadas",
+      "raca": "elfo",
+      "no": "floresta-desperta",
+      "campo": "duracao_rodadas",
+      "de": null,
+      "para": 5
+    },
+    {
+      "achado": "[ERRO] recursos de nível 50 · duracao_rodadas",
+      "raca": "elfo",
+      "no": "noite-sobre-o-dia",
+      "campo": "duracao_rodadas",
+      "de": null,
+      "para": 5
+    },
+    {
+      "achado": "[ERRO] recursos de nível 50 · duracao_rodadas",
+      "raca": "elfo",
+      "no": "tormenta-sobre-o-campo",
+      "campo": "duracao_rodadas",
+      "de": null,
+      "para": 5
+    },
+    {
+      "achado": "[MELHORIA] passo-umbral · Ação de Movimento",
+      "raca": "elfo",
+      "no": "passo-umbral",
+      "campo": "descricao",
+      "de": "gaste seu Movimento e 4 Mana",
+      "para": "gaste sua Ação de Movimento e 4 Mana"
+    },
+    {
+      "achado": "[MELHORIA] Divino e Elfo · \"gaste uma ação\" e ação completa em minúscula",
+      "raca": "elfo",
+      "no": "dominio-verdejante",
+      "campo": "descricao",
+      "de": "gaste uma ação",
+      "para": "gaste uma Ação Padrão"
+    },
+    {
+      "achado": "[MELHORIA] Divino e Elfo · \"gaste uma ação\" e ação completa em minúscula",
+      "raca": "elfo",
+      "no": "floresta-desperta",
+      "campo": "descricao",
+      "de": "gaste uma ação completa",
+      "para": "gaste uma Ação Completa"
+    },
+    {
+      "achado": "[MELHORIA] Divino e Elfo · \"gaste uma ação\" e ação completa em minúscula",
+      "raca": "elfo",
+      "no": "inverno-que-nao-passa",
+      "campo": "descricao",
+      "de": "gaste uma ação completa",
+      "para": "gaste uma Ação Completa"
+    },
+    {
+      "achado": "[MELHORIA] Divino e Elfo · \"gaste uma ação\" e ação completa em minúscula",
+      "raca": "elfo",
+      "no": "avatar-das-chamas",
+      "campo": "descricao",
+      "de": "gaste uma ação",
+      "para": "gaste uma Ação Padrão"
+    },
+    {
+      "achado": "[MELHORIA] Divino e Elfo · \"gaste uma ação\" e ação completa em minúscula",
+      "raca": "elfo",
+      "no": "reinado-da-noite",
+      "campo": "descricao",
+      "de": "gaste uma ação",
+      "para": "gaste uma Ação Padrão"
+    },
+    {
+      "achado": "[MELHORIA] Divino e Elfo · \"gaste uma ação\" e ação completa em minúscula",
+      "raca": "elfo",
+      "no": "noite-sobre-o-dia",
+      "campo": "descricao",
+      "de": "gaste uma ação completa",
+      "para": "gaste uma Ação Completa"
+    },
+    {
+      "achado": "[MELHORIA] Divino e Elfo · \"gaste uma ação\" e ação completa em minúscula",
+      "raca": "elfo",
+      "no": "olho-da-tempestade",
+      "campo": "descricao",
+      "de": "gaste uma ação",
+      "para": "gaste uma Ação Padrão"
+    },
+    {
+      "achado": "[MELHORIA] Divino e Elfo · \"gaste uma ação\" e ação completa em minúscula",
+      "raca": "elfo",
+      "no": "tormenta-sobre-o-campo",
+      "campo": "descricao",
+      "de": "gaste uma ação completa",
+      "para": "gaste uma Ação Completa"
+    },
+    {
+      "achado": "[ERRO] instinto-agil · perícia errada para escalar",
+      "raca": "animalia",
+      "no": "instinto-agil",
+      "campo": "descricao",
+      "de": "tem vantagem em testes de Acrobacia para escalar ou se equilibrar.",
+      "para": "tem vantagem em Acrobacia para se equilibrar e em Atletismo para escalar."
+    },
+    {
+      "achado": "[LACUNA] corpo-de-fera · tipo de dano",
+      "raca": "animalia",
+      "no": "corpo-de-fera",
+      "campo": "descricao",
+      "de": "tem dano base 1d8.",
+      "para": "tem dano base 1d8 + Mod.Força, com crítico 20/x2. O tipo do dano é o da arma natural: Garra e Pinça cortam; Mordida, Presa, Bico, Chifre, Ferrão, Esporão e Mandíbula perfuram; Chute, Coice, Casco, Cauda, Punho, Tentáculo e Constrição batem (impacto); Descarga causa dano de Raio; Toque causa dano de veneno."
+    },
+    {
+      "achado": "[LACUNA] corpo-dividido · tipo de dano",
+      "raca": "animalia",
+      "no": "corpo-dividido",
+      "campo": "descricao",
+      "de": "com dano base 1d6.",
+      "para": "com dano base 1d6 + Mod.Força, com crítico 20/x2. O tipo do dano é o da arma natural: Garra e Pinça cortam; Mordida, Presa, Bico, Chifre, Ferrão, Esporão e Mandíbula perfuram; Chute, Coice, Casco, Cauda, Punho, Tentáculo e Constrição batem (impacto); Descarga causa dano de Raio; Toque causa dano de veneno."
+    },
+    {
+      "achado": "[INCOERÊNCIA] corpo-robusto · vantagem para resistir",
+      "raca": "animalia",
+      "no": "corpo-robusto",
+      "campo": "descricao",
+      "de": "Receba vantagem para resistir a empurrões e quedas causados por outra criatura.",
+      "para": "Quem tenta empurrar, derrubar ou agarrar você tem desvantagem."
+    },
+    {
+      "achado": "[INCOERÊNCIA] bando · vantagem em ações coletivas",
+      "raca": "animalia",
+      "no": "bando",
+      "campo": "descricao",
+      "de": "Você tem vantagem em ações coletivas e recebe",
+      "para": "Você tem vantagem nos Testes de Grupo, e o bônus do seu Ajudar sobe de +2 para +3 (o limite de +4 no teste continua). Você também recebe"
+    },
+    {
+      "achado": "[LACUNA] instinto-cacador · \"criatura ferida\"",
+      "raca": "animalia",
+      "no": "instinto-cacador",
+      "campo": "descricao",
+      "de": "seus ataques causam +1 de dano contra criatura ferida.",
+      "para": "seus ataques causam +1 de dano contra criatura que já perdeu Vida."
+    },
+    {
+      "achado": "[INCOERÊNCIA] peconha · não funciona em Traços",
+      "raca": "animalia",
+      "no": "peconha",
+      "campo": "descricao",
+      "de": "Seus ataques naturais causam +1 de dano de veneno, e",
+      "para": "Seus ataques naturais (em Traços, seus ataques desarmados) causam +1 de dano de veneno uma vez por golpe, sem deixar Envenenado, e"
+    },
+    {
+      "achado": "[INCOERÊNCIA] heranca-mitica · tipo de dano só para quatro",
+      "raca": "animalia",
+      "no": "heranca-mitica",
+      "campo": "descricao",
+      "de": "(fogo no dragão e na fênix, raio no grifo, luz no unicórnio)",
+      "para": "(Fogo no dragão, na fênix, na quimera e no cérbero; Raio no grifo; Luz no unicórnio e na esfinge; Ar no pégaso; Água no kraken; veneno no basilisco, na mantícora e na hidra). Se o jogador escrever o próprio animal mítico, o Mestre escolhe o tipo"
+    },
+    {
+      "achado": "[INCOERÊNCIA] jiboia · morfologia Peçonhenta",
+      "raca": "animalia",
+      "no": "jiboia",
+      "campo": "morfologias",
+      "de": [
+        "peconhenta",
+        "predadora"
+      ],
+      "para": [
+        "robusta",
+        "predadora"
+      ]
+    },
+    {
+      "achado": "[INCOERÊNCIA] fisiologia, animais · tamanhos Minúsculo e Colossal",
+      "raca": "animalia",
+      "no": "__raca__",
+      "campo": "fisiologia",
+      "de": "tem sempre tamanho Normal.",
+      "para": "tem sempre tamanho Normal. Animália jogável nunca é Minúsculo nem Colossal: bicho miúdo fica Pequeno e bicho gigante fica Enorme."
+    },
+    {
+      "achado": "[LACUNA] asas-e-voo-curto · ação, custo e queda",
+      "raca": "animalia",
+      "no": "asas-e-voo-curto",
+      "campo": "descricao",
+      "de": "Você não sofre dano de queda. Uma vez por cena, gaste 2 Mana para voar até o seu Movimento neste turno;",
+      "para": "Você não sofre dano de queda e cai de pé. Uma vez por cena, como parte do seu movimento no turno, gaste 2 Mana para voar até o seu Movimento;"
+    },
+    {
+      "achado": "[MELHORIA] morfologia alada · descrição",
+      "raca": "animalia",
+      "no": "alada",
+      "campo": "descricao",
+      "de": "Tem asas e voa.",
+      "para": "Tem asas e dá saltos de voo curtos."
+    },
+    {
+      "achado": "[MELHORIA] presenca-alfa · animais e Adestramento",
+      "raca": "animalia",
+      "no": "presenca-alfa",
+      "campo": "descricao",
+      "de": "Animais que não estejam",
+      "para": "Animais comuns (sem Fluxo e sem ficha de criatura) que não estejam"
+    }
+  ],
+  "resolvidos": [
+    {
+      "achado": "[ERRO] obra-do-nada, volta-aqui, nome-de-batalha, parar-o-coracao, mundo-selvagem, dia-sem-fim, senhor-da-tempestade, barganha-divina, forma-divina · recuperacao",
+      "por": "janela trocada pela sessão principal (recuperacao \"descanso\")"
+    },
+    {
+      "achado": "[ERRO] floresta-desperta, inverno-que-nao-passa, noite-sobre-o-dia, tormenta-sobre-o-campo · recuperacao",
+      "por": "janela trocada pela sessão principal (recuperacao \"descanso\")"
+    }
+  ],
+  "mantidos": [
+    {
+      "achado": "[INCOERÊNCIA] estagios · degraus 18 e 48",
+      "motivo": "Auleth também usa degraus próprios (18 e 44) e os poderes de Domínio caem em 1/18/48; fica como está."
+    },
+    {
+      "achado": "[MELHORIA] sepulcro-prolongado, avatar-prolongado, chama-que-nao-cede · grafia dos tipos de dano",
+      "motivo": "Só grafia, sem outro motivo de troca naquele trecho."
+    },
+    {
+      "achado": "[LACUNA] asas-e-voo-curto · custo em Estamina",
+      "motivo": "O custo fica em Mana: a ficha não tem campo de custo de Estamina para o traço."
+    },
+    {
+      "achado": "[INCOERÊNCIA] sepulcro-prolongado · dano de gelo todo turno",
+      "motivo": "O traço diz que o dano continua enquanto a criatura estiver presa, o que a regra de persistentes permite."
+    }
+  ]
+}

@@ -1,0 +1,917 @@
+{
+  "correcoes": [
+    {
+      "achado": "[INCOERÊNCIA] corpo-artificial · descricao, imunidades e fisiologia",
+      "raca": "automato",
+      "no": "__raca__",
+      "campo": "fisiologia",
+      "de": "É imune a atordoamento, doenças, encantamentos, enjoo, fadiga, sono e venenos enquanto não possuir a modificação Máquina Viva.",
+      "para": "É imune a Atordoado, Enjoado, Envenenado e Fascinado, a venenos e doenças, a Cansaço e ao sono, inclusive o mágico, enquanto não possuir a modificação Máquina Viva."
+    },
+    {
+      "achado": "[INCOERÊNCIA] corpo-artificial · descricao, imunidades e fisiologia",
+      "raca": "automato",
+      "no": "corpo-artificial",
+      "campo": "descricao",
+      "de": "a doenças, a Cansaço e a sono, inclusive o mágico.",
+      "para": "a venenos, a doenças, a Cansaço e ao sono, inclusive o mágico."
+    },
+    {
+      "achado": "[INCOERÊNCIA] corpo-artificial · descricao, imunidades e fisiologia",
+      "raca": "automato",
+      "no": "corpo-artificial",
+      "campo": "imunidades",
+      "de": [
+        "atordoado",
+        "enjoado",
+        "envenenado",
+        "fascinado",
+        "doenca",
+        "cansaco",
+        "sono"
+      ],
+      "para": [
+        "atordoado",
+        "enjoado",
+        "envenenado",
+        "fascinado",
+        "veneno",
+        "doenca",
+        "cansaco",
+        "sono"
+      ]
+    },
+    {
+      "achado": "[INCOERÊNCIA] reparo-mecanico · descricao, dt_base, dt_metade_nivel, vida_por_sucesso",
+      "raca": "automato",
+      "no": "reparo-mecanico",
+      "campo": "descricao",
+      "de": "Um personagem pode gastar uma hora e fazer Ofício (Engenharia) contra DT 15 + piso do seu Nível Total dividido por 2; em sucesso, você recupera 5 de Vida. Uma nova tentativa exige outra hora.",
+      "para": "Um personagem pode gastar uma hora e fazer Ofício (Engenharia) ou Tecnologia contra a DT Padrão do seu nível; em sucesso, você recupera 1d6 de Vida ou um décimo da Vida máxima, o que for maior. O reparo preenche o Déficit de Vida primeiro e vale uma vez por descanso curto."
+    },
+    {
+      "achado": "[INCOERÊNCIA] reparo-mecanico · descricao, dt_base, dt_metade_nivel, vida_por_sucesso",
+      "raca": "automato",
+      "no": "reparo-mecanico",
+      "campo": "dt_metade_nivel",
+      "de": true,
+      "para": null
+    },
+    {
+      "achado": "[INCOERÊNCIA] reparo-mecanico · descricao, dt_base, dt_metade_nivel, vida_por_sucesso",
+      "raca": "automato",
+      "no": "reparo-mecanico",
+      "campo": "vida_por_sucesso",
+      "de": 5,
+      "para": "1d6 ou 10% da Vida máxima"
+    },
+    {
+      "achado": "[ERRO] raio-inferno · descricao",
+      "raca": "automato",
+      "no": "raio-inferno",
+      "campo": "descricao",
+      "de": "gaste uma ação e 4 Energia do Núcleo para disparar um raio quente contra uma criatura a até 18 m. Faça Pontaria contra Reflexos. Em falha, ela sofre",
+      "para": "gaste uma Ação Padrão e 4 Energia do Núcleo para disparar um raio quente contra uma criatura a até 18 m. Ela testa Reflexos contra a DT do Autômato. Em falha, sofre"
+    },
+    {
+      "achado": "[INCOERÊNCIA] laser, eletrificar, pulso-estridente · descricao e dt_efeitos ausente",
+      "raca": "automato",
+      "no": "__raca__",
+      "campo": "dt_efeitos",
+      "de": null,
+      "para": {
+        "rotulo": "DT de Autômato",
+        "pericia": "tecnologia",
+        "descricao": "Quando uma modificação sua manda alguém testar Fortitude, Reflexos, Vontade ou Percepção, role Tecnologia na hora: o resultado é a DT que a criatura precisa alcançar, e uma rolagem vale para todos os alvos daquele uso."
+      }
+    },
+    {
+      "achado": "[INCOERÊNCIA] laser, eletrificar, pulso-estridente · descricao e dt_efeitos ausente",
+      "raca": "automato",
+      "no": "laser",
+      "campo": "descricao",
+      "de": "Gaste uma ação completa e 8 Energia do Núcleo para disparar uma linha de 30 m. Faça um teste de Tecnologia e compare com os Reflexos de cada criatura na linha. Em falha, ela sofre 4d10+4 de dano tecnológico; em sucesso, sofre metade. Depois do disparo, o Laser precisa de 1d4+1 rodadas para recarregar.",
+      "para": "Gaste uma Ação Completa e 8 Energia do Núcleo para disparar uma linha de 30 m. Cada criatura na linha testa Reflexos contra a DT do Autômato. Em falha, sofre 4d10+4 de dano tecnológico; em sucesso, sofre metade. Vale uma vez por cena."
+    },
+    {
+      "achado": "[INCOERÊNCIA] laser, eletrificar, pulso-estridente · descricao e dt_efeitos ausente",
+      "raca": "automato",
+      "no": "eletrificar",
+      "campo": "descricao",
+      "de": "gaste uma reação e 5 Energia do Núcleo para descarregar eletricidade. Faça um teste de Tecnologia contra os Reflexos de todas as outras criaturas a até 4,5 m. Em falha, cada uma sofre 3d8+4",
+      "para": "gaste uma Reação e 5 Energia do Núcleo para descarregar eletricidade. Cada criatura hostil a até 4,5 m testa Reflexos contra a DT do Autômato. Em falha, sofre 3d8+4"
+    },
+    {
+      "achado": "[INCOERÊNCIA] laser, eletrificar, pulso-estridente · descricao e dt_efeitos ausente",
+      "raca": "automato",
+      "no": "pulso-estridente",
+      "campo": "descricao",
+      "de": "gaste uma ação e 6 Energia do Núcleo para liberar um pulso sônico. Faça Tecnologia contra a Fortitude de cada outra criatura a até 6 m. Em falha, ela fica Atordoada",
+      "para": "gaste uma Ação Padrão e 6 Energia do Núcleo para liberar um pulso sônico. Cada criatura hostil a até 6 m testa Fortitude contra a DT do Autômato. Em falha, fica Atordoada"
+    },
+    {
+      "achado": "[INCOERÊNCIA] laser · descricao e recarga_rodadas",
+      "raca": "automato",
+      "no": "laser",
+      "campo": "usos",
+      "de": null,
+      "para": 1
+    },
+    {
+      "achado": "[INCOERÊNCIA] laser · descricao e recarga_rodadas",
+      "raca": "automato",
+      "no": "laser",
+      "campo": "recuperacao",
+      "de": null,
+      "para": "cena"
+    },
+    {
+      "achado": "[INCOERÊNCIA] laser · descricao e recarga_rodadas",
+      "raca": "automato",
+      "no": "laser",
+      "campo": "recarga_rodadas",
+      "de": "1d4+1",
+      "para": null
+    },
+    {
+      "achado": "[INCOERÊNCIA] garra-extensora · descricao",
+      "raca": "automato",
+      "no": "garra-extensora",
+      "campo": "descricao",
+      "de": "Gaste uma ação e 2 Energia do Núcleo para disparar uma garra",
+      "para": "Gaste uma Ação Padrão e 2 Energia do Núcleo para disparar uma garra"
+    },
+    {
+      "achado": "[INCOERÊNCIA] garra-extensora · descricao",
+      "raca": "automato",
+      "no": "garra-extensora",
+      "campo": "descricao",
+      "de": "faça Pontaria contra Reflexos; em sucesso, ela fica agarrada enquanto o cabo permanecer preso. Ela pode gastar uma ação e superar 10 + seu bônus de Pontaria com Atletismo ou Acrobacia para escapar. Depois de solta ou recolhida, a garra exige uma ação completa para recarregar.",
+      "para": "faça Pontaria contra 10 + Reflexos dela; em sucesso, ela fica Agarrada por até 3 rodadas, enquanto o cabo permanecer preso. Criatura duas categorias de tamanho maior que você não é agarrada. Ela escapa gastando uma Ação Padrão e superando 10 + seu bônus de Pontaria com Atletismo ou Acrobacia. Depois de solta ou recolhida, a garra exige uma Ação Completa para recarregar."
+    },
+    {
+      "achado": "[INCOERÊNCIA] corpo-macico · descricao e resistencia_fisica",
+      "raca": "automato",
+      "no": "corpo-macico",
+      "campo": "descricao",
+      "de": "Receba Resistência 2 a corte, perfuração e impacto, mais 1 a cada 10 níveis totais (3 no nível 10, 8 no nível 60). Ela não reduz dano verdadeiro nem o que atinge o núcleo por dentro.",
+      "para": "Receba Resistência 2 a dano físico (corte, perfuração, impacto e balístico), mais 1 a cada 10 níveis totais (3 no nível 10, 8 no nível 60)."
+    },
+    {
+      "achado": "[INCOERÊNCIA] modificações ativas · nivel_minimo contra capacidade_modificacoes",
+      "raca": "automato",
+      "no": "deteccao",
+      "campo": "nivel_minimo",
+      "de": 1,
+      "para": 6
+    },
+    {
+      "achado": "[INCOERÊNCIA] modificações ativas · nivel_minimo contra capacidade_modificacoes",
+      "raca": "automato",
+      "no": "garra-extensora",
+      "campo": "nivel_minimo",
+      "de": 1,
+      "para": 6
+    },
+    {
+      "achado": "[INCOERÊNCIA] modificações ativas · nivel_minimo contra capacidade_modificacoes",
+      "raca": "automato",
+      "no": "modo-veiculo",
+      "campo": "nivel_minimo",
+      "de": 1,
+      "para": 6
+    },
+    {
+      "achado": "[INCOERÊNCIA] modificações ativas · nivel_minimo contra capacidade_modificacoes",
+      "raca": "automato",
+      "no": "punho-voador",
+      "campo": "nivel_minimo",
+      "de": 1,
+      "para": 6
+    },
+    {
+      "achado": "[INCOERÊNCIA] modificações ativas · nivel_minimo contra capacidade_modificacoes",
+      "raca": "automato",
+      "no": "pulso-estridente",
+      "campo": "nivel_minimo",
+      "de": 4,
+      "para": 6
+    },
+    {
+      "achado": "[INCOERÊNCIA] modificações ativas · nivel_minimo contra capacidade_modificacoes",
+      "raca": "automato",
+      "no": "raio-inferno",
+      "campo": "nivel_minimo",
+      "de": 4,
+      "para": 6
+    },
+    {
+      "achado": "[INCOERÊNCIA] modificações ativas · nivel_minimo contra capacidade_modificacoes",
+      "raca": "automato",
+      "no": "eletrificar",
+      "campo": "nivel_minimo",
+      "de": 5,
+      "para": 6
+    },
+    {
+      "achado": "[LACUNA] chassis (todas as variantes) · dano_natural",
+      "raca": "automato",
+      "no": "chassi-bipede-pequeno",
+      "campo": "descricao",
+      "de": "arma natural com dano-base 1d6",
+      "para": "arma natural com dano-base 1d6 de impacto"
+    },
+    {
+      "achado": "[LACUNA] chassis (todas as variantes) · dano_natural",
+      "raca": "automato",
+      "no": "chassi-bipede-normal",
+      "campo": "descricao",
+      "de": "arma natural com dano-base 1d8",
+      "para": "arma natural com dano-base 1d8 de impacto"
+    },
+    {
+      "achado": "[LACUNA] chassis (todas as variantes) · dano_natural",
+      "raca": "automato",
+      "no": "chassi-bipede-grande",
+      "campo": "descricao",
+      "de": "arma natural com dano-base 2d6",
+      "para": "arma natural com dano-base 2d6 de impacto"
+    },
+    {
+      "achado": "[LACUNA] chassis (todas as variantes) · dano_natural",
+      "raca": "automato",
+      "no": "chassi-bipede-enorme",
+      "campo": "descricao",
+      "de": "arma natural com dano-base 3d6",
+      "para": "arma natural com dano-base 3d6 de impacto"
+    },
+    {
+      "achado": "[LACUNA] chassis (todas as variantes) · dano_natural",
+      "raca": "automato",
+      "no": "chassi-quadrupede-pequeno",
+      "campo": "descricao",
+      "de": "arma natural com dano-base 1d4",
+      "para": "arma natural com dano-base 1d4 de impacto"
+    },
+    {
+      "achado": "[LACUNA] chassis (todas as variantes) · dano_natural",
+      "raca": "automato",
+      "no": "chassi-quadrupede-normal",
+      "campo": "descricao",
+      "de": "arma natural com dano-base 1d6",
+      "para": "arma natural com dano-base 1d6 de impacto"
+    },
+    {
+      "achado": "[LACUNA] chassis (todas as variantes) · dano_natural",
+      "raca": "automato",
+      "no": "chassi-quadrupede-grande",
+      "campo": "descricao",
+      "de": "arma natural com dano-base 1d8",
+      "para": "arma natural com dano-base 1d8 de impacto"
+    },
+    {
+      "achado": "[LACUNA] chassis (todas as variantes) · dano_natural",
+      "raca": "automato",
+      "no": "chassi-quadrupede-enorme",
+      "campo": "descricao",
+      "de": "arma natural com dano-base 2d6",
+      "para": "arma natural com dano-base 2d6 de impacto"
+    },
+    {
+      "achado": "[LACUNA] chassis (todas as variantes) · dano_natural",
+      "raca": "automato",
+      "no": "punho-voador",
+      "campo": "descricao",
+      "de": "Gaste uma ação e 2 Energia do Núcleo para disparar um punho. Faça um ataque de Pontaria a até 12 m usando o dano-base de sua arma natural;",
+      "para": "Gaste uma Ação Padrão e 2 Energia do Núcleo para disparar um punho. Faça um ataque de Pontaria a até 12 m usando o dano-base de impacto de sua arma natural;"
+    },
+    {
+      "achado": "[INCOERÊNCIA] chassis · movimento_fixo",
+      "raca": "automato",
+      "no": "__raca__",
+      "campo": "descricao",
+      "de": "Na criação você escolhe o chassi, bípede ou quadrúpede.",
+      "para": "Na criação você escolhe o chassi, bípede ou quadrúpede. O Movimento do chassi é fixo e não soma Destreza (exceção à regra de Movimento)."
+    },
+    {
+      "achado": "[LACUNA] compartimento-de-carga · descricao",
+      "raca": "automato",
+      "no": "compartimento-de-carga",
+      "campo": "descricao",
+      "de": "receba +15 espaços de carga, sem a perda de Movimento de um mochilão. Retirar um item guardado exige uma ação de movimento.",
+      "para": "receba +15 espaços de capacidade de carga. Retirar um item guardado exige uma Ação de Movimento."
+    },
+    {
+      "achado": "[LACUNA] maquina-viva · descricao (o que mais muda)",
+      "raca": "automato",
+      "no": "maquina-viva",
+      "campo": "descricao",
+      "de": "e não pode usar Reparo Mecânico.",
+      "para": "e não pode usar Reparo Mecânico. Você volta a precisar respirar, comer, beber e dormir, e continua pagando metade da Sanidade dos implantes."
+    },
+    {
+      "achado": "[MELHORIA] nucleo-autonomo · descricao (Fluxo nativo)",
+      "raca": "automato",
+      "no": "nucleo-autonomo",
+      "campo": "descricao",
+      "de": "O núcleo roda o Fluxo da Tecnologia, que é o seu Fluxo nativo.",
+      "para": "O núcleo já traz o Fluxo da Tecnologia instalado, e ele é o único Fluxo do Autômato, sem Marca de círculo."
+    },
+    {
+      "achado": "[LACUNA] escudo · descricao",
+      "raca": "automato",
+      "no": "escudo",
+      "campo": "descricao",
+      "de": "reduza pela metade o dano balístico.",
+      "para": "reduza pela metade o dano balístico (a metade entra depois da vulnerabilidade e antes da Resistência)."
+    },
+    {
+      "achado": "[MELHORIA] vários · grafia de ações e condições",
+      "raca": "automato",
+      "no": "deteccao",
+      "campo": "descricao",
+      "de": "Gaste uma ação e 2 Energia do Núcleo para ativar",
+      "para": "Gaste uma Ação Padrão e 2 Energia do Núcleo para ativar"
+    },
+    {
+      "achado": "[MELHORIA] vários · grafia de ações e condições",
+      "raca": "automato",
+      "no": "modo-veiculo",
+      "campo": "descricao",
+      "de": "Gaste uma ação de movimento e 2 Energia",
+      "para": "Gaste uma Ação de Movimento e 2 Energia"
+    },
+    {
+      "achado": "[INCOERÊNCIA] juramento-de-sangue (Voievod, 42) · descricao",
+      "raca": "vampiro",
+      "no": "juramento-de-sangue",
+      "campo": "descricao",
+      "de": "pode gastar sua reação para dar a ela uma ordem, que ela cumpre imediatamente. Uma ação completa e 8 Mana, duas vezes por sessão.",
+      "para": "pode gastar sua reação para dar a ela uma ordem curta: ela testa Vontade contra a sua DT de Vampiro e, se falhar, cumpre a ordem na hora; se passar, ignora aquela ordem. Ordem abertamente suicida ela não cumpre. Uma Ação Completa e 8 Mana, duas vezes por descanso."
+    },
+    {
+      "achado": "[INCOERÊNCIA] juramento-de-sangue (Voievod, 42) · descricao",
+      "raca": "vampiro",
+      "no": "juramento-de-sangue",
+      "campo": "recuperacao",
+      "de": "sessao",
+      "para": "descanso"
+    },
+    {
+      "achado": "[INCOERÊNCIA] investida-predadora (Strigoi, 42) · descricao",
+      "raca": "vampiro",
+      "no": "investida-predadora",
+      "campo": "descricao",
+      "de": "e, se falhar, cai no chão agarrada por você e sofre 5d6 de dano de corte. Se ela estiver com metade da Vida ou menos, você ainda usa Hemofagia de graça no mesmo turno. Uma ação e 6 Mana",
+      "para": "e, se falhar, fica Caída e Agarrada por você e sofre 5d6 de dano de corte; se passar, sofre metade. Criatura duas categorias de tamanho maior que você não é agarrada nem derrubada. Se ela estiver com metade da Vida ou menos, você pode usar Hemofagia nela mesmo que resista, sem gastar ação nem o uso da cena. Uma Ação Padrão e 6 Mana"
+    },
+    {
+      "achado": "[LACUNA] hemofagia, mordida-esquecida · termos e campos",
+      "raca": "vampiro",
+      "no": "hemofagia",
+      "campo": "descricao",
+      "de": "Beba o sangue de um ser vivo voluntário ou incapacitado e recupere 1d6 de Vida. Custa uma ação e vale uma vez por cena.",
+      "para": "Como Ação Padrão, beba o sangue de um ser vivo voluntário, Inconsciente, Paralisado ou Imobilizado e recupere 1d6 de Vida. Vale uma vez por cena."
+    },
+    {
+      "achado": "[LACUNA] hemofagia, mordida-esquecida · termos e campos",
+      "raca": "vampiro",
+      "no": "hemofagia",
+      "campo": "usos",
+      "de": null,
+      "para": 1
+    },
+    {
+      "achado": "[LACUNA] hemofagia, mordida-esquecida · termos e campos",
+      "raca": "vampiro",
+      "no": "hemofagia",
+      "campo": "recuperacao",
+      "de": null,
+      "para": "cena"
+    },
+    {
+      "achado": "[LACUNA] hemofagia, mordida-esquecida · termos e campos",
+      "raca": "vampiro",
+      "no": "mordida-esquecida",
+      "campo": "descricao",
+      "de": "Ao usar Hemofagia numa criatura voluntária ou indefesa, gaste uma ação e 3 Mana para limpar o rastro: ela não guarda memória clara do que aconteceu e acorda só cansada, sem marca visível.",
+      "para": "Ao usar Hemofagia numa criatura voluntária, Inconsciente, Paralisada ou Imobilizada, gaste 3 Mana, sem ação extra, para limpar o rastro: ela não guarda memória clara do que aconteceu e acorda sem marca visível."
+    },
+    {
+      "achado": "[LACUNA] fome-de-sangue · descricao",
+      "raca": "vampiro",
+      "no": "fome-de-sangue",
+      "campo": "descricao",
+      "de": "seus descansos passam a devolver apenas metade da Mana normal, com mínimo de 1,",
+      "para": "o descanso completo e o Relaxar passam a devolver só metade da Mana, com mínimo de 1,"
+    },
+    {
+      "achado": "[LACUNA] hemomancia, transfusao, mare-vermelha · custo em Vida e efeitos",
+      "raca": "vampiro",
+      "no": "hemomancia",
+      "campo": "descricao",
+      "de": "Gaste 1 Mana e 1d4 da própria Vida para mexer em sangue já exposto a até 9 m. Serve para estancar o ferimento de um aliado, fechar uma poça e não deixar rastro, ou acelerar o sangramento de uma ferida aberta, causando 1d6 de dano à criatura ferida.",
+      "para": "Gaste 1 Mana e 1d4 da própria Vida (isso não deixa você abaixo de 1 nem gasta Vida temporária) para mexer em sangue já exposto a até 9 m. Escolha: encerrar o Sangramento de um aliado, fechar uma poça e não deixar rastro, ou fazer uma criatura em Sangramento testar Fortitude contra a sua DT de Vampiro: em falha, ela sofre 1d6 de dano de Sangue; em sucesso, nada acontece."
+    },
+    {
+      "achado": "[LACUNA] hemomancia, transfusao, mare-vermelha · custo em Vida e efeitos",
+      "raca": "vampiro",
+      "no": "transfusao",
+      "campo": "descricao",
+      "de": "você perde metade desse valor.",
+      "para": "você perde metade desse valor de Vida (isso não deixa você abaixo de 1 nem gasta Vida temporária)."
+    },
+    {
+      "achado": "[LACUNA] hemomancia, transfusao, mare-vermelha · custo em Vida e efeitos",
+      "raca": "vampiro",
+      "no": "mare-vermelha",
+      "campo": "descricao",
+      "de": "Todo o sangue derramado numa área de 9 m se levanta",
+      "para": "Todo o sangue derramado (poças ou criaturas em Sangramento) numa área de 9 m se levanta"
+    },
+    {
+      "achado": "[LACUNA] hemomancia, transfusao, mare-vermelha · custo em Vida e efeitos",
+      "raca": "vampiro",
+      "no": "mare-vermelha",
+      "campo": "descricao",
+      "de": "metade do dano causado a uma delas. Custa uma ação completa, 8 Mana e 4d6 da própria Vida,",
+      "para": "metade do dano causado à criatura mais ferida da área. Custa uma Ação Completa, 8 Mana e 4d6 da própria Vida (isso não deixa você abaixo de 1),"
+    },
+    {
+      "achado": "[MELHORIA] veu-de-nevoa (Noite Eterna, 17) · descricao",
+      "raca": "vampiro",
+      "no": "veu-de-nevoa",
+      "campo": "descricao",
+      "de": "o dano cai pela metade e você se move até 3 m sem provocar ataque de oportunidade.",
+      "para": "o dano cai pela metade (depois da vulnerabilidade e antes da Resistência) e você se move até 3 m sem provocar reação."
+    },
+    {
+      "achado": "[MELHORIA] nevoa-e-morcego (Senhor da Noite, 42) · descricao",
+      "raca": "vampiro",
+      "no": "nevoa-e-morcego",
+      "campo": "descricao",
+      "de": "reduz à metade o dano físico comum. Uma ação e 4 Mana, duas vezes por cena. Nessa forma, você não pode atacar",
+      "para": "reduz à metade o dano físico que não venha de magia nem de arma mágica. Uma Ação Padrão e 4 Mana, duas vezes por cena. Ao assumir a forma, você sai de Agarrado e de Imobilizado. Nessa forma, você não pode atacar"
+    },
+    {
+      "achado": "[LACUNA] coroa-de-sangue (Noite Eterna, 42) · descricao",
+      "raca": "vampiro",
+      "no": "coroa-de-sangue",
+      "campo": "descricao",
+      "de": "toda vez que quiser atacar você.",
+      "para": "uma vez por turno dele, ao tentar atacar você; se falhar, ele perde esse ataque."
+    },
+    {
+      "achado": "[LACUNA] rosto-emprestado (Moroi, 42) · descricao",
+      "raca": "vampiro",
+      "no": "rosto-emprestado",
+      "campo": "descricao",
+      "de": "pode notar diferenças de comportamento com um teste de Intuição.",
+      "para": "a nota com um teste de Intuição contra a sua Enganação."
+    },
+    {
+      "achado": "[LACUNA] presenca-de-corte (Voievod, 1) · descricao",
+      "raca": "vampiro",
+      "no": "presenca-de-corte",
+      "campo": "descricao",
+      "de": "Servos e criaturas de vontade fraca hesitam antes de escolher você como primeiro alvo.",
+      "para": "Uma vez por cena, o primeiro ataque de um servo ou de uma criatura sem nome contra você sofre desvantagem."
+    },
+    {
+      "achado": "[LACUNA] faro-de-sangue (Strigoi, 17) · descricao",
+      "raca": "vampiro",
+      "no": "faro-de-sangue",
+      "campo": "descricao",
+      "de": "e percebe se quem está sangrando se feriu com gravidade. Uma vez por cena, gaste 2 Mana",
+      "para": "e percebe quem está em Sangramento ou com menos da metade da Vida. Uma vez por cena, gaste uma Ação Padrão e 2 Mana"
+    },
+    {
+      "achado": "[LACUNA] faro-de-sangue (Strigoi, 17) · descricao",
+      "raca": "vampiro",
+      "no": "faro-de-sangue",
+      "campo": "usos",
+      "de": null,
+      "para": 1
+    },
+    {
+      "achado": "[LACUNA] faro-de-sangue (Strigoi, 17) · descricao",
+      "raca": "vampiro",
+      "no": "faro-de-sangue",
+      "campo": "recuperacao",
+      "de": null,
+      "para": "cena"
+    },
+    {
+      "achado": "[LACUNA] pelagem-noturna, forma-de-fera, uivo-da-alcateia (Pricolici) · descricao",
+      "raca": "vampiro",
+      "no": "pelagem-noturna",
+      "campo": "descricao",
+      "de": "passam a usar dano-base 1d8.",
+      "para": "passam a usar dano-base 1d8 de corte."
+    },
+    {
+      "achado": "[LACUNA] pelagem-noturna, forma-de-fera, uivo-da-alcateia (Pricolici) · descricao",
+      "raca": "vampiro",
+      "no": "forma-de-fera",
+      "campo": "descricao",
+      "de": "seus ataques usam dano-base 1d10,",
+      "para": "seus ataques desarmados usam dano-base 1d10 de corte,"
+    },
+    {
+      "achado": "[LACUNA] pelagem-noturna, forma-de-fera, uivo-da-alcateia (Pricolici) · descricao",
+      "raca": "vampiro",
+      "no": "forma-de-fera",
+      "campo": "descricao",
+      "de": "Custa uma ação e 4 Mana",
+      "para": "Custa uma Ação Padrão e 4 Mana"
+    },
+    {
+      "achado": "[LACUNA] pelagem-noturna, forma-de-fera, uivo-da-alcateia (Pricolici) · descricao",
+      "raca": "vampiro",
+      "no": "uivo-da-alcateia",
+      "campo": "descricao",
+      "de": "Uive, e por uma cena sua Forma de Fera fica sem limite de duração.",
+      "para": "Se estiver na Forma de Fera, uive e ela fica sem limite de duração até o fim da cena."
+    },
+    {
+      "achado": "[MELHORIA] terror-de-porao, sombra-que-engole · descricao",
+      "raca": "vampiro",
+      "no": "terror-de-porao",
+      "campo": "descricao",
+      "de": "criaturas a até 9 m que enxerguem você testam",
+      "para": "criaturas hostis a até 9 m que enxerguem você testam"
+    },
+    {
+      "achado": "[MELHORIA] terror-de-porao, sombra-que-engole · descricao",
+      "raca": "vampiro",
+      "no": "sombra-que-engole",
+      "campo": "descricao",
+      "de": "numa área de 12 m por cinco rodadas.",
+      "para": "numa área de 12 m de raio centrada em você por cinco rodadas."
+    },
+    {
+      "achado": "[MELHORIA] terror-de-porao, sombra-que-engole · descricao",
+      "raca": "vampiro",
+      "no": "sombra-que-engole",
+      "campo": "descricao",
+      "de": "que começar o turno na área testa",
+      "para": "que entrar na área ou começar o turno nela testa"
+    },
+    {
+      "achado": "[MELHORIA] carne-que-fecha, fome-de-senhor · descricao",
+      "raca": "vampiro",
+      "no": "fome-de-senhor",
+      "campo": "descricao",
+      "de": "além da Mana pela metade, você perde a Carne que Fecha e sofre desvantagem",
+      "para": "além da Mana pela metade, você sofre desvantagem"
+    },
+    {
+      "achado": "[LACUNA] colapso-solar, pulso, reentrada, impacto · descricao (DT ausente)",
+      "raca": "auleth",
+      "no": "colapso-solar",
+      "campo": "descricao",
+      "de": "metade em Reflexos, e a área fica iluminada e escaldante por cinco rodadas",
+      "para": "metade se passarem em Reflexos contra a sua DT de Auleth, e a área fica iluminada por cinco rodadas"
+    },
+    {
+      "achado": "[LACUNA] colapso-solar, pulso, reentrada, impacto · descricao (DT ausente)",
+      "raca": "auleth",
+      "no": "reentrada",
+      "campo": "descricao",
+      "de": "metade em Reflexos.",
+      "para": "metade se passar em Reflexos contra a sua DT de Auleth."
+    },
+    {
+      "achado": "[LACUNA] colapso-solar, pulso, reentrada, impacto · descricao (DT ausente)",
+      "raca": "auleth",
+      "no": "impacto",
+      "campo": "descricao",
+      "de": "metade em Reflexos, e a cratera",
+      "para": "metade se passarem em Reflexos contra a sua DT de Auleth, e a cratera"
+    },
+    {
+      "achado": "[INCOERÊNCIA] fotosfera (Estrela, 18) · descricao",
+      "raca": "auleth",
+      "no": "fotosfera",
+      "campo": "descricao",
+      "de": "criaturas hostis que terminarem o turno adjacentes a você sofrem 1d6 de dano de fogo, e ataques",
+      "para": "criaturas hostis que terminarem o turno adjacentes a você testam Reflexos contra a sua DT de Auleth e sofrem 1d6 de dano de Fogo, ou metade se passarem, e ataques"
+    },
+    {
+      "achado": "[INCOERÊNCIA] gravidade-propria (Planeta, 18) · descricao",
+      "raca": "auleth",
+      "no": "gravidade-propria",
+      "campo": "descricao",
+      "de": "criaturas hostis a até 6 m têm o Movimento reduzido à metade e não conseguem saltar nem voar dentro da área.",
+      "para": "criaturas hostis que entrarem na área de 6 m ou começarem o turno nela testam Fortitude contra a sua DT de Auleth; em falha, ficam Lentas e não saltam nem voam até saírem. Quem estiver voando desce sem sofrer dano."
+    },
+    {
+      "achado": "[INCOERÊNCIA] pulso (Pulsar, 18) · descricao",
+      "raca": "auleth",
+      "no": "pulso",
+      "campo": "descricao",
+      "de": "dispositivos não blindados param por uma rodada, e construtos ou autômatos sofrem 2d6 de dano de raio e ficam lentos até o fim do próximo turno deles, com Fortitude para evitar a lentidão.",
+      "para": "dispositivos hostis ou sem dono param por uma rodada. Construtos e Autômatos hostis a até 9 m testam Fortitude contra a sua DT de Auleth: em falha, sofrem 2d6 de dano de Raio e ficam Lentos até o fim do próximo turno deles; em sucesso, sofrem metade e não ficam Lentos."
+    },
+    {
+      "achado": "[LACUNA] atracao-irresistivel (Buraco Negro, 18) · descricao",
+      "raca": "auleth",
+      "no": "atracao-irresistivel",
+      "campo": "descricao",
+      "de": "se falhar, é arrastada e tem o Movimento reduzido à metade até o fim do próximo turno dela.",
+      "para": "se falhar, é puxada, sem provocar reação, e fica Lenta até o fim do próximo turno dela. Criatura duas categorias de tamanho maior que você não é puxada."
+    },
+    {
+      "achado": "[LACUNA] forma-sem-molde · descricao e tipo",
+      "raca": "auleth",
+      "no": "forma-sem-molde",
+      "campo": "descricao",
+      "de": "À vontade, gaste sua ação e todo o Movimento do turno para alterar",
+      "para": "À vontade, gaste uma Ação Completa para alterar"
+    },
+    {
+      "achado": "[LACUNA] forma-sem-molde · descricao e tipo",
+      "raca": "auleth",
+      "no": "forma-sem-molde",
+      "campo": "descricao",
+      "de": "Sua massa permanece constante.",
+      "para": "Sua massa permanece constante. O Tamanho novo vale para o espaço que você ocupa; para manobras e para a trava de duas categorias de tamanho, vale sempre o seu Tamanho Normal."
+    },
+    {
+      "achado": "[LACUNA] forma-sem-molde · descricao e tipo",
+      "raca": "auleth",
+      "no": "molde-estavel",
+      "campo": "descricao",
+      "de": "passa a custar apenas sua ação de movimento, em vez da ação e do Movimento inteiro.",
+      "para": "passa a custar apenas uma Ação de Movimento, em vez de uma Ação Completa."
+    },
+    {
+      "achado": "[LACUNA] forma-sem-molde · descricao e tipo",
+      "raca": "auleth",
+      "no": "molde-estavel",
+      "campo": "tipo",
+      "de": "acao_completa",
+      "para": "movimento"
+    },
+    {
+      "achado": "[LACUNA] presenca-alheia (Íntegro, 44) · descricao",
+      "raca": "auleth",
+      "no": "presenca-alheia",
+      "campo": "descricao",
+      "de": "você é imune a medo, encanto e qualquer efeito que dependa de manipular a sua emoção.",
+      "para": "você é imune a Amedrontado e Fascinado e a qualquer efeito que dependa de manipular a sua emoção. Perda de Sanidade e dano mental seguem a regra de sempre."
+    },
+    {
+      "achado": "[LACUNA] forma-verdadeira (Íntegro, 44) · descricao",
+      "raca": "auleth",
+      "no": "forma-verdadeira",
+      "campo": "descricao",
+      "de": "gaste uma ação e 6 Mana para assumir sua forma original por uma cena:",
+      "para": "gaste uma Ação Padrão e 6 Mana para assumir sua forma original, de Tamanho Grande, por uma cena (Forma sem Molde não vale nela):"
+    },
+    {
+      "achado": "[MELHORIA] corpo-radiante, colapso-solar, crosta-e-nucleo, bercario · texto",
+      "raca": "auleth",
+      "no": "corpo-radiante",
+      "campo": "descricao",
+      "de": "reduz pela metade o dano de fogo.",
+      "para": "reduz pela metade o dano de Fogo (a metade entra depois da vulnerabilidade e antes da Resistência)."
+    },
+    {
+      "achado": "[MELHORIA] corpo-radiante, colapso-solar, crosta-e-nucleo, bercario · texto",
+      "raca": "auleth",
+      "no": "crosta-e-nucleo",
+      "campo": "descricao",
+      "de": "empurrões, agarrões e quedas",
+      "para": "empurrões, agarrões e derrubadas"
+    },
+    {
+      "achado": "[MELHORIA] corpo-radiante, colapso-solar, crosta-e-nucleo, bercario · texto",
+      "raca": "auleth",
+      "no": "bercario",
+      "campo": "descricao",
+      "de": "cobertura sólida que bloqueia",
+      "para": "cobertura total que bloqueia"
+    },
+    {
+      "achado": "[INCOERÊNCIA] leitura-de-sonhos, visita-noturna · recuperacao",
+      "raca": "onirico",
+      "no": "leitura-de-sonhos",
+      "campo": "descricao",
+      "de": "Uma vez por descanso, enquanto uma criatura dorme",
+      "para": "Uma vez por sessão, enquanto uma criatura dorme"
+    },
+    {
+      "achado": "[INCOERÊNCIA] leitura-de-sonhos, visita-noturna · recuperacao",
+      "raca": "onirico",
+      "no": "leitura-de-sonhos",
+      "campo": "recuperacao",
+      "de": "descanso",
+      "para": "sessao"
+    },
+    {
+      "achado": "[INCOERÊNCIA] leitura-de-sonhos, visita-noturna · recuperacao",
+      "raca": "onirico",
+      "no": "visita-noturna",
+      "campo": "descricao",
+      "de": "Uma vez por descanso, gaste 4 Mana",
+      "para": "Uma vez por sessão, gaste 4 Mana"
+    },
+    {
+      "achado": "[INCOERÊNCIA] leitura-de-sonhos, visita-noturna · recuperacao",
+      "raca": "onirico",
+      "no": "visita-noturna",
+      "campo": "recuperacao",
+      "de": "descanso",
+      "para": "sessao"
+    },
+    {
+      "achado": "[LACUNA] pesadelo-manifesto, delirio-contagioso, noite-sem-fim, sonho-aberto · descricao",
+      "raca": "onirico",
+      "no": "pesadelo-manifesto",
+      "campo": "descricao",
+      "de": "Faça Misticismo contra a Vontade dela. Falhando, ela fica Amedrontada por duas rodadas e não pode usar reações nesse tempo; passando, ela só perde a reação",
+      "para": "Ela testa Vontade contra a sua DT de Onírico. Em falha, fica Amedrontada por duas rodadas e não pode usar reações nesse tempo; em sucesso, só perde a reação"
+    },
+    {
+      "achado": "[LACUNA] pesadelo-manifesto, delirio-contagioso, noite-sem-fim, sonho-aberto · descricao",
+      "raca": "onirico",
+      "no": "pesadelo-manifesto",
+      "campo": "descricao",
+      "de": "Uma vez por cena, gaste uma ação e 5 Mana",
+      "para": "Uma vez por cena, gaste uma Ação Padrão e 5 Mana"
+    },
+    {
+      "achado": "[LACUNA] pesadelo-manifesto, delirio-contagioso, noite-sem-fim, sonho-aberto · descricao",
+      "raca": "onirico",
+      "no": "noite-sem-fim",
+      "campo": "descricao",
+      "de": "faz Vontade contra o seu Misticismo no começo do próprio turno e, falhando, sofre 1d8 de dano mental, que tira Sanidade, e perde a ação daquele turno. Ninguém perde a ação em duas",
+      "para": "testa Vontade contra a sua DT de Onírico no começo do próprio turno e, se falhar, sofre 1d8 de dano mental, que tira Sanidade, e perde a Ação Padrão daquele turno. Ninguém perde a Ação Padrão em duas"
+    },
+    {
+      "achado": "[LACUNA] pesadelo-manifesto, delirio-contagioso, noite-sem-fim, sonho-aberto · descricao",
+      "raca": "onirico",
+      "no": "sonho-aberto",
+      "campo": "descricao",
+      "de": "testa Vontade contra o seu Misticismo e, se falhar",
+      "para": "testa Vontade contra a sua DT de Onírico e, se falhar"
+    },
+    {
+      "achado": "[INCOERÊNCIA] delirio-contagioso (Caos, 15) · descricao",
+      "raca": "onirico",
+      "no": "delirio-contagioso",
+      "campo": "descricao",
+      "de": "Faça Misticismo contra a Vontade dela; falhando, ela passa duas rodadas tratando um aliado como inimigo e um inimigo como aliado, os dois escolhidos por você.",
+      "para": "Ela testa Vontade contra a sua DT de Onírico; em falha, passa até duas rodadas tratando um aliado como inimigo e um inimigo como aliado, os dois escolhidos por você, e repete o teste no fim de cada turno dela para sair."
+    },
+    {
+      "achado": "[INCOERÊNCIA] o-mundo-nao-combina (Caos, 40) · descricao",
+      "raca": "onirico",
+      "no": "o-mundo-nao-combina",
+      "campo": "descricao",
+      "de": "ou toda criatura hostil ali perde a reação.",
+      "para": "ou toda criatura hostil ali testa Vontade contra a sua DT de Onírico e, se falhar, perde a reação até o começo do próximo turno dela."
+    },
+    {
+      "achado": "[INCOERÊNCIA] passo-entre-sonhos, nunca-mais-pousar, sonho-aberto · descricao (combo)",
+      "raca": "onirico",
+      "no": "sonho-aberto",
+      "campo": "descricao",
+      "de": "Passo Entre-Sonhos não gasta Movimento nem Mana.",
+      "para": "Passo Entre-Sonhos não gasta Mana."
+    },
+    {
+      "achado": "[LACUNA] a-noite-que-se-repete (Ciclo, 40) · descricao",
+      "raca": "onirico",
+      "no": "a-noite-que-se-repete",
+      "campo": "descricao",
+      "de": "como se aquele pedaço da rodada não tivesse acontecido.",
+      "para": "como se aquele pedaço da rodada não tivesse acontecido. Vale até contra o golpe que mataria, porque ele não aconteceu."
+    },
+    {
+      "achado": "[MELHORIA] de-novo-igual (Ciclo, 1) · descricao e recuperacao",
+      "raca": "onirico",
+      "no": "de-novo-igual",
+      "campo": "descricao",
+      "de": "Uma vez por cena, depois de falhar",
+      "para": "Uma vez por sessão, depois de falhar"
+    },
+    {
+      "achado": "[MELHORIA] de-novo-igual (Ciclo, 1) · descricao e recuperacao",
+      "raca": "onirico",
+      "no": "de-novo-igual",
+      "campo": "recuperacao",
+      "de": "cena",
+      "para": "sessao"
+    },
+    {
+      "achado": "[INCOERÊNCIA] dono-do-sonho (Laço com um Sonhador, 1) · descricao",
+      "raca": "onirico",
+      "no": "dono-do-sonho",
+      "campo": "descricao",
+      "de": "Você criou um laço com alguém do mundo desperto; defina com o Mestre quem é. Enquanto essa pessoa estiver viva, você recebe vantagem em Vontade e sabe a direção aproximada dela. Se ela morrer, você perde",
+      "para": "Você criou um laço com alguém do mundo desperto; defina com o Mestre quem é. Esse laço conta como um dos seus três laços. Enquanto essa pessoa estiver viva, você recebe vantagem em Vontade e sabe a direção aproximada dela. Se ela morrer, vale o teste de Sanidade de laço rompido e você perde"
+    },
+    {
+      "achado": "[LACUNA] visita-noturna (Ponte, 15) · descricao",
+      "raca": "onirico",
+      "no": "visita-noturna",
+      "campo": "descricao",
+      "de": "uma criatura adormecida que você já viu de perto.",
+      "para": "uma criatura adormecida, na mesma dimensão, que você já viu de perto."
+    },
+    {
+      "achado": "[LACUNA] visita-noturna (Ponte, 15) · descricao",
+      "raca": "onirico",
+      "no": "visita-noturna",
+      "campo": "descricao",
+      "de": "enquanto ela continuar dormindo, e",
+      "para": "por até dez minutos, enquanto ela continuar dormindo, e"
+    },
+    {
+      "achado": "[MELHORIA] corpo-de-sonho (40) · descricao",
+      "raca": "onirico",
+      "no": "corpo-de-sonho",
+      "campo": "descricao",
+      "de": "para ficar incorpóreo",
+      "para": "para ficar Incorpóreo"
+    },
+    {
+      "achado": "[MELHORIA] corpo-de-sonho (40) · descricao",
+      "raca": "onirico",
+      "no": "corpo-de-sonho",
+      "campo": "usos",
+      "de": null,
+      "para": 2
+    },
+    {
+      "achado": "[MELHORIA] corpo-de-sonho (40) · descricao",
+      "raca": "onirico",
+      "no": "corpo-de-sonho",
+      "campo": "recuperacao",
+      "de": null,
+      "para": "cena"
+    },
+    {
+      "achado": "[LACUNA] ancoragem-fragil · descricao",
+      "raca": "onirico",
+      "no": "ancoragem-fragil",
+      "campo": "descricao",
+      "de": "cai pela metade, arredondada para baixo.",
+      "para": "cai pela metade, arredondada para baixo, e a Mana atual desce junto se passar do novo máximo."
+    },
+    {
+      "achado": "[MELHORIA] cara-que-nao-fecha, noite-sem-fim, pes-fora-do-chao · descricao",
+      "raca": "onirico",
+      "no": "cara-que-nao-fecha",
+      "campo": "descricao",
+      "de": "não conseguem mais te pegar de surpresa.",
+      "para": "não deixam você Surpreendido."
+    },
+    {
+      "achado": "[MELHORIA] cara-que-nao-fecha, noite-sem-fim, pes-fora-do-chao · descricao",
+      "raca": "onirico",
+      "no": "pes-fora-do-chao",
+      "campo": "descricao",
+      "de": "cai de qualquer altura sem sofrer dano",
+      "para": "cai de qualquer altura sem sofrer dano e cai de pé"
+    }
+  ],
+  "resolvidos": [
+    {
+      "achado": "[INCOERÊNCIA] sombra-que-engole, uivo-da-alcateia, mare-vermelha, lua-que-nao-se-poe · recuperacao",
+      "por": "janela trocada pela sessão principal (Vampiro)"
+    },
+    {
+      "achado": "[INCOERÊNCIA] colapso-solar, horizonte-de-eventos, peso-de-mundo, bercario, farol, impacto, forma-verdadeira · recuperacao",
+      "por": "janela trocada pela sessão principal (Auleth)"
+    },
+    {
+      "achado": "[INCOERÊNCIA] noite-sem-fim, a-noite-que-se-repete, sonho-emprestado, o-mundo-nao-combina, sonho-aberto · recuperacao",
+      "por": "janela trocada pela sessão principal (Onírico)"
+    },
+    {
+      "achado": "[INCOERÊNCIA] eletrificar, pulso-estridente · descricao (aliados no alvo)",
+      "por": "tratado nas trocas de eletrificar e pulso-estridente (criaturas hostis)"
+    }
+  ],
+  "mantidos": [
+    {
+      "achado": "[LACUNA] fome-de-sangue · comida e água do Vampiro",
+      "motivo": "o povo já diz que ele precisa de sangue para viver; Fome e sede não é reescrita por raça."
+    },
+    {
+      "achado": "[LACUNA] terror-de-porao, sombra-que-engole · sem poder se aproximar",
+      "motivo": "repetir a condição Amedrontado é inofensivo; só se acrescentou hostis e o raio."
+    },
+    {
+      "achado": "[MELHORIA] carne-que-fecha · 12 horas na Noite Eterna",
+      "motivo": "opcional no relatório; mantida a regra de 24 horas para não mudar a força."
+    },
+    {
+      "achado": "[LACUNA] ordem sem teto Voievod (Ordem Sussurrada, Mandato da Coroa)",
+      "motivo": "já têm teste e limite de ordem suicida."
+    }
+  ]
+}

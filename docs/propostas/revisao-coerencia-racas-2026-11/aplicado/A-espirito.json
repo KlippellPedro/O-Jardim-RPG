@@ -1,0 +1,829 @@
+{
+  "correcoes": [
+    {
+      "achado": "[ERRO] adiantar-se",
+      "raca": "espirito",
+      "no": "adiantar-se",
+      "campo": "descricao",
+      "de": "gaste 2 Mana ao rolar Iniciativa: role dois d20 e fique com o maior.",
+      "para": "gaste 2 Mana no começo de um combate: a sua Iniciativa sobe 5 até o fim da cena."
+    },
+    {
+      "achado": "[ERRO] voz-do-jardim",
+      "raca": "espirito",
+      "no": "voz-do-jardim",
+      "campo": "descricao",
+      "de": "vantagem em Iniciativa",
+      "para": "+2 de Iniciativa"
+    },
+    {
+      "achado": "[ERRO] mundo-em-pressa",
+      "raca": "espirito",
+      "no": "mundo-em-pressa",
+      "campo": "descricao",
+      "de": "vantagem em Iniciativa",
+      "para": "+2 de Iniciativa"
+    },
+    {
+      "achado": "[ERRO] mundo-em-camera-lenta",
+      "raca": "espirito",
+      "no": "mundo-em-camera-lenta",
+      "campo": "descricao",
+      "de": "desvantagem em Iniciativa",
+      "para": "−2 de Iniciativa"
+    },
+    {
+      "achado": "[ERRO] origem-de-tudo",
+      "raca": "espirito",
+      "no": "origem-de-tudo",
+      "campo": "descricao",
+      "de": "volta com 1 de Vida.",
+      "para": "volta com 1 de Vida e paga o preço de Voltar da morte: Ferido 2, 2 de Cansaço, e Arkarin fica com alguma coisa."
+    },
+    {
+      "achado": "[LACUNA] ancora-primordial",
+      "raca": "espirito",
+      "no": "ancora-primordial",
+      "campo": "descricao",
+      "de": "e sem precisar de descanso.",
+      "para": "e sem precisar de descanso, sem Morrendo e sem Ferido. Isso não vale contra a morte na hora (Déficit igual à Vida máxima). Vale uma vez por cena."
+    },
+    {
+      "achado": "[LACUNA] ancora-primordial usos",
+      "raca": "espirito",
+      "no": "ancora-primordial",
+      "campo": "usos",
+      "de": null,
+      "para": 1
+    },
+    {
+      "achado": "[LACUNA] ancora-primordial recuperacao",
+      "raca": "espirito",
+      "no": "ancora-primordial",
+      "campo": "recuperacao",
+      "de": null,
+      "para": "cena"
+    },
+    {
+      "achado": "[LACUNA] raiz-do-pecado",
+      "raca": "espirito",
+      "no": "raiz-do-pecado",
+      "campo": "descricao",
+      "de": "e sem precisar de descanso.",
+      "para": "e sem precisar de descanso, sem Morrendo e sem Ferido. Isso não vale contra a morte na hora (Déficit igual à Vida máxima). Vale uma vez por cena."
+    },
+    {
+      "achado": "[LACUNA] raiz-do-pecado usos",
+      "raca": "espirito",
+      "no": "raiz-do-pecado",
+      "campo": "usos",
+      "de": null,
+      "para": 1
+    },
+    {
+      "achado": "[LACUNA] raiz-do-pecado recuperacao",
+      "raca": "espirito",
+      "no": "raiz-do-pecado",
+      "campo": "recuperacao",
+      "de": null,
+      "para": "cena"
+    },
+    {
+      "achado": "[LACUNA] voto-primordial",
+      "raca": "espirito",
+      "no": "voto-primordial",
+      "campo": "descricao",
+      "de": "e sem precisar de descanso.",
+      "para": "e sem precisar de descanso, sem Morrendo e sem Ferido. Isso não vale contra a morte na hora (Déficit igual à Vida máxima). Vale uma vez por cena."
+    },
+    {
+      "achado": "[LACUNA] voto-primordial usos",
+      "raca": "espirito",
+      "no": "voto-primordial",
+      "campo": "usos",
+      "de": null,
+      "para": 1
+    },
+    {
+      "achado": "[LACUNA] voto-primordial recuperacao",
+      "raca": "espirito",
+      "no": "voto-primordial",
+      "campo": "recuperacao",
+      "de": null,
+      "para": "cena"
+    },
+    {
+      "achado": "[LACUNA] eterno",
+      "raca": "espirito",
+      "no": "eterno",
+      "campo": "descricao",
+      "de": "de pé e livre de qualquer condição. Para isso, você não precisa mais da Âncora.",
+      "para": "de pé e livre de qualquer condição de efeito curto, menos Ferido e as condições de longo prazo. Para isso, você não precisa mais da Âncora. Não vale contra a morte na hora (Déficit igual à Vida máxima). Se a Âncora já tiver feito o mesmo nesta cena, só um dos dois vale."
+    },
+    {
+      "achado": "[LACUNA] eterno-demonio",
+      "raca": "espirito",
+      "no": "eterno-demonio",
+      "campo": "descricao",
+      "de": "livre de qualquer condição, a até 9 m de onde caiu. Para isso, você não precisa mais da Raiz.",
+      "para": "livre de qualquer condição de efeito curto, menos Ferido e as condições de longo prazo, a até 9 m de onde caiu. Para isso, você não precisa mais da Raiz. Não vale contra a morte na hora (Déficit igual à Vida máxima). Se a Raiz já tiver feito o mesmo nesta cena, só um dos dois vale."
+    },
+    {
+      "achado": "[LACUNA] eterno-anjo",
+      "raca": "espirito",
+      "no": "eterno-anjo",
+      "campo": "descricao",
+      "de": "livre de qualquer condição, a até 9 m de onde caiu. Para isso, você não precisa mais do Voto.",
+      "para": "livre de qualquer condição de efeito curto, menos Ferido e as condições de longo prazo, a até 9 m de onde caiu. Para isso, você não precisa mais do Voto. Não vale contra a morte na hora (Déficit igual à Vida máxima). Se o Voto já tiver feito o mesmo nesta cena, só um dos dois vale."
+    },
+    {
+      "achado": "[LACUNA] primeira-alma",
+      "raca": "espirito",
+      "no": "primeira-alma",
+      "campo": "descricao",
+      "de": "com metade da Vida máxima, de pé e livre de condições que dependam do corpo.",
+      "para": "com metade da Vida máxima (o Déficit de Vida some), sem Morrendo, de pé e livre de condições que dependam do corpo. Não vale contra a morte na hora (Déficit igual à Vida máxima)."
+    },
+    {
+      "achado": "[LACUNA] refazer-o-corpo",
+      "raca": "espirito",
+      "no": "refazer-o-corpo",
+      "campo": "descricao",
+      "de": "ele se levanta com metade da Vida máxima e livre de",
+      "para": "ele volta a ter metade da Vida máxima (o Déficit de Vida some), sai de Morrendo, se levanta e fica livre de"
+    },
+    {
+      "achado": "[LACUNA] primavera",
+      "raca": "espirito",
+      "no": "primavera",
+      "campo": "descricao",
+      "de": "e não conseguem cair abaixo de 1 de Vida.",
+      "para": "e, sempre que um deles cair a 0 de Vida, fica com 1 de Vida (não vale contra a morte na hora)."
+    },
+    {
+      "achado": "[LACUNA] furia-sem-fim",
+      "raca": "espirito",
+      "no": "furia-sem-fim",
+      "campo": "descricao",
+      "de": "você não cai abaixo de 1 de Vida e seus",
+      "para": "sempre que você cair a 0 de Vida, fica com 1 de Vida (não vale contra a morte na hora), e seus"
+    },
+    {
+      "achado": "[INCOERÊNCIA] furia-sem-fim inconsciente",
+      "raca": "espirito",
+      "no": "furia-sem-fim",
+      "campo": "descricao",
+      "de": "fica inconsciente por 1 rodada",
+      "para": "fica Atordoado por 1 rodada"
+    },
+    {
+      "achado": "[INCOERÊNCIA] raizes-de-alma",
+      "raca": "espirito",
+      "no": "raizes-de-alma",
+      "campo": "descricao",
+      "de": "encerrar uma Aflição de nível 1 nele",
+      "para": "encerrar uma aflição que esteja no estágio 1 nele"
+    },
+    {
+      "achado": "[INCOERÊNCIA] floresta-interior",
+      "raca": "espirito",
+      "no": "floresta-interior",
+      "campo": "descricao",
+      "de": "encerram uma Aflição de nível 1 ou 2",
+      "para": "encerram uma aflição que esteja no estágio 1 ou 2"
+    },
+    {
+      "achado": "[INCOERÊNCIA] engolir-o-som",
+      "raca": "espirito",
+      "no": "engolir-o-som",
+      "campo": "descricao",
+      "de": "fica cega e surda",
+      "para": "fica Cega e Surda"
+    },
+    {
+      "achado": "[LACUNA] eclipse",
+      "raca": "espirito",
+      "no": "eclipse",
+      "campo": "descricao",
+      "de": "criaturas hostis ficam cegas e não conseguem conjurar magia de até 8º Círculo.",
+      "para": "criaturas hostis testam Vontade contra o seu Misticismo. Falhando, ficam Cegas e não conseguem conjurar magia de até 8º Círculo, e repetem o teste no fim de cada turno delas."
+    },
+    {
+      "achado": "[LACUNA] eclipse teste",
+      "raca": "espirito",
+      "no": "eclipse",
+      "campo": "teste",
+      "de": null,
+      "para": "misticismo_vs_vontade"
+    },
+    {
+      "achado": "[MELHORIA] eclipse titulo",
+      "raca": "espirito",
+      "no": "eclipse",
+      "campo": "titulo",
+      "de": "Eclipse",
+      "para": "Apagão do Vazio"
+    },
+    {
+      "achado": "[LACUNA] presagio-do-fim",
+      "raca": "espirito",
+      "no": "presagio-do-fim",
+      "campo": "descricao",
+      "de": "ela sofre 14d6 de dano.",
+      "para": "ela testa Fortitude contra o seu Misticismo e sofre 14d6 de dano do Fim, ou metade se passar."
+    },
+    {
+      "achado": "[LACUNA] presagio-do-fim teste",
+      "raca": "espirito",
+      "no": "presagio-do-fim",
+      "campo": "teste",
+      "de": null,
+      "para": "misticismo_vs_fortitude"
+    },
+    {
+      "achado": "[LACUNA] ceifa",
+      "raca": "espirito",
+      "no": "ceifa",
+      "campo": "descricao",
+      "de": "com metade da Vida máxima ou menos sofre 20d6 de dano, e você",
+      "para": "com metade da Vida máxima ou menos testa Fortitude contra o seu Misticismo e sofre 20d6 de dano do Fim, ou metade se passar, e você"
+    },
+    {
+      "achado": "[LACUNA] ceifa teste",
+      "raca": "espirito",
+      "no": "ceifa",
+      "campo": "teste",
+      "de": null,
+      "para": "misticismo_vs_fortitude"
+    },
+    {
+      "achado": "[INCOERÊNCIA] troca-de-vidas",
+      "raca": "espirito",
+      "no": "troca-de-vidas",
+      "campo": "descricao",
+      "de": "Falhando, ela sofre 10d6 de dano de Essência e você recupera Vida igual ao dano causado. Depois, vocês dois trocam",
+      "para": "Ela sofre 10d6 de dano de Essência, ou metade se passar, e você recupera Vida igual ao dano causado. Se ela falhar, vocês dois trocam"
+    },
+    {
+      "achado": "[LACUNA] corpo-em-brasa",
+      "raca": "espirito",
+      "no": "corpo-em-brasa",
+      "campo": "descricao",
+      "de": "quem te acertar corpo a corpo sofre 1d6 de dano de fogo.",
+      "para": "quem te acertar corpo a corpo testa Reflexos contra o seu Misticismo e sofre 1d6 de dano de Fogo, ou metade se passar."
+    },
+    {
+      "achado": "[LACUNA] corpo-em-brasa teste",
+      "raca": "espirito",
+      "no": "corpo-em-brasa",
+      "campo": "teste",
+      "de": null,
+      "para": "misticismo_vs_reflexos"
+    },
+    {
+      "achado": "[INCOERÊNCIA] dano físico comum nevoa-persistente",
+      "raca": "espirito",
+      "no": "nevoa-persistente",
+      "campo": "descricao",
+      "de": "dano físico comum (corte, perfuração e impacto)",
+      "para": "dano físico que não venha de magia"
+    },
+    {
+      "achado": "[INCOERÊNCIA] dano físico comum corpo-de-nevoa-solida",
+      "raca": "espirito",
+      "no": "corpo-de-nevoa-solida",
+      "campo": "descricao",
+      "de": "dano físico comum (corte, perfuração e impacto)",
+      "para": "dano físico que não venha de magia"
+    },
+    {
+      "achado": "[INCOERÊNCIA] dano físico comum corpo-de-eternidade",
+      "raca": "espirito",
+      "no": "corpo-de-eternidade",
+      "campo": "descricao",
+      "de": "dano físico comum (corte, perfuração e impacto)",
+      "para": "dano físico que não venha de magia"
+    },
+    {
+      "achado": "[INCOERÊNCIA] dano físico comum nevoa-densa",
+      "raca": "espirito",
+      "no": "nevoa-densa",
+      "campo": "descricao",
+      "de": "dano físico comum",
+      "para": "dano físico que não venha de magia"
+    },
+    {
+      "achado": "[INCOERÊNCIA] dano físico comum corpo-de-pedra",
+      "raca": "espirito",
+      "no": "corpo-de-pedra",
+      "campo": "descricao",
+      "de": "dano físico comum",
+      "para": "dano físico que não venha de magia"
+    },
+    {
+      "achado": "[INCOERÊNCIA] dano físico comum escudo-dos-humildes",
+      "raca": "espirito",
+      "no": "escudo-dos-humildes",
+      "campo": "descricao",
+      "de": "dano físico comum",
+      "para": "dano físico que não venha de magia"
+    },
+    {
+      "achado": "[INCOERÊNCIA] Raio/Luz veu-de-luz",
+      "raca": "espirito",
+      "no": "veu-de-luz",
+      "campo": "descricao",
+      "de": "dano de raio",
+      "para": "dano de Luz"
+    },
+    {
+      "achado": "[INCOERÊNCIA] Raio/Luz luz-interior",
+      "raca": "espirito",
+      "no": "luz-interior",
+      "campo": "descricao",
+      "de": "dano de raio",
+      "para": "dano de Luz"
+    },
+    {
+      "achado": "[INCOERÊNCIA] Raio/Luz corpo-de-luz",
+      "raca": "espirito",
+      "no": "corpo-de-luz",
+      "campo": "descricao",
+      "de": "dano de raio",
+      "para": "dano de Luz"
+    },
+    {
+      "achado": "[LACUNA] Incorpóreo povo",
+      "raca": "espirito",
+      "no": "__raca__",
+      "campo": "povo",
+      "de": "atravessa parede, e por isso",
+      "para": "atravessa parede pela Passagem Etérea, e por isso"
+    },
+    {
+      "achado": "[LACUNA] Incorpóreo descricao",
+      "raca": "espirito",
+      "no": "__raca__",
+      "campo": "descricao",
+      "de": "Sem corpo, atravessa parede e enxerga",
+      "para": "Sem corpo, atravessa material sólido pela Passagem Etérea e enxerga"
+    },
+    {
+      "achado": "[LACUNA] Incorpóreo fisiologia",
+      "raca": "espirito",
+      "no": "__raca__",
+      "campo": "fisiologia",
+      "de": "Sem corpo, não pode vestir armaduras comuns.",
+      "para": "Sem corpo, não pode vestir armaduras comuns. Não é Incorpóreo: só atravessa material pela Passagem Etérea."
+    },
+    {
+      "achado": "[LACUNA] Incorpóreo natural",
+      "raca": "espirito",
+      "no": "natural",
+      "campo": "descricao",
+      "de": "atravessa paredes e, a cada degrau",
+      "para": "atravessa paredes pela Passagem Etérea e, a cada degrau"
+    },
+    {
+      "achado": "[LACUNA] fonte-da-cor",
+      "raca": "espirito",
+      "no": "fonte-da-cor",
+      "campo": "descricao",
+      "de": "criatura incorpórea",
+      "para": "criatura Incorpórea"
+    },
+    {
+      "achado": "[LACUNA] corpo possessao",
+      "raca": "espirito",
+      "no": "possessao",
+      "campo": "descricao",
+      "de": "perde a Passagem Etérea e as Travessias; a sua Vida, a sua Mana e os seus poderes continuam sendo os da sua ficha.",
+      "para": "perde a Passagem Etérea; usa os atributos, o tamanho, a Defesa e o Movimento do corpo, e a sua Vida, a sua Mana, as suas perícias e os seus poderes continuam sendo os da sua ficha."
+    },
+    {
+      "achado": "[LACUNA] corpo encarnacao",
+      "raca": "espirito",
+      "no": "encarnacao",
+      "campo": "descricao",
+      "de": "perde a Passagem Etérea e as Travessias; a sua Vida, a sua Mana e os seus poderes continuam sendo os da sua ficha.",
+      "para": "perde a Passagem Etérea; usa os atributos, o tamanho, a Defesa e o Movimento do corpo, e a sua Vida, a sua Mana, as suas perícias e os seus poderes continuam sendo os da sua ficha."
+    },
+    {
+      "achado": "[MELHORIA] possessao teste repetido",
+      "raca": "espirito",
+      "no": "possessao",
+      "campo": "descricao",
+      "de": "no fim de cada turno seu, e um sucesso",
+      "para": "no fim de cada turno dele, mesmo apagado, e um sucesso"
+    },
+    {
+      "achado": "[LACUNA] posse-absoluta",
+      "raca": "espirito",
+      "no": "posse-absoluta",
+      "campo": "descricao",
+      "de": "e agir por qualquer um deles no seu turno.",
+      "para": "e escolher, no seu turno, qual deles age: você tem uma Ação Padrão e uma Ação de Movimento por turno, divididas entre os dois como quiser."
+    },
+    {
+      "achado": "[LACUNA] encarnacao-absoluta",
+      "raca": "espirito",
+      "no": "encarnacao-absoluta",
+      "campo": "descricao",
+      "de": "e agir por qualquer um deles no seu turno.",
+      "para": "e escolher, no seu turno, qual deles age: você tem uma Ação Padrão e uma Ação de Movimento por turno, divididas entre os dois como quiser."
+    },
+    {
+      "achado": "[INCOERÊNCIA] esperar-a-hora",
+      "raca": "espirito",
+      "no": "esperar-a-hora",
+      "campo": "descricao",
+      "de": "age por último nesta rodada,",
+      "para": "age por último nesta rodada (a sua posição na Iniciativa não muda para as próximas),"
+    },
+    {
+      "achado": "[INCOERÊNCIA] sangue-sobe",
+      "raca": "espirito",
+      "no": "sangue-sobe",
+      "campo": "descricao",
+      "de": "não pode adiar o seu turno nem preparar uma ação.",
+      "para": "não pode Atrasar o seu turno."
+    },
+    {
+      "achado": "[INCOERÊNCIA] olho-comprido",
+      "raca": "espirito",
+      "no": "olho-comprido",
+      "campo": "descricao",
+      "de": "desvantagem em testes para elogiar ou ajudar essa criatura.",
+      "para": "desvantagem em testes para elogiar essa criatura e não pode Ajudá-la."
+    },
+    {
+      "achado": "[LACUNA] mao-estendida",
+      "raca": "espirito",
+      "no": "mao-estendida",
+      "campo": "descricao",
+      "de": "ao auxiliar o teste de um aliado a até 9 m, gaste 2 Mana: o auxílio vale +4 em vez de +2.",
+      "para": "ao Ajudar o teste de um aliado a até 9 m, gaste 2 Mana: a sua Ajuda vale +4 em vez de +2, e o total de Ajudar no teste continua em +4."
+    },
+    {
+      "achado": "[LACUNA] escudo-dos-humildes ajuda",
+      "raca": "espirito",
+      "no": "escudo-dos-humildes",
+      "campo": "descricao",
+      "de": "+4 em testes feitos com auxílio de outro",
+      "para": "+4 em testes feitos com Ajuda de outro (somado ao limite normal da Ajuda, que não muda)"
+    },
+    {
+      "achado": "[MELHORIA] tempestade-de-acasos",
+      "raca": "espirito",
+      "no": "tempestade-de-acasos",
+      "campo": "descricao",
+      "de": "Cada uma rola dois d20 em tudo nessa rodada, e você decide se vale o maior ou o menor.",
+      "para": "Cada uma recebe, em tudo o que rolar nessa rodada, vantagem ou desvantagem, à sua escolha, que se cancela com as outras fontes do jeito de sempre."
+    },
+    {
+      "achado": "[INCOERÊNCIA] desfazer-o-instante",
+      "raca": "espirito",
+      "no": "desfazer-o-instante",
+      "campo": "descricao",
+      "de": "sofrer dano ou falhar num teste: o dano é cancelado, ou o teste é refeito com vantagem.",
+      "para": "for sofrer dano ou acabar de falhar num teste: o golpe não causa dano, ou o teste é refeito com vantagem. O Tempo age agora e não desfaz o que já aconteceu.",
+      "ajuste": "sessão principal: mantém a força (critério 16)"
+    },
+    {
+      "achado": "[INCOERÊNCIA] provação do Tempo",
+      "raca": "espirito",
+      "no": "dourado",
+      "campo": "provacao",
+      "de": "Chegar a um instante que já aconteceu e mudar nele uma única coisa, sem desfazer o resto.",
+      "para": "Salvar alguém de um destino que já estava marcado, com um único ato no instante certo."
+    },
+    {
+      "achado": "[LACUNA] segundo-agora",
+      "raca": "espirito",
+      "no": "segundo-agora",
+      "campo": "descricao",
+      "de": "logo depois do último turno da rodada.",
+      "para": "logo depois do último turno da rodada. Quando termina, você sofre 1 de Cansaço."
+    },
+    {
+      "achado": "[LACUNA] parar-o-tempo",
+      "raca": "espirito",
+      "no": "parar-o-tempo",
+      "campo": "descricao",
+      "de": "logo depois do último turno da rodada.",
+      "para": "logo depois do último turno da rodada. Quando termina, você sofre 2 de Cansaço."
+    },
+    {
+      "achado": "[LACUNA] dobra-do-fluxo",
+      "raca": "espirito",
+      "no": "dobra-do-fluxo",
+      "campo": "descricao",
+      "de": "mesmo que já tenha gasto os usos.",
+      "para": "mesmo que já tenha gasto os usos. Não vale para características que dão ação ou turno extra."
+    },
+    {
+      "achado": "[LACUNA] possessao-de-circuito",
+      "raca": "espirito",
+      "no": "possessao-de-circuito",
+      "campo": "descricao",
+      "de": "tem direito a um teste de resistência para expulsar você.",
+      "para": "testa Vontade contra o seu Misticismo, e um sucesso expulsa você."
+    },
+    {
+      "achado": "[LACUNA] possessao-de-circuito teste",
+      "raca": "espirito",
+      "no": "possessao-de-circuito",
+      "campo": "teste",
+      "de": null,
+      "para": "misticismo_vs_vontade"
+    },
+    {
+      "achado": "[LACUNA] punho-espectral",
+      "raca": "espirito",
+      "no": "punho-espectral",
+      "campo": "descricao",
+      "de": "com dano-base 1d8.",
+      "para": "com dano 1d8 de impacto + Mod. Força, crítico 20/x2, usando Luta."
+    },
+    {
+      "achado": "[LACUNA] punho-pesado",
+      "raca": "espirito",
+      "no": "punho-pesado",
+      "campo": "descricao",
+      "de": "e empurra o alvo 3 m.",
+      "para": "e empurra o alvo 3 m (criatura duas categorias de tamanho maior que você não é empurrada)."
+    },
+    {
+      "achado": "[LACUNA] montanha-espectral",
+      "raca": "espirito",
+      "no": "montanha-espectral",
+      "campo": "descricao",
+      "de": "causa +2 dados de dano.",
+      "para": "causa +2d8 de dano, e você ocupa o espaço e o alcance de uma criatura Enorme."
+    },
+    {
+      "achado": "[LACUNA] ceder-o-passo",
+      "raca": "espirito",
+      "no": "ceder-o-passo",
+      "campo": "descricao",
+      "de": "você sofre metade desse dano no lugar dele,",
+      "para": "você sofre metade desse dano, do mesmo tipo e com as suas Resistências e vulnerabilidades, no lugar dele,"
+    },
+    {
+      "achado": "[LACUNA] todos-antes-de-mim",
+      "raca": "espirito",
+      "no": "todos-antes-de-mim",
+      "campo": "descricao",
+      "de": "e você sofre metade dele.",
+      "para": "e você sofre metade dele, com as suas Resistências e vulnerabilidades, sem passar da sua Vida máxima por rodada."
+    },
+    {
+      "achado": "[LACUNA] trono-proprio",
+      "raca": "espirito",
+      "no": "trono-proprio",
+      "campo": "descricao",
+      "de": "imune a todas as condições",
+      "para": "imune a todas as condições de efeito negativo (as da lista de Condições, menos Concentrando)"
+    },
+    {
+      "achado": "[LACUNA] aprender-a-forca",
+      "raca": "espirito",
+      "no": "aprender-a-forca",
+      "campo": "descricao",
+      "de": "como se fosse sua, e ela",
+      "para": "como se fosse sua (só de nível ou círculo até o 3º), e ela"
+    },
+    {
+      "achado": "[LACUNA] Fluxo do Fim",
+      "raca": "espirito",
+      "no": "__raca__",
+      "campo": "descricao_variantes",
+      "de": "Só o Mestre concede.",
+      "para": "Só o Mestre concede. O Fim, por ser raro, também pede o aval do Mestre na hora de escolher."
+    },
+    {
+      "achado": "[MELHORIA] passo-curto",
+      "raca": "espirito",
+      "no": "passo-curto",
+      "campo": "descricao",
+      "de": "atravessa até 3 m de material sólido, em vez de 1,5 m.",
+      "para": "atravessa 1,5 m a mais de material sólido do que a dos outros espíritos."
+    },
+    {
+      "achado": "[MELHORIA] verdade-nua",
+      "raca": "espirito",
+      "no": "verdade-nua",
+      "campo": "descricao",
+      "de": "toda ilusão, disfarce, forma alternativa e invisibilidade deixa de funcionar, e criaturas hostis na área têm",
+      "para": "toda criatura hostil fica Revelada e tem"
+    },
+    {
+      "achado": "[MELHORIA] nome-verdadeiro",
+      "raca": "espirito",
+      "no": "nome-verdadeiro",
+      "campo": "descricao",
+      "de": "perde disfarces, formas alternativas e ilusões sobre si, e fica com",
+      "para": "fica Revelada e fica com"
+    },
+    {
+      "achado": "[MELHORIA] dobra-maior",
+      "raca": "espirito",
+      "no": "dobra-maior",
+      "campo": "descricao",
+      "de": "para qualquer lugar da mesma Árvore que você conheça.",
+      "para": "para qualquer lugar conhecido da mesma Árvore (um ponto que você visitou em pessoa). Fronteira selada não atravessa."
+    },
+    {
+      "achado": "[MELHORIA] equilibrio",
+      "raca": "espirito",
+      "no": "equilibrio",
+      "campo": "descricao",
+      "de": "todos os bônus temporários e vantagens dela acabam, e todas as penalidades e desvantagens também.",
+      "para": "as condições benéficas e as penalidades de efeitos em andamento sobre ela acabam. Graus de perícia, Resistências e itens não mudam."
+    },
+    {
+      "achado": "[LACUNA] roubo-de-poder",
+      "raca": "espirito",
+      "no": "roubo-de-poder",
+      "campo": "descricao",
+      "de": "você sofre 2d6 de dano mental",
+      "para": "você perde 2d6 de Sanidade"
+    },
+    {
+      "achado": "[LACUNA] voto-inquebravel",
+      "raca": "espirito",
+      "no": "voto-inquebravel",
+      "campo": "descricao",
+      "de": "sofre 2d6 de dano mental",
+      "para": "perde 2d6 de Sanidade"
+    },
+    {
+      "achado": "[INCOERÊNCIA] estomago-sem-fundo",
+      "raca": "espirito",
+      "no": "estomago-sem-fundo",
+      "campo": "descricao",
+      "de": "1 de Cansaço.",
+      "para": "1 de Cansaço, sem os dias de folga do Livro."
+    },
+    {
+      "achado": "[ERRO] pecado-preguica Iniciativa",
+      "raca": "_pecados-e-virtudes",
+      "no": "pecado-preguica",
+      "campo": "onus",
+      "de": "Desvantagem em Iniciativa.",
+      "para": "−3 de Iniciativa."
+    },
+    {
+      "achado": "[INCOERÊNCIA] pecado-preguica dia",
+      "raca": "_pecados-e-virtudes",
+      "no": "pecado-preguica",
+      "campo": "bonus",
+      "de": "Uma vez por dia,",
+      "para": "Uma vez por descanso,"
+    },
+    {
+      "achado": "[LACUNA] pecado-preguica descanso",
+      "raca": "_pecados-e-virtudes",
+      "no": "pecado-preguica",
+      "campo": "bonus",
+      "de": "Descanso completo devolve Vida e Mana em dobro.",
+      "para": "Descanso completo devolve Vida, Mana e Estamina em dobro da porcentagem da qualidade, até o máximo."
+    },
+    {
+      "achado": "[INCOERÊNCIA] pecado-gula",
+      "raca": "_pecados-e-virtudes",
+      "no": "pecado-gula",
+      "campo": "onus",
+      "de": "Um dia sem comer o suficiente te dá 2 Cansaço, não 1.",
+      "para": "Cada dia sem comer o suficiente te dá 2 de Cansaço, sem os dias de folga do Livro."
+    },
+    {
+      "achado": "[INCOERÊNCIA] pecado-ira",
+      "raca": "_pecados-e-virtudes",
+      "no": "pecado-ira",
+      "campo": "bonus",
+      "de": "imunidade a medo",
+      "para": "imune a Amedrontado"
+    },
+    {
+      "achado": "[INCOERÊNCIA] perícias avareza",
+      "raca": "_pecados-e-virtudes",
+      "no": "pecado-avareza",
+      "campo": "bonus",
+      "de": "+5 em testes de negociação, avaliação e para farejar valor.",
+      "para": "+5 em Diplomacia para negociar, em Conhecimento para avaliar e para farejar valor."
+    },
+    {
+      "achado": "[INCOERÊNCIA] perícias luxuria",
+      "raca": "_pecados-e-virtudes",
+      "no": "pecado-luxuria",
+      "campo": "bonus",
+      "de": "+5 em testes de persuasão, sedução e leitura de intenção.",
+      "para": "+5 em Diplomacia e Enganação para seduzir e convencer, e em Intuição para ler intenção."
+    },
+    {
+      "achado": "[INCOERÊNCIA] perícias inveja",
+      "raca": "_pecados-e-virtudes",
+      "no": "pecado-inveja",
+      "campo": "bonus",
+      "de": "+3 em testes para imitar, falsificar e se passar por outra pessoa.",
+      "para": "+3 em Enganação para imitar, falsificar e se passar por outra pessoa."
+    },
+    {
+      "achado": "[INCOERÊNCIA] perícias humildade",
+      "raca": "_pecados-e-virtudes",
+      "no": "virtude-humildade",
+      "campo": "onus",
+      "de": "Desvantagem em testes de intimidação.",
+      "para": "Desvantagem em Intimidação."
+    },
+    {
+      "achado": "[INCOERÊNCIA] pecado-inveja ajudar",
+      "raca": "_pecados-e-virtudes",
+      "no": "pecado-inveja",
+      "campo": "onus",
+      "de": "Desvantagem em qualquer teste feito para ajudar outra pessoa.",
+      "para": "Você não pode Ajudar outra pessoa."
+    },
+    {
+      "achado": "[LACUNA] pecado-inveja mental",
+      "raca": "_pecados-e-virtudes",
+      "no": "pecado-inveja",
+      "campo": "onus",
+      "de": "você sofre 1d6 de dano mental.",
+      "para": "você perde 1d6 de Sanidade."
+    },
+    {
+      "achado": "[INCOERÊNCIA] virtude-humildade recebe",
+      "raca": "_pecados-e-virtudes",
+      "no": "virtude-humildade",
+      "campo": "bonus",
+      "de": "Auxílio que você recebe concede +4 em vez de +2.",
+      "para": "Quando você recebe Ajuda, cada ajudante dá +4 em vez de +2, e o total de Ajudar continua em +4."
+    },
+    {
+      "achado": "[INCOERÊNCIA] virtude-humildade presta",
+      "raca": "_pecados-e-virtudes",
+      "no": "virtude-humildade",
+      "campo": "bonus",
+      "de": "Auxílio que você presta também concede +4.",
+      "para": "Quando você Ajuda, a sua Ajuda dá +4 em vez de +2."
+    },
+    {
+      "achado": "[LACUNA] pecado-luxuria rodada",
+      "raca": "_pecados-e-virtudes",
+      "no": "pecado-luxuria",
+      "campo": "bonus",
+      "de": "Uma vez por cena, quem falhar em Vontade contra você age com desvantagem contra você naquela rodada.",
+      "para": "Uma vez por cena, como Ação Padrão, escolha uma criatura que veja você a até 9 m: ela testa Vontade contra a DT Padrão do seu nível. Falhando, age com desvantagem contra você até o fim da próxima rodada."
+    },
+    {
+      "achado": "[LACUNA] virtude-temperanca",
+      "raca": "_pecados-e-virtudes",
+      "no": "virtude-temperanca",
+      "campo": "bonus",
+      "de": "imune a veneno, doença e a qualquer excesso.",
+      "para": "imune a veneno, doença e vício (aflições) e a embriaguez."
+    },
+    {
+      "achado": "[LACUNA] virtude-paciencia",
+      "raca": "_pecados-e-virtudes",
+      "no": "virtude-paciencia",
+      "campo": "onus",
+      "de": "Você age por último na primeira rodada de todo combate.",
+      "para": "Na primeira rodada de todo combate você age por último; depois a sua posição volta à da Iniciativa."
+    }
+  ],
+  "resolvidos": [
+    {
+      "achado": "[INCOERÊNCIA] 60 traços com \"por descanso\" e recuperacao sessao",
+      "por": "janela trocada pela sessão principal (recuperacao descanso)"
+    },
+    {
+      "achado": "[LACUNA] dt do teste e dt_efeitos",
+      "por": "o texto já está igual ao Livro (Raças); sem troca"
+    }
+  ],
+  "mantidos": [
+    {
+      "achado": "[LACUNA] resistências do Espírito Físico que somam",
+      "motivo": "a soma de Resistências de fontes diferentes é a regra do Livro; o número alto é consequência legal e fica."
+    },
+    {
+      "achado": "[MELHORIA] \"gaste uma ação\" / tipo acao",
+      "motivo": "o Livro diz que poder sem ação escrita é Ação Padrão; a convenção do campo tipo acao cobre."
+    },
+    {
+      "achado": "[LACUNA] instante-roubado e Desgaste do Tempo",
+      "motivo": "o Desgaste do Tempo vale para magia de 5º círculo em diante; ação de movimento extra de nível 1 fica sem Cansaço."
+    },
+    {
+      "achado": "[MELHORIA] vazio, invisibilidade em minúscula",
+      "motivo": "só grafia, sem troca isolada."
+    },
+    {
+      "achado": "[LACUNA] virtude-diligencia (+6 m e Ação de Movimento extra)",
+      "motivo": "decisão de balanço, não fere regra escrita."
+    }
+  ]
+}
