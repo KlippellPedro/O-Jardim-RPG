@@ -1,6 +1,23 @@
 {
   "itens": [
     {
+      "id": "2026-11-24-racas-de-acordo-com-o-livro",
+      "data": "2026-11-24",
+      "tipo": "correcao",
+      "area": "Regras",
+      "titulo": "Raças: os traços de acordo com o Livro",
+      "detalhes": [
+        "Os traços de raça que voltam por descanso agora aparecem assim na ficha. Antes, 119 deles diziam \"por descanso\" no texto e \"por sessão\" na ficha, e as páginas do Espírito e da Animália mostravam a janela errada.",
+        "Iniciativa não se rola: o Adiantar-se do Espírito dá +5 de Iniciativa, e os traços que davam vantagem nela dão +2.",
+        "Quem volta da morte por um traço de raça paga o preço do Livro: Ferido 2, 2 de Cansaço, e Arkarin fica com alguma coisa. No Corpo Reserva do Clone, o que fica para trás são as memórias desde a última sincronização.",
+        "Todo dano de raça tem tipo e rolagem. As armas naturais da Animália dizem se cortam, perfuram ou batem, e o que acertava sozinho ganhou teste com metade do dano para quem passa.",
+        "Autômato, Mímico, Anomalia e Simbionte ganharam DT de raça. O Reparo Mecânico do Autômato cura como o curativo do Livro.",
+        "O Instinto Ágil da Animália dá vantagem em Atletismo para escalar, e quem tenta empurrar, derrubar ou agarrar alguém de Corpo Robusto tem desvantagem.",
+        "O Onírico continua saltando entre sonhos, um salto por turno, e A Noite que Se Repete vale até contra o golpe que mataria.",
+        "O Espírito sem corpo atravessa material só pela Passagem Etérea. Os Elfos de Sombras e da Noite Eterna enxergam também na escuridão criada por magia."
+      ]
+    },
+    {
       "id": "2026-11-23-classes-ultimos-furos",
       "data": "2026-11-23",
       "tipo": "correcao",
@@ -1041,17 +1058,6 @@
         "A régua mede como a mesa preferir: reta, diagonal valendo uma casa, diagonal alternada, só pelos eixos ou por hexágonos. A distância por casa pode ser em metros ou em pés.",
         "Cada pessoa liga ou desliga o encaixe na grade no próprio aparelho. Desligado, o token e a régua ficam onde você soltar.",
         "Sincronizar vista: qualquer pessoa pode trazer a mesa inteira para o que está vendo, e cada um escolhe se aceita ser levado. Também dá para digitar a posição e o zoom da sua tela."
-      ]
-    },
-    {
-      "id": "2026-11-04-criador-na-lista-de-jogadores",
-      "data": "2026-11-04",
-      "tipo": "melhoria",
-      "area": "Sessão",
-      "titulo": "Mapa: o Criador aparece na lista de jogadores",
-      "detalhes": [
-        "O Criador da plataforma agora aparece em Jogadores e permissões mesmo sem ser membro da campanha, e escolhe o próprio nome e a própria cor na mesa.",
-        "Quem está conectado no mapa e ainda não é membro também aparece na lista do Mestre."
       ]
     }
   ]

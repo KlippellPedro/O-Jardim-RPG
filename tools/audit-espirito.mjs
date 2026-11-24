@@ -85,7 +85,9 @@ export function analisarEspirito() {
     const media = maiorMediaDeDados(texto);
     const acerto = interpolar(acertoPorNivel, nivel);
     const vida = interpolar(vidaPorNivel, nivel);
-    const sessaoCurta = traco.recuperacao === 'sessao';
+    // Janela longa: efeito de combate volta por descanso; o resto, por sessão (Livro, Poderes e Habilidades).
+    const janelaLonga = traco.recuperacao === 'sessao' || traco.recuperacao === 'descanso';
+    const janela = traco.recuperacao === 'sessao' ? 'sessão' : traco.recuperacao === 'descanso' ? 'descanso' : 'cena';
     const mana = Number(traco.custo_mana) || 0;
 
     linhas.push({
@@ -94,7 +96,7 @@ export function analisarEspirito() {
       origem,
       nivel,
       mana,
-      usos: traco.usos ? `${traco.usos}/${sessaoCurta ? 'sessão' : 'cena'}` : '-',
+      usos: traco.usos ? `${traco.usos}/${janela}` : '-',
       mediaDeDados: media,
       emAcertosDeNpc: media ? Number((media / acerto).toFixed(2)) : 0,
       emPorcentoDaVida: media ? Math.round((100 * media) / vida) : 0,
@@ -116,9 +118,9 @@ export function analisarEspirito() {
     if (/custam 0 Mana/.test(texto) && !/(uso|vez) a mais/.test(texto)) {
       problema('sem-teto-de-usos', 'característica a 0 Mana precisa dizer que ganha só um uso a mais');
     }
-    // R4: no último degrau, habilidade cara tem de ser por sessão e no máximo três vezes.
+    // R4: no último degrau, habilidade cara tem de ser por descanso (ou sessão) e no máximo três vezes.
     if (nivel >= NIVEL_DO_ULTIMO_DEGRAU && (Number(traco.custo_mana) || 0) >= 10) {
-      if (!sessaoCurta || traco.usos > 3) problema('uso-demais-no-ultimo-degrau', 'no máximo 3 usos por sessão');
+      if (!janelaLonga || traco.usos > 3) problema('uso-demais-no-ultimo-degrau', 'no máximo 3 usos por descanso');
     }
     // R5: imunidade a um tipo de dano só existe no último degrau.
     if (/imune a dano/.test(texto) && nivel < NIVEL_DO_ULTIMO_DEGRAU) {
@@ -140,7 +142,9 @@ export function analisarEspirito() {
       problema('area-sem-metade', 'dano em várias criaturas precisa de teste com metade no sucesso');
     }
     // R8: o que tira a criatura da luta (paralisar, atordoar, possuir, mandar) pede teste repetido.
-    if ((/[Pp]aralisad|[Aa]tordoad|obedece|como aliado/.test(texto) || traco.id === 'possessao') && !/repete/.test(texto)) {
+    // O custo que o próprio Espírito paga ("Quando termina, você ... fica Atordoado") não conta.
+    const textoSemCustoProprio = texto.replace(/Quando termina, você[^.]*\./g, '');
+    if ((/[Pp]aralisad|[Aa]tordoad|obedece|como aliado/.test(textoSemCustoProprio) || traco.id === 'possessao') && !/repete/.test(texto)) {
       problema('trava-sem-teste-repetido', 'a criatura repete o teste no fim de cada turno');
     }
     // R9: 1 minuto cobre o encontro inteiro em qualquer degrau.

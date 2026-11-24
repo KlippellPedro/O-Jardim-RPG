@@ -33,7 +33,8 @@ const Etiquetas = ({ traco }: { traco: ICaracteristicaRacial }) => {
   const mana = Number(traco.custo_mana);
   if (mana > 0) itens.push(`${mana} Mana`);
   const usos = Number(traco.usos);
-  if (usos > 0) itens.push(usos === 1 ? `1 vez por ${traco.recuperacao === 'sessao' ? 'sessão' : 'cena'}` : `${usos} vezes por ${traco.recuperacao === 'sessao' ? 'sessão' : 'cena'}`);
+  const quando = traco.recuperacao === 'sessao' ? 'sessão' : traco.recuperacao === 'descanso' ? 'descanso' : 'cena';
+  if (usos > 0) itens.push(usos === 1 ? `1 vez por ${quando}` : `${usos} vezes por ${quando}`);
   if (Number(traco.defesa)) itens.push(`Defesa +${traco.defesa}`);
   if (Number(traco.movimento)) itens.push(`Movimento ${Number(traco.movimento) > 0 ? '+' : '−'}${Math.abs(Number(traco.movimento)).toString().replace('.', ',')} m`);
   if (itens.length === 0) return null;

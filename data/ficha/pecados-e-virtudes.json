@@ -36,7 +36,7 @@
       "titulo": "Ganância",
       "virtude_oposta": "virtude-caridade",
       "bonus": [
-        "+5 em testes de negociação, avaliação e para farejar valor.",
+        "+5 em Diplomacia para negociar, em Conhecimento para avaliar e para farejar valor.",
         "Você compra por 25% menos e vende por 25% mais.",
         "Você sente metal precioso e objeto de valor a até 30 m, mesmo escondido."
       ],
@@ -51,8 +51,8 @@
       "titulo": "Luxúria",
       "virtude_oposta": "virtude-castidade",
       "bonus": [
-        "+5 em testes de persuasão, sedução e leitura de intenção.",
-        "Uma vez por cena, quem falhar em Vontade contra você age com desvantagem contra você naquela rodada.",
+        "+5 em Diplomacia e Enganação para seduzir e convencer, e em Intuição para ler intenção.",
+        "Uma vez por cena, como Ação Padrão, escolha uma criatura que veja você a até 9 m: ela testa Vontade contra a DT Padrão do seu nível. Falhando, age com desvantagem contra você até o fim da próxima rodada.",
         "Você reconhece o desejo mais evidente de qualquer pessoa que encarar."
       ],
       "onus": [
@@ -67,12 +67,12 @@
       "virtude_oposta": "virtude-gratidao",
       "bonus": [
         "Uma vez por cena, copie uma habilidade simples que tenha visto um aliado usar naquela cena.",
-        "+3 em testes para imitar, falsificar e se passar por outra pessoa.",
+        "+3 em Enganação para imitar, falsificar e se passar por outra pessoa.",
         "Você sabe, olhando, quem no recinto é mais capaz que você em alguma coisa."
       ],
       "onus": [
-        "Quando um aliado tira um crítico, você sofre 1d6 de dano mental.",
-        "Desvantagem em qualquer teste feito para ajudar outra pessoa.",
+        "Quando um aliado tira um crítico, você perde 1d6 de Sanidade.",
+        "Você não pode Ajudar outra pessoa.",
         "Você não consegue elogiar ninguém em voz alta sem passar em Vontade."
       ]
     },
@@ -87,7 +87,7 @@
       ],
       "onus": [
         "Você come e bebe o triplo de uma pessoa comum.",
-        "Um dia sem comer o suficiente te dá 2 Cansaço, não 1.",
+        "Cada dia sem comer o suficiente te dá 2 de Cansaço, sem os dias de folga do Livro.",
         "Diante de banquete ou fartura, você precisa passar em Vontade para fazer outra coisa antes de comer."
       ]
     },
@@ -97,7 +97,7 @@
       "virtude_oposta": "virtude-paciencia",
       "bonus": [
         "+2 dados de dano em ataques corpo a corpo.",
-        "+3 em Iniciativa e imunidade a medo.",
+        "+3 em Iniciativa e imune a Amedrontado.",
         "Quando você sofre dano, seu próximo ataque na mesma rodada causa +1d6."
       ],
       "onus": [
@@ -111,13 +111,13 @@
       "titulo": "Preguiça",
       "virtude_oposta": "virtude-diligencia",
       "bonus": [
-        "Descanso completo devolve Vida e Mana em dobro.",
+        "Descanso completo devolve Vida, Mana e Estamina em dobro da porcentagem da qualidade, até o máximo.",
         "Você não acumula Cansaço por esforço físico.",
-        "Uma vez por dia, ignore uma consequência por ter demorado a agir."
+        "Uma vez por descanso, ignore uma consequência por ter demorado a agir."
       ],
       "onus": [
         "-3 m de deslocamento.",
-        "Desvantagem em Iniciativa.",
+        "−3 de Iniciativa.",
         "Você não corre duas rodadas seguidas: a segunda exige Vontade DT 15."
       ]
     }
@@ -128,14 +128,14 @@
       "titulo": "Humildade",
       "pecado_oposto": "pecado-soberba",
       "bonus": [
-        "Auxílio que você recebe concede +4 em vez de +2.",
-        "Auxílio que você presta também concede +4.",
+        "Quando você recebe Ajuda, cada ajudante dá +4 em vez de +2, e o total de Ajudar continua em +4.",
+        "Quando você Ajuda, a sua Ajuda dá +4 em vez de +2.",
         "+3 em qualquer teste feito em conjunto com o grupo."
       ],
       "onus": [
         "-2 em testes que você faça sozinho, sem ninguém por perto.",
         "Você não consegue reivindicar crédito pelo que fez: ganhos de reputação vão para o grupo.",
-        "Desvantagem em testes de intimidação."
+        "Desvantagem em Intimidação."
       ]
     },
     {
@@ -188,7 +188,7 @@
       "titulo": "Moderação",
       "pecado_oposto": "pecado-gula",
       "bonus": [
-        "Você fica imune a veneno, doença e a qualquer excesso.",
+        "Você fica imune a veneno, doença e vício (aflições) e a embriaguez.",
         "Você consome metade de comida, água e recursos.",
         "+3 contra qualquer efeito que dependa de vício, fome ou compulsão."
       ],
@@ -208,7 +208,7 @@
         "Você fica imune a provocação e a efeitos que forcem você a atacar."
       ],
       "onus": [
-        "Você age por último na primeira rodada de todo combate.",
+        "Na primeira rodada de todo combate você age por último; depois a sua posição volta à da Iniciativa.",
         "Desvantagem em testes para agir rápido ou por impulso.",
         "Você não consegue atacar primeiro sem passar em Vontade DT 15."
       ]

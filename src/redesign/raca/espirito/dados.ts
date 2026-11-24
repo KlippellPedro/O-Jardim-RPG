@@ -56,6 +56,7 @@ export function marcaOposta(
 const TIPOS: Record<string, string> = {
   acao: 'Ação',
   acao_completa: 'Ação completa',
+  acao_livre: 'Ação livre',
   reacao: 'Reação',
   movimento: 'Movimento',
   passiva: 'Passiva',
@@ -74,7 +75,7 @@ export function etiquetasDoTraco(traco: ICaracteristicaRacial): string[] {
   if (mana > 0) etiquetas.push(`${mana} Mana`);
   const usos = Number(traco.usos);
   if (usos > 0) {
-    const quando = traco.recuperacao === 'sessao' ? 'sessão' : 'cena';
+    const quando = traco.recuperacao === 'sessao' ? 'sessão' : traco.recuperacao === 'descanso' ? 'descanso' : 'cena';
     etiquetas.push(usos === 1 ? `1 vez por ${quando}` : `${usos} vezes por ${quando}`);
   }
   const alcance = Number(traco.alcance_m);

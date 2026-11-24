@@ -457,6 +457,7 @@ export function eventosDesbloqueados(ficha: any): IConteudoAutomatico[] {
 const ACAO_DO_TIPO_RACIAL: Record<string, string> = {
   acao: 'Ação Padrão',
   acao_completa: 'Ação Completa',
+  acao_livre: 'Ação Livre',
   reacao: 'Reação',
   movimento: 'Ação de Movimento',
   passiva: 'Passivo',
